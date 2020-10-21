@@ -1,26 +1,32 @@
 begin;
 
-insert into artist_type(id, rehearsal_min_time)
+insert into artist_type(name, rehearsal_min_time)
 values ('musician', 1), ('band', 3);
 
-insert into room(name, description, area, artist_type, price)
+insert into room_status(id, description)
+values
+   ('active', 'Available for rehearsals'),
+   ('closed', 'Temporarily closed. Available only for admins')
+;
+
+insert into room(name, description, area, type_id, status_id, price)
 values
    (
         'Молодость и красота',
        'Комната для тех, кто начинает путь к музыкальным вершинам',
-       35, 'band', 1000
+       35, 2, 'active', 1000
    ),
-   ('Мама-анархия', 'Комната для панков в душе и жанре', 26, 'band', 750),
-   ('Стакан портвейна', 'Комната для истинных блюзменов', 30, 'band', 900),
-   ('До-ми-соль', 'Вокальная комната', 15, 'musician', 200),
-   ('Гром и молния', 'Комната ударных', 15, 'musician', 220),
-   ('Элтон Джон', 'Комната фортепиано', 18, 'musician', 250)
+   ('Мама-анархия', 'Комната для панков в душе и жанре', 26, 2, 'active', 750),
+   ('Стакан портвейна', 'Комната для истинных блюзменов', 30, 2, 'active', 900),
+   ('До-ми-соль', 'Вокальная комната', 15, 1, 'active', 200),
+   ('Гром и молния', 'Комната ударных', 15, 1, 'active', 220),
+   ('Элтон Джон', 'Комната фортепиано', 18, 1, 'active', 250)
 ;
 
-insert into artist(name, genre, phone, email, password, type)
+insert into artist(name, genre, phone, email, password, type_id)
 values
-   ('Группа риска', 'Рок', '89031231231', 'riska@mail.ru', '123', 'band'),
-   ('Лжедмитрий Маликов', 'Death metal', '89296666666', 'metal@metal.com', '321', 'musician')
+   ('Группа риска', 'Рок', '89031231231', 'riska@mail.ru', '123', 1),
+   ('Лжедмитрий Маликов', 'Death metal', '89296666666', 'metal@metal.com', '321', 1)
 ;
 
 insert into gear(name, type, description, price)
