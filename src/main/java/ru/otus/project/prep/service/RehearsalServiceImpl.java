@@ -27,6 +27,11 @@ public class RehearsalServiceImpl implements RehearsalService {
     private final ArtistRepository artistRepository;
 
     @Override
+    public Rehearsal reserve(Rehearsal rehearsal) {
+        return repository.saveAndFlush(rehearsal);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public List<Rehearsal> getReservedFromDate(int roomId, String date) {
         LocalDate fromDate = LocalDate.parse(date);

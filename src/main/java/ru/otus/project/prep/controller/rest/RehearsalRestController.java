@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.otus.project.prep.domain.rehearsal.Rehearsal;
 import ru.otus.project.prep.repository.ArtistRepository;
 import ru.otus.project.prep.repository.RehearsalRepository;
+import ru.otus.project.prep.service.RehearsalService;
 import ru.otus.project.prep.service.RehearsalServiceImpl;
 import ru.otus.project.prep.service.TooLateToCancel;
 
@@ -24,7 +25,7 @@ public class RehearsalRestController {
     private static Logger logger = LoggerFactory.getLogger(RehearsalRestController.class);
 
     private final ArtistRepository artistRepository;
-    private final RehearsalServiceImpl service;
+    private final RehearsalService service;
 
     @PostMapping("/rehearsal")
     public ResponseEntity<?> reserve(@RequestBody Rehearsal rehearsal) {
@@ -39,7 +40,7 @@ public class RehearsalRestController {
                     artist -> {
                         rehearsal.setArtist(artist);
 
-                        return status(CREATED).body(rehearsal);
+                        return status(CREATED).body(service.reserve(rehearsal));
                     }
                 )
                 .orElse(status(INTERNAL_SERVER_ERROR).build());
