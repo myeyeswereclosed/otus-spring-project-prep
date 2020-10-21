@@ -6,3 +6,8 @@ spring:
     password: testpassword
     driverClassName: org.postgresql.Driver
     initialization-mode: always
+  jpa:
+    show-sql: true
+rehearsal:
+  showRehearsalsPeriod: 7
+  canBeCancelledBefore: 24
