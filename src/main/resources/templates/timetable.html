@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-  <title>WeekBookings</title>
+  <title>RoomCalendar</title>
 
   <link rel='stylesheet' type='text/css' th:href="@{/libs/css/smoothness/jquery-ui-1.8.11.custom.css}" />
   <link rel='stylesheet' type='text/css' th:href="@{/jquery.weekcalendar.css}" />
@@ -49,16 +49,25 @@
 
 <body>
 <script type='text/javascript' th:inline="javascript">
-  var year = new Date().getFullYear();
-  var month = new Date().getMonth();
-  var day = new Date().getDate();
 
   const roomId = /*[[${roomId}]]*/'roomId';
 
+  let room;
+
+  $.ajax({
+    url: "/room/" + roomId,
+    type: "get",
+    success: function (roomFound) {
+      room = roomFound;
+    },
+    error: function(e) {
+      console.log(e);
+    }
+  });
 
   $.ajax({
     url: "/rehearsals/room/" + roomId + "/reserved/" + new Date().toISOString().slice(0,10),
-    method: "get",
+    type: "get",
     success: function(rehearsals) {
       var reserved = [];
 
@@ -83,43 +92,33 @@
 
       console.log("AFTER REQUEST ", reserved);
 
-      var eventData = {
-        events : reserved
-        // [
-        //   {/*'id':1,*/ 'start': new Date(year, month, day, 12), 'end': new Date(year, month, day, 15), /*'title':'Lunch with Mike'*/},
-        // {'id':2, 'start': new Date(year, month, day, 14), 'end': new Date(year, month, day, 14, 45),'title':'Dev Meeting'},
-        // {'id':3, 'start': new Date(year, month, day + 1, 18), 'end': new Date(year, month, day + 1, 18, 45),'title':'Hair cut'},
-        // {'id':4, 'start': new Date(year, month, day - 1, 8), 'end': new Date(year, month, day - 1, 9, 30),'title':'Team breakfast'},
-        // {'id':5, 'start': new Date(year, month, day + 1, 14), 'end': new Date(year, month, day + 1, 15),'title':'Product showcase'}
-        // ]
-      };
-
-      console.log(eventData);
-
-      let text =  /*[[${mytext}]]*/'mytext';
-
-      console.log("TEXT IS " + text);
-
       $('#calendar').weekCalendar({
-        // timeslotsPerHour: 6,
-        timeslotHeigh: 30,
-        // hourLine: true,
         hourLine: false,
         use24Hour: true,
-        data: eventData,
+        data: {events : reserved},
+        // data: function(start, end) {
+        //
+        // },
         businessHours: {start: 9, end: 24, limitDisplay: true},
         defaultEventLength: 1,
         timeslotsPerHour: 1,
         timeslotHeight: 35,
+
+        // allowCalEventOverlap: true,
+
+        /** TODO should be passed **/
         timeslotsPerDay: 5,
         newEventText: '',
         preventDragOnEventCreation: true,
+        startOnFirstDayOfWeek: function(calendar) {
+          // return $(calendar).weekCalendar('option', 'daysToShow') >= 5;
+          return false;
+        },
         height: function() {
           return $(window).height() - $('h1').outerHeight(true);
         },
         eventRender : function(calEvent, $event) {
           if (calEvent.end.getTime() < new Date().getTime()) {
-
             $event.css('backgroundColor', '#aaa');
             $event.find('.time').css({'backgroundColor': '#999', 'border':'1px solid #888'});
           }
@@ -130,7 +129,31 @@
             return;
           }
           displayMessage('<strong>Added event</strong><br/>Start: ' + calEvent.startDatetime + '<br/>End: ' + calEvent.end);
-          alert('You\'ve added a new event. You would capture this event, add the logic for creating a new event with your own fields, data and whatever backend persistence you require.');
+
+          console.log(calEvent);
+          console.log(room);
+
+          let rehearsal = {
+            'startsAt': new Date(calEvent.start).toISOString(),
+            'room': room
+          }
+
+          console.log(JSON.stringify(rehearsal));
+
+          $.ajax({
+            url: "/rehearsal",
+            type: "post",
+            contentType: "application/json",
+            data: JSON.stringify(rehearsal),
+            success: function(rehearsal) {
+              console.log("Successfully reserved " + rehearsal);
+              location.reload();
+            },
+            error: function (e) {
+              console.log(e);
+            }
+            // alert('You\'ve added a new event. You would capture this event, add the logic for creating a new event with your own fields, data and whatever backend persistence you require.');
+          })
         },
 
         eventDrop: function(calEvent, $event) {
@@ -142,7 +165,6 @@
         },
 
         eventClick: function(calEvent, $event) {
-          console.log("CLICKED!!!!!");
           displayMessage('<strong>Clicked Event</strong><br/>Start: ' + calEvent.start + '<br/>End: ' + calEvent.end);
         },
 

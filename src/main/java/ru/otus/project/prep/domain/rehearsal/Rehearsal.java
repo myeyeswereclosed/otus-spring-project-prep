@@ -43,7 +43,9 @@ public class Rehearsal {
     @Enumerated(EnumType.STRING)
     private PaymentStatus paymentStatus = PaymentStatus.NOT_PAID;
 
-    public Rehearsal(LocalDateTime startDatetime, Room room) {
+    public Rehearsal(long id, Artist artist, LocalDateTime startDatetime, Room room) {
+        this.id = id;
+        this.artist = artist;
         this.startDatetime = startDatetime;
         this.room = room;
     }
@@ -52,6 +54,16 @@ public class Rehearsal {
         this.status = status;
 
         return this;
+    }
+
+    public static Rehearsal fromDto(RehearsalDto dto) {
+        return
+            new Rehearsal(
+                dto.getId(),
+                dto.getArtist(),
+                dto.getStartsAt(),
+                Room.fromDto(dto.getRoom())
+            );
     }
 
     public boolean isValid(LocalTime minTime, LocalTime maxTime) {
@@ -73,8 +85,8 @@ public class Rehearsal {
             new RehearsalDto(
                 id,
                 artist,
-                room,
-                DateTimeFormatter.ISO_DATE_TIME.format(startDatetime),
+                room.toDto(),
+                startDatetime,
                 room.getArtistType().getRehearsalMinTime()
             );
     }

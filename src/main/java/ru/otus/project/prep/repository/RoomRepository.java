@@ -6,6 +6,6 @@ import ru.otus.project.prep.domain.room.RoomStatus;
 
 import java.util.List;
 
-public interface RoomRepository extends JpaRepository<Room, Long> {
+public interface RoomRepository extends JpaRepository<Room, Integer> {
     List<Room> findAllByStatus(RoomStatus status);
 }

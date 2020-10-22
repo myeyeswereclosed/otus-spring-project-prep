@@ -1,5 +1,6 @@
 package ru.otus.project.prep.domain.room;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -12,6 +13,7 @@ import java.time.LocalTime;
 @Entity
 @Table(name = "room")
 @NoArgsConstructor
+@AllArgsConstructor
 @Data
 @ToString
 public class Room {
@@ -37,8 +39,20 @@ public class Room {
     @Column(name = "price")
     private int price;
 
+    public static Room fromDto(RoomDto dto) {
+        return
+            new Room(
+                dto.getId(),
+                dto.getName(),
+                dto.getDescription(),
+                RoomStatus.fromDto(dto.getStatus()),
+                ArtistType.fromDto(dto.getArtistType()),
+                dto.getPrice()
+            );
+    }
+
     public RoomDto toDto() {
-        return new RoomDto(id, name, description, status.getId(), artistType.getName(), price);
+        return new RoomDto(id, name, description, status.toDto(), artistType.toDto(), price);
     }
 
     public LocalTime latestRehearsalTime() {

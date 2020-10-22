@@ -31,7 +31,7 @@ public class RehearsalRestController {
     private final RehearsalService service;
 
     @PostMapping("/rehearsal")
-    public ResponseEntity<?> reserve(@RequestBody Rehearsal rehearsal) {
+    public ResponseEntity<?> reserve(@RequestBody RehearsalDto rehearsal) {
 //        if (rehearsal.isValid())
 
         // stub
@@ -43,7 +43,7 @@ public class RehearsalRestController {
                     artist -> {
                         rehearsal.setArtist(artist);
 
-                        return status(CREATED).body(service.reserve(rehearsal));
+                        return status(CREATED).body(service.reserve(Rehearsal.fromDto(rehearsal)));
                     }
                 )
                 .orElse(status(INTERNAL_SERVER_ERROR).build());

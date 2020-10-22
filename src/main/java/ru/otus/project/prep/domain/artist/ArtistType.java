@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import ru.otus.project.prep.dto.ArtistTypeDto;
+import ru.otus.project.prep.dto.RoomStatusDto;
 
 import javax.persistence.*;
 
@@ -23,4 +25,12 @@ public class ArtistType {
 
     @Column(name = "rehearsal_min_time")
     private int rehearsalMinTime;
+
+    public static ArtistType fromDto(ArtistTypeDto dto) {
+        return new ArtistType(dto.getId(), dto.getName(), dto.getRehearsalMinTime());
+    }
+
+    public ArtistTypeDto toDto() {
+        return new ArtistTypeDto(id, name, rehearsalMinTime);
+    }
 }
