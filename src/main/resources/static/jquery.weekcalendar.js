@@ -1500,6 +1500,9 @@
         * day for calEvent date
         */
       _renderEvent: function(calEvent, $weekDay) {
+        if (calEvent.start.getTime() < new Date().getTime()) {
+          return;
+        }
           var self = this;
           var options = this.options;
           if (calEvent.start.getTime() > calEvent.end.getTime()) {
