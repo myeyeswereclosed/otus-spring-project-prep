@@ -8,6 +8,7 @@ import ru.otus.project.prep.dto.RehearsalDto;
 
 import javax.persistence.*;
 import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Set;
 
@@ -65,5 +66,16 @@ public class Rehearsal {
 
     public boolean canBeCancelled(int hours) {
         return ChronoUnit.HOURS.between(LocalDateTime.now(), startDatetime) > hours;
+    }
+
+    public RehearsalDto toDto() {
+        return
+            new RehearsalDto(
+                id,
+                artist,
+                room,
+                DateTimeFormatter.ISO_DATE_TIME.format(startDatetime),
+                room.getArtistType().getRehearsalMinTime()
+            );
     }
 }

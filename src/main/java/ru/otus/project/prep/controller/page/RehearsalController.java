@@ -1,7 +1,10 @@
-package ru.otus.project.prep.controller.booking;
+package ru.otus.project.prep.controller.page;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import ru.otus.project.prep.domain.rehearsal.Rehearsal;
 import ru.otus.project.prep.dto.RehearsalDto;
 import ru.otus.project.prep.dto.RoomDto;
 
@@ -11,14 +14,13 @@ import java.util.List;
 
 @Controller
 public class RehearsalController {
-    // get all reservations made for this week (from -> to) in some Room
-    public List<RehearsalDto> getFree(RoomDto room, LocalDateTime fromDate, LocalDateTime toDate) {
-        return Collections.emptyList();
-    }
 
-    @GetMapping("/")
-    public String home() {
-        return "index";
+    @GetMapping("/room/{id}/timetable")
+    public String home(Model model, @PathVariable String id) {
+        model.addAttribute("rehearsal", new Rehearsal());
+        model.addAttribute("roomId", id);
+
+        return "timetable";
     }
 
 

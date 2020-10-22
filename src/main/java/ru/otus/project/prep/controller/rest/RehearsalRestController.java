@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.otus.project.prep.domain.rehearsal.Rehearsal;
+import ru.otus.project.prep.dto.RehearsalDto;
 import ru.otus.project.prep.repository.ArtistRepository;
 import ru.otus.project.prep.repository.RehearsalRepository;
 import ru.otus.project.prep.service.RehearsalService;
@@ -14,7 +15,9 @@ import ru.otus.project.prep.service.RehearsalServiceImpl;
 import ru.otus.project.prep.service.TooLateToCancel;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.toList;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.ResponseEntity.status;
@@ -47,8 +50,18 @@ public class RehearsalRestController {
     }
 
     @GetMapping("/rehearsals/room/{roomId}/reserved/{date}")
-    public ResponseEntity<List<Rehearsal>> getReservedFromDate(@PathVariable int roomId, @PathVariable String date) {
-        return ResponseEntity.ok(service.getReservedFromDate(roomId, date));
+    public ResponseEntity<List<RehearsalDto>> getReservedFromDate(
+        @PathVariable int roomId,
+        @PathVariable String date
+    ) {
+        return
+            ResponseEntity.ok(
+                service
+                    .getReservedFromDate(roomId, date)
+                    .stream()
+                    .map(Rehearsal::toDto)
+                    .collect(toList())
+            );
     }
 
     @DeleteMapping("rehearsal/{id}")
