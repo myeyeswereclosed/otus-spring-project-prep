@@ -16,7 +16,7 @@ import java.util.List;
 public interface RehearsalRepository extends JpaRepository<Rehearsal, Long> {
     @Query(
         "select r from Rehearsal r " +
-        "where r.room.id = :roomId and r.startDatetime > :from and r.startDatetime < :to")
+        "where r.room.id = :roomId and r.status = 'RESERVED' and r.startDatetime > :from and r.startDatetime < :to")
     List<Rehearsal> findReserved(
         @Param("roomId") int roomId,
         @Param("from") LocalDateTime from,

@@ -60,7 +60,7 @@ public class Rehearsal {
         return
             new Rehearsal(
                 dto.getId(),
-                dto.getArtist(),
+                Artist.fromDto(dto.getArtist()),
                 dto.getStartsAt(),
                 Room.fromDto(dto.getRoom())
             );
@@ -84,10 +84,12 @@ public class Rehearsal {
         return
             new RehearsalDto(
                 id,
-                artist,
+                artist.toDto(),
                 room.toDto(),
                 startDatetime,
-                room.getArtistType().getRehearsalMinTime()
+                room.getArtistType().getRehearsalMinTime(),
+                status,
+                paymentStatus
             );
     }
 }

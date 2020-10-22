@@ -51,6 +51,7 @@
 <script type='text/javascript' th:inline="javascript">
 
   const roomId = /*[[${roomId}]]*/'roomId';
+  const artist = /*[[${artist}]]*/'artist';
 
   let room;
 
@@ -110,6 +111,7 @@
         timeslotsPerDay: 5,
         newEventText: '',
         preventDragOnEventCreation: true,
+        allowCalEventOverlap: true,
         startOnFirstDayOfWeek: function(calendar) {
           // return $(calendar).weekCalendar('option', 'daysToShow') >= 5;
           return false;
@@ -125,7 +127,7 @@
         },
 
         eventNew: function(calEvent, $event) {
-          if (calEvent.end.getTime() < new Date().getTime()) {
+          if (calEvent.start.getTime() < new Date().getTime()) {
             return;
           }
           displayMessage('<strong>Added event</strong><br/>Start: ' + calEvent.startDatetime + '<br/>End: ' + calEvent.end);
@@ -133,9 +135,12 @@
           console.log(calEvent);
           console.log(room);
 
+          let date = new Date(calEvent.start);
+
           let rehearsal = {
-            'startsAt': new Date(calEvent.start).toISOString(),
-            'room': room
+            'startsAt': new Date(date.getTime() - date.getTimezoneOffset()*60*1000),
+            'room': room,
+            'artist': artist
           }
 
           console.log(JSON.stringify(rehearsal));
@@ -147,7 +152,7 @@
             data: JSON.stringify(rehearsal),
             success: function(rehearsal) {
               console.log("Successfully reserved " + rehearsal);
-              location.reload();
+              // location.reload();
             },
             error: function (e) {
               console.log(e);

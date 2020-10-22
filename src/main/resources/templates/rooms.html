@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Rooms</title>
+        <script th:src="@{/libs/css/smoothness/jquery-ui-1.8.11.custom.css}"></script>
+        <script type="text/javascript" th:src="@{/libs/jquery-1.4.4.min.js}"></script>
+    </head>
+    <body>
+        <script type='text/javascript' th:inline="javascript">
+            $(function () {
+                $.ajax({
+                    url: "/rooms",
+                    method: "get",
+                    success: function (rooms) {
+                        rooms.forEach(function(room) {
+                            console.log(room);
+                            $('body').append(
+                                $('<a href="/room/' + room.id + '/timetable">' + room.name + '</a><br/>')
+                            );
+                        })
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>

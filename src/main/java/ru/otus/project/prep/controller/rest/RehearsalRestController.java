@@ -39,13 +39,7 @@ public class RehearsalRestController {
 
         return
             maybeArtist
-                .map(
-                    artist -> {
-                        rehearsal.setArtist(artist);
-
-                        return status(CREATED).body(service.reserve(Rehearsal.fromDto(rehearsal)));
-                    }
-                )
+                .map(artist -> status(CREATED).body(service.reserve(Rehearsal.fromDto(rehearsal))))
                 .orElse(status(INTERNAL_SERVER_ERROR).build());
     }
 
@@ -74,8 +68,15 @@ public class RehearsalRestController {
     }
 
     @GetMapping("/artist/{artistId}/rehearsals/")
-    public ResponseEntity<List<Rehearsal>> getArtistRehearsals(@PathVariable long artistId) {
-        return ResponseEntity.ok(service.getArtistRehearsals(artistId));
+    public ResponseEntity<List<RehearsalDto>> getArtistRehearsals(@PathVariable long artistId) {
+        return
+            ResponseEntity.ok(
+                service
+                    .getArtistRehearsals(artistId)
+                    .stream()
+                    .map(Rehearsal::toDto)
+                    .collect(toList())
+            );
     }
 
     @GetMapping("/rehearsal/{id}")

@@ -5,6 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import ru.otus.project.prep.domain.artist.Artist;
+import ru.otus.project.prep.domain.rehearsal.PaymentStatus;
+import ru.otus.project.prep.domain.rehearsal.Rehearsal;
+import ru.otus.project.prep.domain.rehearsal.RehearsalStatus;
 import ru.otus.project.prep.domain.room.Room;
 
 import java.time.LocalDateTime;
@@ -14,11 +17,11 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class RehearsalDto {
     private long id;
-    private Artist artist;
+    private ArtistDto artist;
     private RoomDto room;
     /** TODO datetime **/
     private LocalDateTime startsAt;
     private int duration;
-//    private final String status;
-//    private final String paymentStatus;
+    private RehearsalStatus status;
+    private PaymentStatus paymentStatus;
 }
