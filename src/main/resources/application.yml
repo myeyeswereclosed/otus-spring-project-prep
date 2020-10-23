@@ -9,5 +9,13 @@ spring:
   jpa:
     show-sql: true
 rehearsal:
+  #days
   showRehearsalsPeriod: 7
+  #hours
   canBeCancelledBefore: 24
+smsCode:
+  #seconds
+  waitingInterval: 60
+  #seconds
+  countRequestsInterval: 300
+  requestsNumber: 3

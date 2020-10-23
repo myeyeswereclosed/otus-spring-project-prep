@@ -1,5 +1,6 @@
 begin;
 
+-- reservation
 drop table if exists rehearsal_gear cascade;
 drop table if exists gear cascade;
 drop table if exists room cascade;
@@ -85,13 +86,25 @@ create unique index uq__rehearsal__room_id_start_datetime
     where status = 'RESERVED';
 
 create table if not exists rehearsal_gear(
-    id bigserial not null,
+    id bigserial primary key,
     rehearsal_id bigint not null,
     gear_id int not null,
     constraint fk__rehearsal_gear__rehearsal_id foreign key(rehearsal_id)
         references rehearsal(id) on update cascade on delete cascade,
     constraint fk__rehearsal_gear__gear_id foreign key(gear_id)
         references gear(id) on update cascade on delete cascade
+);
+
+-- sms
+
+drop table if exists sms_code;
+
+create table sms_code(
+   id bigserial primary key,
+   phone varchar not null,
+   value varchar not null,
+   created_at timestamp not null default now(),
+   actual boolean default true
 );
 
 commit;
