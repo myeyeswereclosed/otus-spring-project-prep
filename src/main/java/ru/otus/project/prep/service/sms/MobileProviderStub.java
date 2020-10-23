@@ -13,7 +13,7 @@ public class MobileProviderStub implements MobileProvider {
     // Emulating interaction with mobile provider
     public void send(SmsCode smsCode) {
         try {
-            Thread.sleep(500);
+            Thread.sleep(2500);
 
             logger.info("Sms '{}' was sent to {}", smsCode.getValue(), smsCode.getPhone());
         } catch (InterruptedException e) {
