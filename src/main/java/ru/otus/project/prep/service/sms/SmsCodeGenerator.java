@@ -9,18 +9,15 @@ import ru.otus.project.prep.domain.sms.SmsCode;
 import ru.otus.project.prep.repository.sms.SmsCodeRepository;
 
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
 public class SmsCodeGenerator {
-    private static final Logger logger = LoggerFactory.getLogger(SmsCodeGenerator.class);
-
     private final SmsCodeRepository repository;
 
     @Transactional
     public SmsCode generate(String phone) {
-        repository.invalidateFor(phone);
+        repository.invalidateActualFor(phone);
 
         return
             repository.save(

@@ -9,5 +9,5 @@ public interface SmcCodeProvider {
         requestChannel = "requestChannel",
         replyChannel = "responseChannel"
     )
-    CheckerResult run(String phone);
+    GenerationAvailability run(String phone);
 }

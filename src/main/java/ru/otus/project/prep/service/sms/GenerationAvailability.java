@@ -7,8 +7,8 @@ import lombok.ToString;
 @RequiredArgsConstructor
 @Getter
 @ToString
-public class CheckerResult {
-    private final boolean isOk;
+public class GenerationAvailability {
+    private final boolean isAvailable;
     private final String message;
     private final String phone;
 }

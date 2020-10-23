@@ -15,12 +15,12 @@ public class SmsController {
 
     @PostMapping("code/generate")
     public ResponseEntity<?> generate(@RequestBody PhoneDto phone) {
-        var result = provider.run(phone.getNumber());
+        var codeGenerationAvailability = provider.run(phone.getNumber());
 
         return
-            result.isOk()
-                ? ResponseEntity.ok(result.getMessage())
-                : ResponseEntity.badRequest().body(result.getMessage())
+            codeGenerationAvailability.isAvailable()
+                ? ResponseEntity.ok(codeGenerationAvailability.getMessage())
+                : ResponseEntity.badRequest().body(codeGenerationAvailability.getMessage())
             ;
     }
 }

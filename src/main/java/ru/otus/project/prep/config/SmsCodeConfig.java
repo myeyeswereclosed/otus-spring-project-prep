@@ -10,9 +10,9 @@ import org.springframework.integration.router.RecipientListRouter;
 import org.springframework.integration.scheduling.PollerMetadata;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
-import ru.otus.project.prep.service.sms.CheckerResult;
+import ru.otus.project.prep.service.sms.GenerationAvailability;
 import ru.otus.project.prep.service.sms.MobileProvider;
-import ru.otus.project.prep.service.sms.SmsCodeChecker;
+import ru.otus.project.prep.service.sms.SmsCodeGenerationValidator;
 import ru.otus.project.prep.service.sms.SmsCodeGenerator;
 
 @Configuration
@@ -25,7 +25,7 @@ public class SmsCodeConfig {
     private static final String GENERATE_CODE_CHANNEL = "generationChannel";
     private static final String SEND_SMS_CHANNEL = "sendSmsChannel";
 
-    private final SmsCodeChecker checker;
+    private final SmsCodeGenerationValidator checker;
     private final SmsCodeGenerator generator;
     private final MobileProvider mobileProvider;
 
@@ -92,7 +92,7 @@ public class SmsCodeConfig {
         return
             IntegrationFlows
                 .from(GENERATE_CODE_CHANNEL)
-                .transform(CheckerResult.class, CheckerResult::getPhone)
+                .transform(GenerationAvailability.class, GenerationAvailability::getPhone)
                 .handle("smsCodeGenerator", "generate")
                 .channel(SEND_SMS_CHANNEL)
                 .get()
