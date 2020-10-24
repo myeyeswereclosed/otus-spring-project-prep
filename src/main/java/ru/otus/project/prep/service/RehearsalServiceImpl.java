@@ -33,13 +33,12 @@ public class RehearsalServiceImpl implements RehearsalService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Rehearsal> getReservedFromDate(int roomId, String date) {
-        LocalDate fromDate = LocalDate.parse(date);
-        LocalDate toDate = fromDate.plusDays(7);
+    public List<Rehearsal> getReserved(int roomId, String fromDate, String toDate) {
+        LocalDate start = LocalDate.parse(fromDate);
+        LocalDate end = LocalDate.parse(toDate);
 
-        logger.info("Searching reserved rehearsals from {} to {}", date, toDate);
-
-        return repository.findReserved(roomId, fromDate.atStartOfDay(), toDate.plusDays(1).atStartOfDay());
+        logger.info("Searching reserved rehearsals from {} to {}", start, end);
+        return repository.findReserved(roomId, start.atStartOfDay(), end.plusDays(1).atStartOfDay());
     }
 
     @Override
@@ -49,6 +48,7 @@ public class RehearsalServiceImpl implements RehearsalService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Rehearsal> getArtistRehearsals(long artistId) {
         return
             artistRepository
@@ -62,6 +62,7 @@ public class RehearsalServiceImpl implements RehearsalService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<Rehearsal> get(long rehearsalId) {
         return repository.findById(rehearsalId);
     }

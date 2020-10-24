@@ -6,25 +6,9 @@
         <script type="text/javascript" th:src="@{/libs/jquery-1.4.4.min.js}"></script>
     </head>
     <body>
-        <a href="/rooms/view">Комнаты</a>
+        <h4>Добро пожаловать на нашу репетиционную базу</h4>
+        <a href="/rooms/view">Забронировать комнату</a>
         <br />
         <a href="/rehearsals">Мои репетиции</a>
-
-<!--        <script type='text/javascript' th:inline="javascript">-->
-<!--            $(function () {-->
-<!--                $.ajax({-->
-<!--                    url: "/rooms",-->
-<!--                    method: "get",-->
-<!--                    success: function (rooms) {-->
-<!--                        rooms.forEach(function(room) {-->
-<!--                            console.log(room);-->
-<!--                            $('body').append(-->
-<!--                                $('<a href="/room/' + room.id + '/timetable">' + room.name + '</a><br/>')-->
-<!--                            );-->
-<!--                        })-->
-<!--                    }-->
-<!--                });-->
-<!--            });-->
-<!--        </script>-->
     </body>
 </html>

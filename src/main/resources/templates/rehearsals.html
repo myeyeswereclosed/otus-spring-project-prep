@@ -31,10 +31,13 @@
                                     let row =
                                         $('<tr>')
                                             .append($('<td>' + rehearsal.startsAt + '</td>'))
-                                            .append($('<td>' + rehearsal.room.name + '</td>'))
+                                            .append(
+                                                $('<td><a href="/room/' + rehearsal.room.id + '/timetable">'
+                                                    + rehearsal.room.name +
+                                                    '</a></td>'
+                                                )
+                                            )
                                             .append($('<td>' + rehearsal.status + '</td>'));
-
-                                    console.log(rehearsal);
 
                                     if (rehearsal.cancelable) {
                                         row.append(

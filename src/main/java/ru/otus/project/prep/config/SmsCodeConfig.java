@@ -10,7 +10,10 @@ import org.springframework.integration.router.RecipientListRouter;
 import org.springframework.integration.scheduling.PollerMetadata;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
-import ru.otus.project.prep.service.sms.*;
+import ru.otus.project.prep.service.sms.code_generation.availability.CodeGenerationAvailability;
+import ru.otus.project.prep.service.sms.code_generation.availability.PhoneCodeGenerationAvailabilityChecker;
+import ru.otus.project.prep.service.sms.code_generation.service.PhoneCodeService;
+import ru.otus.project.prep.service.sms.mobile_provider.MobileProvider;
 
 @Configuration
 @RequiredArgsConstructor
@@ -21,8 +24,8 @@ public class SmsCodeConfig {
     private static final String GENERATE_CODE_CHANNEL = "generationChannel";
     private static final String SEND_SMS_CHANNEL = "sendSmsChannel";
 
-    private final PhoneCodeGenerationValidator validator;
-    private final SmsCodeGenerator generator;
+    private final PhoneCodeGenerationAvailabilityChecker validator;
+    private final PhoneCodeService service;
     private final MobileProvider mobileProvider;
 
     @Bean (name = PollerMetadata.DEFAULT_POLLER )
@@ -38,8 +41,8 @@ public class SmsCodeConfig {
     public ThreadPoolTaskExecutor executor() {
         ThreadPoolTaskExecutor pool = new ThreadPoolTaskExecutor();
 
-        pool.setCorePoolSize(5);
-        pool.setMaxPoolSize(5);
+        pool.setCorePoolSize(2);
+        pool.setMaxPoolSize(2);
         pool.setWaitForTasksToCompleteOnShutdown(true);
 
         return pool;
@@ -88,8 +91,8 @@ public class SmsCodeConfig {
         return
             IntegrationFlows
                 .from(GENERATE_CODE_CHANNEL)
-                .transform(GenerationAvailability.class, GenerationAvailability::getPhone)
-                .handle("smsCodeGenerator", "generate")
+                .transform(CodeGenerationAvailability.class, CodeGenerationAvailability::getPhone)
+                .handle((GenericHandler<String>) (phone, headers) -> service.makeCode(phone))
                 .channel(SEND_SMS_CHANNEL)
                 .get()
         ;

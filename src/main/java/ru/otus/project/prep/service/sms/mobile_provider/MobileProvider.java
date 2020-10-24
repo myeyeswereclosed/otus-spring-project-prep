@@ -1,4 +1,4 @@
-package ru.otus.project.prep.service.sms;
+package ru.otus.project.prep.service.sms.mobile_provider;
 
 import ru.otus.project.prep.domain.sms.SmsCode;
 

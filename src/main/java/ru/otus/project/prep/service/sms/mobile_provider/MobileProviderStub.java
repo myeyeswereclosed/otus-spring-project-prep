@@ -1,4 +1,4 @@
-package ru.otus.project.prep.service.sms;
+package ru.otus.project.prep.service.sms.mobile_provider;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

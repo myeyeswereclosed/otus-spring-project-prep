@@ -10,7 +10,7 @@ import ru.otus.project.prep.repository.ArtistRepository;
 
 @Controller
 @RequiredArgsConstructor
-public class RehearsalController {
+public class RoomController {
     private final ArtistRepository artistRepository;
     private final Timetable timetable;
 

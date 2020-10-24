@@ -29,7 +29,6 @@ public class RoomRestController {
                 .map(Room::toDto)
                 .collect(toList())
             ;
-
     }
 
     @GetMapping("/room/{id}")

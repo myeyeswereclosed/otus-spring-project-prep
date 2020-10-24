@@ -41,17 +41,16 @@ public class RehearsalRestController {
                 .orElse(status(INTERNAL_SERVER_ERROR).build());
     }
 
-    @GetMapping("/room/{roomId}/rehearsals/reserved/{date}")
+    @GetMapping("/room/{roomId}/rehearsals/reserved/{fromDate}/{toDate}")
     public ResponseEntity<List<RehearsalDto>> getReservedFromDate(
         @PathVariable int roomId,
-        @PathVariable String date
+        @PathVariable String fromDate,
+        @PathVariable String toDate
     ) {
-        logger.info("BOOKED FROM " + date);
-
         return
             ResponseEntity.ok(
                 service
-                    .getReservedFromDate(roomId, date)
+                    .getReserved(roomId, fromDate, toDate)
                     .stream()
                     .map(rehearsal -> rehearsal.toDto(config.getCanBeCancelledBefore()))
                     .collect(toList())

@@ -33,10 +33,6 @@ public class Artist {
     @Column(name = "password")
     private String password;
 
-//    @OneToOne
-//    @JoinColumn(name = "type_id")
-//    private ArtistType type;
-
     public static Artist fromDto(ArtistDto dto) {
         return
             new Artist(

@@ -24,8 +24,4 @@ public interface RehearsalRepository extends JpaRepository<Rehearsal, Long> {
     );
 
     List<Rehearsal> findAllByArtist(Artist artist);
-
-//    @Modifying
-//    @Query("update Rehearsal r set r.status = :status")
-//    int changeStatus(@Param("rehearsal") Rehearsal rehearsal, @Param("status") RehearsalStatus status);
 }

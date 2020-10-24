@@ -104,7 +104,7 @@ public class Rehearsal {
                 room.getArtistType().getRehearsalMinTime(),
                 status,
                 paymentStatus,
-                canBeCancelled(hoursToCancel)
+                !status.isCancelled() && canBeCancelled(hoursToCancel)
             );
     }
 }

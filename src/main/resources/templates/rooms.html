@@ -6,21 +6,27 @@
         <script type="text/javascript" th:src="@{/libs/jquery-1.4.4.min.js}"></script>
     </head>
     <body>
-        <script type='text/javascript' th:inline="javascript">
-            $(function () {
-                $.ajax({
-                    url: "/rooms",
-                    method: "get",
-                    success: function (rooms) {
-                        rooms.forEach(function(room) {
-                            console.log(room);
-                            $('body').append(
-                                $('<a href="/room/' + room.id + '/timetable">' + room.name + '</a><br/>')
-                            );
-                        })
-                    }
+        <h3>Наши комнаты</h3>
+        <br>
+        <div class="room-container">
+            <script type='text/javascript' th:inline="javascript">
+                $(function () {
+                    $.ajax({
+                        url: "/rooms",
+                        method: "get",
+                        success: function (rooms) {
+                            rooms.forEach(function(room) {
+                                $('.room-container').append(
+                                    $('<a href="/room/' + room.id + '/timetable">' + room.name + '</a><br/>')
+                                );
+                            })
+                        }
+                    });
                 });
-            });
-        </script>
+            </script>
+        </div>
+
+        <br>
+        <a href="/">На главную</a>
     </body>
 </html>
