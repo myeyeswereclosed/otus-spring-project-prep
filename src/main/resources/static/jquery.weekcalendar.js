@@ -1011,9 +1011,9 @@
             start = (options.businessHours.limitDisplay ? options.businessHours.start : 0),
             end = (options.businessHours.limitDisplay ? options.businessHours.end : 24);
 
-        console.log("START " + start);
-        console.log("END " + end);
-        console.log("NUM " + options.timeslotsPerDay);
+        console.log("START AT" + start);
+        console.log("END AT" + end);
+        console.log("TIMESLOTS NUM " + options.timeslotsPerDay);
 
         let step = (end - start) / options.timeslotsPerDay;
 
@@ -1199,6 +1199,9 @@
 
           self._updateDayColumnHeader($weekDayColumns);
 
+          console.log("TYPE OF DATA");
+          console.log(typeof options.data);
+
           //load events by chosen means
           if (typeof options.data == 'string') {
             if (options.loading) {
@@ -1250,12 +1253,16 @@
             });
           }
           else if ($.isFunction(options.data)) {
+            console.log("FUNC");
             options.data(weekStartDate, weekEndDate,
                   function(data) {
+                      console.log("TRYING ");
+                      console.log(data);
                       self._renderEvents(data, $weekDayColumns);
                   });
           }
           else if (options.data) {
+                console.log("PUNC");
                 self._renderEvents(options.data, $weekDayColumns);
             }
 

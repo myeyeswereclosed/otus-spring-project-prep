@@ -43,11 +43,13 @@ public class RehearsalRestController {
                 .orElse(status(INTERNAL_SERVER_ERROR).build());
     }
 
-    @GetMapping("/rehearsals/room/{roomId}/reserved/{date}")
+    @GetMapping("/room/{roomId}/rehearsals/reserved/{date}")
     public ResponseEntity<List<RehearsalDto>> getReservedFromDate(
         @PathVariable int roomId,
         @PathVariable String date
     ) {
+        logger.info("BOOKED FROM " + date);
+
         return
             ResponseEntity.ok(
                 service

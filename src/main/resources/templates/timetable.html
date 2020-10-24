@@ -43,179 +43,169 @@
 
   <script type="text/javascript" th:src="@{/libs/date.js}"></script>
   <script type='text/javascript' th:src="@{/jquery.weekcalendar.js}"></script>
-
-
 </head>
 
-<body>
 <script type='text/javascript' th:inline="javascript">
+  $(document).ready(function() {
+    const roomId = /*[[${roomId}]]*/'roomId';
+    const artist = /*[[${artist}]]*/'artist';
 
-  const roomId = /*[[${roomId}]]*/'roomId';
-  const artist = /*[[${artist}]]*/'artist';
+    let room;
 
-  let room;
-
-  $.ajax({
-    url: "/room/" + roomId,
-    type: "get",
-    success: function (roomFound) {
-      room = roomFound;
-    },
-    error: function(e) {
-      console.log(e);
-    }
-  });
-
-  $.ajax({
-    url: "/rehearsals/room/" + roomId + "/reserved/" + new Date().toISOString().slice(0,10),
-    type: "get",
-    success: function(rehearsals) {
-      var reserved = [];
-
-      rehearsals.forEach(function(rehearsal) {
-        let startYear = rehearsal.startsAt.slice(0, 4);
-        let startMonth = parseInt(rehearsal.startsAt.slice(5, 7)) - 1;
-        let startDay = rehearsal.startsAt.slice(8, 10);
-        let startHour = rehearsal.startsAt.slice(11, 13);
-
-        console.log("DAY " + startDay + "____" + startHour);
-
-        let endHour = parseInt(startHour) + rehearsal.duration;
-
-        console.log("DAY " + startDay + "____" + endHour);
-
-        rehearsal.start = new Date(startYear, startMonth, startDay, startHour)
-        rehearsal.end = new Date(startYear, startMonth, startDay, endHour);
-
-        console.log(rehearsal);
-        reserved.push(rehearsal);
-      })
-
-      console.log("AFTER REQUEST ", reserved);
-
-      $('#calendar').weekCalendar({
-        hourLine: false,
-        use24Hour: true,
-        data: {events : reserved},
-        // data: function(start, end) {
-        //
-        // },
-        businessHours: {start: 9, end: 24, limitDisplay: true},
-        defaultEventLength: 1,
-        timeslotsPerHour: 1,
-        timeslotHeight: 35,
-
-        // allowCalEventOverlap: true,
-
-        /** TODO should be passed **/
-        timeslotsPerDay: 5,
-        newEventText: '',
-        preventDragOnEventCreation: true,
-        allowCalEventOverlap: true,
-        startOnFirstDayOfWeek: function(calendar) {
-          // return $(calendar).weekCalendar('option', 'daysToShow') >= 5;
-          return false;
-        },
-        height: function() {
-          return $(window).height() - $('h1').outerHeight(true);
-        },
-        eventRender : function(calEvent, $event) {
-          if (calEvent.end.getTime() < new Date().getTime()) {
-            $event.css('backgroundColor', '#aaa');
-            $event.find('.time').css({'backgroundColor': '#999', 'border':'1px solid #888'});
-          }
-        },
-
-        eventNew: function(calEvent, $event) {
-          if (calEvent.start.getTime() < new Date().getTime()) {
-            return;
-          }
-          displayMessage('<strong>Added event</strong><br/>Start: ' + calEvent.startDatetime + '<br/>End: ' + calEvent.end);
-
-          console.log(calEvent);
-          console.log(room);
-
-          let date = new Date(calEvent.start);
-
-          let rehearsal = {
-            'startsAt': new Date(date.getTime() - date.getTimezoneOffset()*60*1000),
-            'room': room,
-            'artist': artist
-          }
-
-          console.log(JSON.stringify(rehearsal));
-
-          $.ajax({
-            url: "/rehearsal",
-            type: "post",
-            contentType: "application/json",
-            data: JSON.stringify(rehearsal),
-            success: function(rehearsal) {
-              console.log("Successfully reserved " + rehearsal);
-              // location.reload();
-            },
-            error: function (e) {
-              console.log(e);
-            }
-            // alert('You\'ve added a new event. You would capture this event, add the logic for creating a new event with your own fields, data and whatever backend persistence you require.');
-          })
-        },
-
-        eventDrop: function(calEvent, $event) {
-          displayMessage('<strong>Moved Event</strong><br/>Start: ' + calEvent.start + '<br/>End: ' + calEvent.end);
-        },
-
-        eventResize: function(calEvent, $event) {
-          displayMessage('<strong>Resized Event</strong><br/>Start: ' + calEvent.start + '<br/>End: ' + calEvent.end);
-        },
-
-        eventClick: function(calEvent, $event) {
-          displayMessage('<strong>Clicked Event</strong><br/>Start: ' + calEvent.start + '<br/>End: ' + calEvent.end);
-        },
-
-        eventMouseover: function(calEvent, $event) {
-          if (calEvent.end.getTime() < new Date().getTime()) {
-            return;
-          }
-          displayMessage('<strong>Mouseover Event</strong><br/>Start: ' + calEvent.start + '<br/>End: ' + calEvent.end);
-        },
-
-        /** TODO remove **/
-        eventMouseout: function(calEvent, $event) {
-          if (calEvent.end.getTime() < new Date().getTime()) {
-            return;
-          }
-          displayMessage('<strong>Mouseout Event</strong><br/>Start: ' + calEvent.start + '<br/>End: ' + calEvent.end);
-        },
-
-        noEvents: function() {
-          displayMessage('There are no events for this week');
-        },
-
-        // forbid events to be dragged
-        draggable: function(calEvent, element) {
-          return false;
-        },
-
-        resizable: function(calEvent, element) {
-          return calEvent.duration === 1;
-        },
-      });
-
-      function displayMessage(message) {
-        $('#message').html(message).fadeIn();
+    $.ajax({
+      url: "/room/" + roomId,
+      type: "get",
+      success: function (roomFound) {
+        room = roomFound;
+      },
+      error: function (e) {
+        console.log(e);
       }
+    });
 
-      $('<div id="message" class="ui-corner-all"></div>').prependTo($('body'));
-    },
-    error: function(error) {
-      console.log(error);
+    $('#calendar').weekCalendar({
+      hourLine: false,
+      use24Hour: true,
+      data: function (start, end, render) {
+        let reserved = [];
+
+        $.ajax({
+          url: "/room/" + roomId + "/rehearsals/reserved/" + start.toISOString().slice(0, 10),
+          type: "get",
+          success: function (rehearsals) {
+            rehearsals.forEach(function (rehearsal) {
+              let startYear = rehearsal.startsAt.slice(0, 4);
+              let startMonth = parseInt(rehearsal.startsAt.slice(5, 7)) - 1;
+              let startDay = rehearsal.startsAt.slice(8, 10);
+              let startHour = rehearsal.startsAt.slice(11, 13);
+
+              let endHour = parseInt(startHour) + rehearsal.duration;
+
+              rehearsal.start = new Date(startYear, startMonth, startDay, startHour)
+              rehearsal.end = new Date(startYear, startMonth, startDay, endHour);
+
+              console.log(rehearsal);
+              reserved.push(rehearsal);
+            })
+
+            render(reserved);
+          },
+          error: function (error) {
+            console.log(error);
+          }
+        });
+      },
+      businessHours: {start: 9, end: 24, limitDisplay: true},
+      defaultEventLength: 1,
+      timeslotsPerHour: 1,
+      timeslotHeight: 35,
+
+      /** TODO should be passed **/
+      timeslotsPerDay: 5,
+      newEventText: '',
+      preventDragOnEventCreation: true,
+      allowCalEventOverlap: true,
+      startOnFirstDayOfWeek: function (calendar) {
+        // return $(calendar).weekCalendar('option', 'daysToShow') >= 5;
+        return false;
+      },
+      height: function () {
+        return $(window).height() - $('h1').outerHeight(true);
+      },
+      eventRender: function (calEvent, $event) {
+        if (calEvent.end.getTime() < new Date().getTime()) {
+          $event.css('backgroundColor', '#aaa');
+          $event.find('.time').css({'backgroundColor': '#999', 'border': '1px solid #888'});
+        }
+      },
+
+      eventNew: function (calEvent, $event) {
+        if (calEvent.start.getTime() < new Date().getTime()) {
+          return;
+        }
+        displayMessage('<strong>Added event</strong><br/>Start: ' + calEvent.startDatetime + '<br/>End: ' + calEvent.end);
+
+        console.log(calEvent);
+        console.log(room);
+
+        let date = new Date(calEvent.start);
+
+        let rehearsal = {
+          'startsAt': new Date(date.getTime() - date.getTimezoneOffset() * 60 * 1000),
+          'room': room,
+          'artist': artist
+        }
+
+        console.log(JSON.stringify(rehearsal));
+
+        $.ajax({
+          url: "/rehearsal",
+          type: "post",
+          contentType: "application/json",
+          data: JSON.stringify(rehearsal),
+          success: function (rehearsal) {
+            console.log("Successfully reserved " + rehearsal);
+            // location.reload();
+          },
+          error: function (e) {
+            console.log(e);
+          }
+          // alert('You\'ve added a new event. You would capture this event, add the logic for creating a new event with your own fields, data and whatever backend persistence you require.');
+        })
+      },
+
+      eventDrop: function (calEvent, $event) {
+        displayMessage('<strong>Moved Event</strong><br/>Start: ' + calEvent.start + '<br/>End: ' + calEvent.end);
+      },
+
+      eventResize: function (calEvent, $event) {
+        displayMessage('<strong>Resized Event</strong><br/>Start: ' + calEvent.start + '<br/>End: ' + calEvent.end);
+      },
+
+      eventClick: function (calEvent, $event) {
+        displayMessage('<strong>Clicked Event</strong><br/>Start: ' + calEvent.start + '<br/>End: ' + calEvent.end);
+      },
+
+      eventMouseover: function (calEvent, $event) {
+        if (calEvent.end.getTime() < new Date().getTime()) {
+          return;
+        }
+        displayMessage('<strong>Mouseover Event</strong><br/>Start: ' + calEvent.start + '<br/>End: ' + calEvent.end);
+      },
+
+      /** TODO remove **/
+      eventMouseout: function (calEvent, $event) {
+        if (calEvent.end.getTime() < new Date().getTime()) {
+          return;
+        }
+        displayMessage('<strong>Mouseout Event</strong><br/>Start: ' + calEvent.start + '<br/>End: ' + calEvent.end);
+      },
+
+      noEvents: function () {
+        displayMessage('There are no events for this week');
+      },
+
+      // forbid events to be dragged
+      draggable: function (calEvent, element) {
+        return false;
+      },
+
+      resizable: function (calEvent, element) {
+        return calEvent.duration === 1;
+      },
+    });
+
+    function displayMessage(message) {
+      $('#message').html(message).fadeIn();
     }
+
+    $('<div id="message" class="ui-corner-all"></div>').prependTo($('body'));
   });
-
-
 
 </script>
+
+<body>
+
 <!--  <h1>Week Calendar Demo</h1>-->
 
 <!--  <p class="description">-->
