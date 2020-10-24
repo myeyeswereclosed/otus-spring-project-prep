@@ -81,7 +81,7 @@ create table if not exists rehearsal(
 --         where (status = 'reserved')
 );
 
-create unique index uq__rehearsal__room_id_start_datetime
+create unique index uq__rehearsal__room_id__start_datetime
     on rehearsal(room_id, start_datetime)
     where status = 'RESERVED';
 
@@ -106,5 +106,7 @@ create table sms_code(
    created_at timestamp not null default now(),
    actual boolean default true
 );
+
+create unique index uq__sms_code__phone__actual on sms_code(phone, actual) where actual;
 
 commit;
