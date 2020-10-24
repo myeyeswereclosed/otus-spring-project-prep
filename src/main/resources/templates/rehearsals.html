@@ -34,7 +34,9 @@
                                             .append($('<td>' + rehearsal.room.name + '</td>'))
                                             .append($('<td>' + rehearsal.status + '</td>'));
 
-                                    if (rehearsal.status === 'RESERVED') {
+                                    console.log(rehearsal);
+
+                                    if (rehearsal.cancelable) {
                                         row.append(
                                             $('<a class="btn btn-primary btn-info btn-sm cancel-rehearsal-btn" href="'
                                                 + 'rehearsal/' + rehearsal.id + '">Cancel</a>')

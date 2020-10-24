@@ -5,7 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.otus.project.prep.config.Config;
+import ru.otus.project.prep.config.RehearsalConfig;
 import ru.otus.project.prep.domain.rehearsal.Rehearsal;
 import ru.otus.project.prep.repository.ArtistRepository;
 import ru.otus.project.prep.repository.RehearsalRepository;
@@ -22,7 +22,7 @@ import static ru.otus.project.prep.domain.rehearsal.RehearsalStatus.CANCELLED;
 public class RehearsalServiceImpl implements RehearsalService {
     private static final Logger logger = LoggerFactory.getLogger(RehearsalServiceImpl.class);
 
-    private final Config config;
+    private final RehearsalConfig config;
     private final RehearsalRepository repository;
     private final ArtistRepository artistRepository;
 

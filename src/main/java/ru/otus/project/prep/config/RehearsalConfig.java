@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties(prefix = "rehearsal")
 @Data
-public class Config {
-    private int showRehearsalsPeriod;
+public class RehearsalConfig {
     private int canBeCancelledBefore;
 }

@@ -25,7 +25,7 @@ public class MainController {
     }
 
     @GetMapping("/rehearsals")
-    public String reservations(Model model) {
+    public String rehearsals(Model model) {
         // stub
         var artist = artistRepository.findById(1L).get().toDto();
 

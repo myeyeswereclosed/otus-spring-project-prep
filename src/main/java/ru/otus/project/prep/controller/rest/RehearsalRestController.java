@@ -3,19 +3,16 @@ package ru.otus.project.prep.controller.rest;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.otus.project.prep.config.RehearsalConfig;
 import ru.otus.project.prep.domain.rehearsal.Rehearsal;
 import ru.otus.project.prep.dto.RehearsalDto;
 import ru.otus.project.prep.repository.ArtistRepository;
-import ru.otus.project.prep.repository.RehearsalRepository;
 import ru.otus.project.prep.service.RehearsalService;
-import ru.otus.project.prep.service.RehearsalServiceImpl;
 import ru.otus.project.prep.service.TooLateToCancel;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 import static org.springframework.http.HttpStatus.CREATED;
@@ -29,6 +26,7 @@ public class RehearsalRestController {
 
     private final ArtistRepository artistRepository;
     private final RehearsalService service;
+    private final RehearsalConfig config;
 
     @PostMapping("/rehearsal")
     public ResponseEntity<?> reserve(@RequestBody RehearsalDto rehearsal) {
@@ -55,7 +53,7 @@ public class RehearsalRestController {
                 service
                     .getReservedFromDate(roomId, date)
                     .stream()
-                    .map(Rehearsal::toDto)
+                    .map(rehearsal -> rehearsal.toDto(config.getCanBeCancelledBefore()))
                     .collect(toList())
             );
     }
@@ -76,7 +74,7 @@ public class RehearsalRestController {
                 service
                     .getArtistRehearsals(artistId)
                     .stream()
-                    .map(Rehearsal::toDto)
+                    .map(rehearsal -> rehearsal.toDto(config.getCanBeCancelledBefore()))
                     .collect(toList())
             );
     }

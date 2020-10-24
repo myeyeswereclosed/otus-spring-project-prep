@@ -89,7 +89,22 @@ public class Rehearsal {
                 startDatetime,
                 room.getArtistType().getRehearsalMinTime(),
                 status,
-                paymentStatus
+                paymentStatus,
+                true
+            );
+    }
+
+    public RehearsalDto toDto(int hoursToCancel) {
+        return
+            new RehearsalDto(
+                id,
+                artist.toDto(),
+                room.toDto(),
+                startDatetime,
+                room.getArtistType().getRehearsalMinTime(),
+                status,
+                paymentStatus,
+                canBeCancelled(hoursToCancel)
             );
     }
 }

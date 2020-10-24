@@ -24,4 +24,5 @@ public class RehearsalDto {
     private int duration;
     private RehearsalStatus status;
     private PaymentStatus paymentStatus;
+    private boolean cancelable = true;
 }
