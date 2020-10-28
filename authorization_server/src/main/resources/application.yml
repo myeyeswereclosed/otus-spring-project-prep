@@ -1,0 +1,26 @@
+server:
+  port: 8090
+
+spring:
+  datasource:
+    platform: postgres
+    url: jdbc:postgresql://localhost:5432/rehearsal_base_user
+    username: postgres
+    password: testpassword
+    driverClassName: org.postgresql.Driver
+    initialization-mode: always
+  jpa:
+    show-sql: true
+
+app:
+  oauth2:
+    client-id: "any_id"
+    client-secret: "any_secret"
+    signing-key: 987654321
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Login</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+<!--    <link rel="stylesheet" th:href="@{common.css}">-->
+    <script th:src="@{/webjars/jquery/3.3.1/jquery.min.js}"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="row border round common-div">
+            <div class="col-md-4">
+                <h5>Login: </h5>
+                <!--/*@thymesVar id="user" type="ru.otus.project.gateway.dto.UserDto"*/-->
+                <form id="login-form" th:action="@{/login}" th:object="${user}" th:method="post">
+                    <div class="form-group">
+                        <input
+                                type="text"
+                                id="username"
+                                name="username"
+                                class="form-control"
+                                placeholder="username..."
+                                required
+                                th:field="*{username}"
+                        >
+                    </div>
+                    <div class="form-group">
+                        <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                class="form-control"
+                                placeholder="password..."
+                                required
+                                th:field="*{password}"
+                        >
+                    </div>
+<!--                    <div class="form-group">-->
+<!--                        <input-->
+<!--                                type="hidden"-->
+<!--                                id="client-id"-->
+<!--                                name="client_id"-->
+<!--                                class="form-control"-->
+<!--                                required-->
+<!--                                th:value="${clientId}"-->
+<!--                        >-->
+<!--                    </div>-->
+<!--                    <div class="form-group">-->
+<!--                        <input-->
+<!--                                type="hidden"-->
+<!--                                id="grant-type"-->
+<!--                                name="grant_type"-->
+<!--                                class="form-control"-->
+<!--                                required-->
+<!--                                th:value="password"-->
+<!--                        >-->
+<!--                    </div>-->
+                    <div class="row">
+                        <div class="col-sm">
+                            <button id="login-btn" class="btn btn-dark btn-sm" type="submit">Login</button>
+                        </div>
+                        <!--                        <div class="col-sm">-->
+                        <!--                            <a class="btn btn-primary btn-sm" th:href="@{/}" href="../list.html">Back</a>-->
+                        <!--                        </div>-->
+                    </div>
+                </form>
+
+                <script type='text/javascript' th:inline="javascript">
+                    $('#login-form').submit(
+                        function (event) {
+                            event.preventDefault();
+
+                            // const tokenUri = /*[[${tokenUri}]]*/'tokenUri';
+                            // const clientId = /*[[${clientId}]]*/'clientId';
+                            // const clientSecret = /*[[${clientSecret}]]*/'clientSecret';
+
+                            // let userData = $('#login-form').serialize();
+
+                            // console.log(userData);
+                            // console.log(tokenUri);
+                            // console.log(clientId);
+
+                            let url = $('#login-form').attr('action');
+
+                            console.log("URL " + url);
+
+                            $.ajax({
+                                url: "/clientLogin",
+                                method: "post",
+                                // contentType: "application/x-www-form-urlencoded",
+                                // mimeType: "application/x-www-form-urlencoded",
+                                // data: userData,
+                                data: $('#login-form').serialize(),
+                                // beforeSend: function (request) {
+                                //     request.setRequestHeader(
+                                //         "Authorization",
+                                //         "Basic " + btoa(clientId + ":" + clientSecret)
+                                //     )
+                                // },
+                                success: function (data) {
+                                    console.log("RESPONDED ");
+                                    console.log(data);
+
+                                    for (const [key, value] of Object.entries(data)) {
+                                        localStorage.setItem(key, value);
+                                    }
+
+                                    console.log(localStorage.getItem("access_token"));
+                                },
+                                error: function (err) {
+                                    console.log(err);
+                                }
+                            });
+                        }
+                    );
+                </script>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

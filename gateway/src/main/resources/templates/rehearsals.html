@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Rehearsals</title>
+    <script th:src="@{/libs/css/smoothness/jquery-ui-1.8.11.custom.css}"></script>
+    <script type="text/javascript" th:src="@{/libs/jquery-1.4.4.min.js}"></script>
+</head>
+<body>
+    <div class="row table-responsive">
+        <table id = "book-info" class="table">
+            <thead>
+            <tr>
+                <th>Date</th>
+                <th>Room</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+
+                <script type='text/javascript' th:inline="javascript">
+                    const artist = /*[[${artist}]]*/'artist';
+
+                    $(function () {
+                        $.ajax({
+                            url: "/artist/" + artist.id + "/rehearsals/",
+                            method: "get",
+                            success: function (rehearsals) {
+                                rehearsals.forEach(function(rehearsal) {
+                                    let row =
+                                        $('<tr>')
+                                            .append($('<td>' + rehearsal.startsAt + '</td>'))
+                                            .append(
+                                                $('<td><a href="/room/' + rehearsal.room.id + '/timetable">'
+                                                    + rehearsal.room.name +
+                                                    '</a></td>'
+                                                )
+                                            )
+                                            .append($('<td>' + rehearsal.status + '</td>'));
+
+                                    if (rehearsal.cancelable) {
+                                        row.append(
+                                            $('<a class="btn btn-primary btn-info btn-sm cancel-rehearsal-btn" href="'
+                                                + 'rehearsal/' + rehearsal.id + '">Cancel</a>')
+                                        );
+                                    }
+
+                                    $('tbody').append(row);
+                                })
+
+                                $(".cancel-rehearsal-btn").click(
+                                    function (event) {
+                                        event.preventDefault();
+
+                                        console.log($(this).attr("href"));
+
+                                        $.ajax({
+                                            url: $(this).attr("href"),
+                                            type: "delete",
+                                            success: function() {
+                                                alert("Cancelled!");
+                                                location.reload();
+                                            },
+                                            error: function(jqXHR) {
+                                                handleError(jqXHR, this.url.split("/")[2]);
+                                            }
+                                        })
+                                    }
+                                );
+                            }
+                        });
+                    });
+                </script>
+        </table>
+    </div>
+</body>
+</html>

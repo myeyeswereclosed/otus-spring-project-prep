@@ -1,0 +1,17 @@
+server:
+  port: 8888
+
+spring:
+  datasource:
+    platform: postgres
+    url: jdbc:postgresql://localhost:5432/rehearsal_base
+    username: postgres
+    password: testpassword
+    driverClassName: org.postgresql.Driver
+    initialization-mode: always
+  jpa:
+    show-sql: true
+rehearsal:
+  canBeCancelledBefore: 24 #hours
+
+

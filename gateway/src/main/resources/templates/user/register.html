@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Register user</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet"  th:href="@{/css/custom.css}">
+</head>
+<body>
+    <!-- TODO move to header -->
+    <div th:include="~{fragments/header :: header}"></div>
+    <!-- -->
+    <div class="container">
+        <div class="row">
+            <div class="span12">
+                <h4 class="muted">Зарегистрируйтесь</h4>
+                <hr>
+                <!--/*@thymesVar id="artist" type="ru.otus.project.gateway.dto.ArtistDto"*/-->
+                <form class="form-horizontal" th:action="@{/register}" th:object="${artist}" th:method="post">
+                    <div class="control-group">
+                        <label class="control-label">Имя/название группы</label>
+                        <div class="controls">
+                            <input
+                                    name="name"
+                                    type="text"
+                                    placeholder="Имя/название..."
+                                    th:field="*{name}"
+                                    required
+                            >
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Жанр</label>
+                        <div class="controls">
+                            <input
+                                    name="genre"
+                                    type="text"
+                                    th:field="*{genre}"
+                                    placeholder="Жанр...">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Телефон</label>
+                        <div class="controls">
+                            <input
+                                    name="phone"
+                                    type="text"
+                                    th:field="*{phone}"
+                                    placeholder="Телефон..."
+                                    required
+                            >
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Email</label>
+                        <div class="controls">
+                            <input
+                                    name="email"
+                                    type="text"
+                                    th:field="*{email}"
+                                    placeholder="Email">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Пароль</label>
+                        <div class="controls">
+                            <input
+                                    name="password"
+                                    type="password"
+                                    th:field="*{password}"
+                                    placeholder="Пароль..."
+                                    required>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Подтвердите пароль</label>
+                        <div class="controls">
+                            <input type="password" placeholder="Пароль..." required>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Footer section -->
+    <div class="container">
+        <hr>
+        <div class="row">
+            <div class="span12">
+                <p class="pull-left">Copyright &copy; 2013 Gadget Store, Inc. All Right Reserved</p>
+                <p class="pull-right"><a href="user-agreement.html">Privacy Policy</a> | <a href="user-agreement.html">Terms of Use</a></p>
+            </div>
+        </div>
+    </div>
+</body>

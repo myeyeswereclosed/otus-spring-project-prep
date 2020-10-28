@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Rehearsals</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+
+    <script th:src="@{/webjars/jquery/3.3.1/jquery.min.js}"></script>
+</head>
+<body>
+<script type='text/javascript' th:inline="javascript">
+
+    let token = localStorage.getItem("access_token");
+
+    console.log("Token " + token);
+
+    if (!token) {
+        location.href = "/login";
+    } else {
+        $.ajax({
+            url: "/rehearsals",
+            method: "get",
+            // contentType: "application/x-www-form-urlencoded",
+            // mimeType: "application/x-www-form-urlencoded",
+            // data: userData,
+            // data: $('#login-form').serialize(),
+            headers: {
+                'Authorization': 'Bearer ' + token
+            },
+            success: function (data) {
+                console.log("REHEARSALS ");
+                console.log(data);
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+    }
+</script>
+
+</body>

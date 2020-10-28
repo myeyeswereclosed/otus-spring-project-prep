@@ -1,0 +1,18 @@
+server:
+  port: 8080
+
+app:
+  oauth2:
+    token-uri: http://localhost:8090/oauth/token
+    client-id: "any_id"
+    client-secret: "any_secret"
+    signing-key: 987654321
+timetable:
+  start: 9 #hours
+  end: 24 #hours
+  period: 7 #days
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
