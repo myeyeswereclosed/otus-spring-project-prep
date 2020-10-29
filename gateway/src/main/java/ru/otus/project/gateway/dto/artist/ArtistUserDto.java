@@ -1,4 +1,4 @@
-package ru.otus.project.gateway.dto;
+package ru.otus.project.gateway.dto.artist;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ArtistDto {
+public class ArtistUserDto {
     private long id;
     private String name;
     private String genre;

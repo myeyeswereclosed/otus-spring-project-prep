@@ -1,4 +1,4 @@
-package ru.otus.project.gateway.dto;
+package ru.otus.project.gateway.dto.rehearsal;
 
 public enum RehearsalStatus {
     RESERVED, CANCELLED, FINISHED;

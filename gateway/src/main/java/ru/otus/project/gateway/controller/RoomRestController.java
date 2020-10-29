@@ -4,17 +4,15 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
-import ru.otus.project.gateway.dto.RehearsalDto;
-import ru.otus.project.gateway.dto.RoomDto;
+import ru.otus.project.gateway.dto.rehearsal.RehearsalDto;
+import ru.otus.project.gateway.dto.room.RoomDto;
 
 import java.util.List;
 
-import static java.util.stream.Collectors.toList;
 import static org.springframework.http.HttpMethod.GET;
 
 @RestController
@@ -32,13 +30,6 @@ public class RoomRestController {
                 .exchange(url + "rooms/active", GET, null, new ParameterizedTypeReference<List<RoomDto>>() {})
                 .getBody()
         ;
-
-//            repository
-//                .findAllByStatus(RoomStatus.active())
-//                .stream()
-//                .map(Room::toDto)
-//                .collect(toList())
-//            ;
     }
 
     @GetMapping("/room/{id}")

@@ -47,14 +47,22 @@
 
 
 <body>
-<div class="room-info">
-</div>
-<div>
-  <a href="/">На главную</a>
-</div>
-<div>
-  <a href="/rehearsals">Мои репетиции</a>
-</div>
+<!-- TODO при подключении ломатеся календарь(
+  <div th:include="~{fragments/header :: header}"></div>
+-->
+
+  <div class="room-info">
+
+  </div>
+
+  <div>
+    <a href="/">На главную</a>
+  </div>
+
+  <div>
+    <a href="/rehearsals">Мои репетиции</a>
+  </div>
+
   <script type='text/javascript' th:inline="javascript">
     $(document).ready(function() {
       const roomId = /*[[${roomId}]]*/'roomId';
@@ -70,10 +78,13 @@
         url: "/room/" + roomId,
         type: "get",
         success: function(room) {
+          console.log("ROOM!!!!!");
+          console.log(room);
           renderRoomData(room);
           renderTimetable(room, timetableStart, timetableEnd);
         },
         error: function (e) {
+          console.log("ROOM ERROR")
           console.log(e);
         }
       });
@@ -94,6 +105,7 @@
           hourLine: false,
           use24Hour: true,
           data: function (start, end, render) {
+            console.log("HERE I AM");
             console.log(room);
 
             let reserved = [];
@@ -132,7 +144,7 @@
           timeslotHeight: 35,
 
           /** TODO should be passed **/
-          timeslotsPerDay: (timetableEnd - timetableStart) / room.artistType.rehearsalMinTime,
+          timeslotsPerDay: (timetableEnd - timetableStart) / room.roomType.rehearsalMinTime,
           newEventText: '',
           preventDragOnEventCreation: true,
           allowCalEventOverlap: true,
@@ -250,8 +262,6 @@
   <div id='calendar'>
 
   </div>
-
-
 
 </body>
 </html>

@@ -14,7 +14,7 @@
             <div class="span12">
                 <h4 class="muted">Зарегистрируйтесь</h4>
                 <hr>
-                <!--/*@thymesVar id="artist" type="ru.otus.project.gateway.dto.ArtistDto"*/-->
+                <!--/*@thymesVar id="artist" type="ru.otus.project.gateway.dto.artist.ArtistUserDto"*/-->
                 <form class="form-horizontal" th:action="@{/register}" th:object="${artist}" th:method="post">
                     <div class="control-group">
                         <label class="control-label">Имя/название группы</label>

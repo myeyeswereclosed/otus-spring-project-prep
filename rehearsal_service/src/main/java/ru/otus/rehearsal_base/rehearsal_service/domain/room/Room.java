@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import ru.otus.rehearsal_base.rehearsal_service.domain.artist.ArtistType;
 import ru.otus.rehearsal_base.rehearsal_service.dto.RoomDto;
 
 import javax.persistence.*;
@@ -34,7 +33,7 @@ public class Room {
 
     @OneToOne
     @JoinColumn(name = "type_id")
-    private ArtistType artistType;
+    private RoomType artistType;
 
     @Column(name = "price")
     private int price;
@@ -46,7 +45,7 @@ public class Room {
                 dto.getName(),
                 dto.getDescription(),
                 RoomStatus.fromDto(dto.getStatus()),
-                ArtistType.fromDto(dto.getArtistType()),
+                RoomType.fromDto(dto.getRoomType()),
                 dto.getPrice()
             );
     }

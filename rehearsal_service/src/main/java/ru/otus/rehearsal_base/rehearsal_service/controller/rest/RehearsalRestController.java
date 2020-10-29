@@ -9,14 +9,15 @@ import ru.otus.rehearsal_base.rehearsal_service.config.RehearsalConfig;
 import ru.otus.rehearsal_base.rehearsal_service.domain.rehearsal.Rehearsal;
 import ru.otus.rehearsal_base.rehearsal_service.dto.RehearsalDto;
 import ru.otus.rehearsal_base.rehearsal_service.repository.ArtistRepository;
-import ru.otus.rehearsal_base.rehearsal_service.service.RehearsalService;
-import ru.otus.rehearsal_base.rehearsal_service.service.TooLateToCancel;
+import ru.otus.rehearsal_base.rehearsal_service.service.rehearsal.RehearsalService;
+import ru.otus.rehearsal_base.rehearsal_service.service.rehearsal.TooLateToCancel;
 
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.ResponseEntity.notFound;
 import static org.springframework.http.ResponseEntity.status;
 
 @RestController
@@ -28,17 +29,21 @@ public class RehearsalRestController {
     private final RehearsalService service;
     private final RehearsalConfig config;
 
-    @PostMapping("/rehearsal")
-    public ResponseEntity<?> reserve(@RequestBody RehearsalDto rehearsal) {
-//        if (rehearsal.isValid())
-
-        // stub
-        var maybeArtist = artistRepository.findById(1L);
+    @PostMapping("/artist/{phone}/rehearsal")
+    public ResponseEntity<?> reserve(@PathVariable String phone, @RequestBody RehearsalDto rehearsal) {
+        logger.info("Trying to reserve {} fot {}", rehearsal, phone);
 
         return
-            maybeArtist
-                .map(artist -> status(CREATED).body(service.reserve(Rehearsal.fromDto(rehearsal))))
-                .orElse(status(INTERNAL_SERVER_ERROR).build());
+            artistRepository
+                .findByPhone(phone)
+                .map(
+                    artist ->
+                        status(CREATED)
+                            .body(
+                                service.reserve(Rehearsal.fromDto(rehearsal.setArtist(artist.toDto())))
+                            )
+                )
+                .orElse(notFound().build());
     }
 
     @GetMapping("/room/{roomId}/rehearsals/reserved/{fromDate}/{toDate}")

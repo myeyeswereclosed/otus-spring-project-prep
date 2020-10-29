@@ -1,4 +1,4 @@
-package ru.otus.rehearsal_base.rehearsal_service.service;
+package ru.otus.rehearsal_base.rehearsal_service.service.rehearsal;
 
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;

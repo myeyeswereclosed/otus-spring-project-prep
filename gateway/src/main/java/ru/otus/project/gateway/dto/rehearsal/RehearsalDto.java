@@ -1,8 +1,11 @@
-package ru.otus.project.gateway.dto;
+package ru.otus.project.gateway.dto.rehearsal;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.otus.project.gateway.dto.artist.ArtistDto;
+import ru.otus.project.gateway.dto.artist.ArtistUserDto;
+import ru.otus.project.gateway.dto.room.RoomDto;
 
 import java.time.LocalDateTime;
 

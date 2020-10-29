@@ -15,7 +15,7 @@
             <div class="span12">
                 <h4 class="muted">Введите данные для входа</h4>
                 <hr>
-                <!--/*@thymesVar id="user" type="ru.otus.project.gateway.dto.UserDto"*/-->
+                <!--/*@thymesVar id="user" type="ru.otus.project.gateway.dto.security.UserLoginDto"*/-->
                 <form id ="login-form" class="form-horizontal" th:action="@{/}" th:object="${user}" th:method="post">
                     <div class="control-group">
                         <label class="control-label">Телефон (10 цифр)</label>

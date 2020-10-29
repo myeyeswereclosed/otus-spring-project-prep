@@ -1,9 +1,9 @@
-package ru.otus.project.gateway.dto;
+package ru.otus.project.gateway.dto.security;
 
 import lombok.Data;
 
 @Data
-public class UserDto {
+public class UserLoginDto {
     private String phone;
     private String password;
 }

@@ -68,10 +68,10 @@
                                             console.log(user);
                                             $('#actions-div')
                                                 .append(
-                                                    `<ul class="nav pull-right">' +
+                                                    `<ul class="nav pull-right">
                                                         <li><a href="/login">Профиль</a></li>
                                                         <li class="divider-vertical"></li>
-                                                         <li><a href="/logout">Выйти</a></li>
+                                                         <li><a href="/" onclick="localStorage.clear()">Выйти</a></li>
                                                     </ul>`
                                                 );
                                         },

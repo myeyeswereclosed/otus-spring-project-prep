@@ -16,10 +16,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import ru.otus.project.gateway.config.AuthorizationConfig;
-import ru.otus.project.gateway.dto.ArtistDto;
-import ru.otus.project.gateway.dto.RehearsalBaseUserDto;
-import ru.otus.project.gateway.dto.TokenResponseDto;
-import ru.otus.project.gateway.dto.UserDto;
+import ru.otus.project.gateway.dto.artist.ArtistAccountDto;
+import ru.otus.project.gateway.dto.artist.ArtistUserDto;
+import ru.otus.project.gateway.dto.artist.ArtistDto;
+import ru.otus.project.gateway.dto.security.User;
+import ru.otus.project.gateway.dto.security.TokenResponseDto;
+import ru.otus.project.gateway.dto.security.UserLoginDto;
+
+import java.util.Objects;
 
 @RequiredArgsConstructor
 @Controller
@@ -28,12 +32,12 @@ public class UserController {
 
     private final AuthorizationConfig config;
     private final RestTemplate restClient = new RestTemplate();
-    private final PasswordEncoder encoder;
     private final String authorizationServerUrl = "http://localhost:8090";
+    private final String rehearsalServiceUrl = "http://localhost:8888";
 
     @GetMapping("/register")
     public String register(Model model) {
-        model.addAttribute("artist", new ArtistDto());
+        model.addAttribute("artist", new ArtistUserDto());
 
         return "user/register";
     }
@@ -42,12 +46,7 @@ public class UserController {
     public String loginPage(Model model) {
         System.out.println("HERE");
 
-        model
-//            .addAttribute("tokenUri", config.getTokenUri())
-//            .addAttribute("clientId", "any_id")
-//            .addAttribute("clientSecret", "any_secret")
-            .addAttribute("user", new UserDto())
-        ;
+        model.addAttribute("user", new UserLoginDto());
 
         System.out.println("LOGIN");
 
@@ -56,7 +55,7 @@ public class UserController {
 
     @PostMapping("/clientLogin")
     @ResponseBody
-    public TokenResponseDto login(UserDto user) {
+    public TokenResponseDto login(UserLoginDto user) {
         logger.info("Trying to login {}", user);
 
         HttpHeaders headers = new HttpHeaders();
@@ -71,35 +70,60 @@ public class UserController {
         formData.add("client_id", config.getClientId());
         formData.add("grant_type", "password");
 
-        var response =
+        // TODO completable future
+        var authorizationResponse =
             restClient.postForEntity(
                 config.getTokenUri(),
                 new HttpEntity<>(formData, headers),
                 TokenResponseDto.class
             );
 
-        logger.info("Response is {}", response);
+        logger.info("Authorization server responded {}", authorizationResponse);
 
-        return response.getBody();
+        return authorizationResponse.getBody();
+
+//        var rehearsalServiceResponse =
+//            restClient.getForEntity(
+//                rehearsalServiceUrl + "/artist?phone=" + user.getPhone(),
+//                ArtistDto.class
+//            );
+//
+//        logger.info("Rehearsal service responded {}", rehearsalServiceResponse);
+//
+//        // TODO возможно на этом этапе не нужно тянуть данные из сервиса репетиций
+//        return
+//            ArtistAccountDto
+//                .fromTokenAndPersonalData(
+//                    Objects.requireNonNull(authorizationResponse.getBody()),
+//                    Objects.requireNonNull(rehearsalServiceResponse.getBody())
+//                );
     }
 
     @PostMapping("/register")
-    public String register(ArtistDto user) {
-        var response =
+    public String register(ArtistUserDto user, Model model) {
+        var authorizationServerResponse =
             restClient.postForEntity(
                 authorizationServerUrl + "/register",
-                new RehearsalBaseUserDto(
-                    0,
+                new User(
                     user.getName(),
                     user.getPhone(),
                     user.getEmail(),
                     user.getPassword(),
                     user.getRole()
                 ),
-                RehearsalBaseUserDto.class
+                User.class
             );
 
-        logger.info("Response is {}", response);
+        var rehearsalServiceResponse =
+            restClient.postForEntity(
+                rehearsalServiceUrl + "/artist",
+                new ArtistDto(user.getName(), user.getGenre(), user.getPhone(), user.getEmail()),
+                ArtistDto.class
+            );
+
+        model.addAttribute("user", new UserLoginDto());
+
+        logger.info("Response is {}", authorizationServerResponse);
 
         return "user/login";
     }

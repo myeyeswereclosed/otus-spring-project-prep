@@ -14,7 +14,7 @@ public class RoomController {
     private final Timetable timetable;
 
     @GetMapping("/room/{id}/timetable")
-    public String home(Model model, @PathVariable String id) {
+    public String roomTimetable(Model model, @PathVariable String id) {
         var timetableStart = timetable.getStart();
         var timetableEnd = timetable.getEnd();
 

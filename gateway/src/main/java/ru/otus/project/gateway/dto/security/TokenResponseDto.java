@@ -1,4 +1,4 @@
-package ru.otus.project.gateway.dto;
+package ru.otus.project.gateway.dto.security;
 
 import lombok.Data;
 

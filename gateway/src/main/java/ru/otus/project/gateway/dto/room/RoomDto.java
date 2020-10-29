@@ -1,4 +1,4 @@
-package ru.otus.project.gateway.dto;
+package ru.otus.project.gateway.dto.room;
 
 import lombok.*;
 
@@ -10,6 +10,6 @@ public class RoomDto {
     private String name;
     private String description;
     private RoomStatusDto status;
-    private ArtistTypeDto artistType;
+    private RoomTypeDto roomType;
     private int price;
 }

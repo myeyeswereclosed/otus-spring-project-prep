@@ -30,9 +30,6 @@ public class Artist {
     @Column(name = "email")
     private String email;
 
-    @Column(name = "password")
-    private String password;
-
     public static Artist fromDto(ArtistDto dto) {
         return
             new Artist(
@@ -40,12 +37,11 @@ public class Artist {
                 dto.getName(),
                 dto.getGenre(),
                 dto.getPhone(),
-                dto.getEmail(),
-                dto.getPassword()
+                dto.getEmail()
             );
     }
 
     public ArtistDto toDto() {
-        return new ArtistDto(id, name, genre, phone, email, password);
+        return new ArtistDto(id, name, genre, phone, email);
     }
 }

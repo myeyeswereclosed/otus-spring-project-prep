@@ -1,6 +1,7 @@
 package ru.otus.rehearsal_base.rehearsal_service.domain.rehearsal;
 
 import lombok.*;
+import lombok.experimental.Accessors;
 import ru.otus.rehearsal_base.rehearsal_service.domain.artist.Artist;
 import ru.otus.rehearsal_base.rehearsal_service.domain.room.Room;
 import ru.otus.rehearsal_base.rehearsal_service.dto.RehearsalDto;
@@ -16,6 +17,7 @@ import java.time.temporal.ChronoUnit;
 @AllArgsConstructor
 @Data
 @ToString
+@Accessors(chain = true)
 public class Rehearsal {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,4 +1,4 @@
-package ru.otus.rehearsal_base.rehearsal_service.service;
+package ru.otus.rehearsal_base.rehearsal_service.service.rehearsal;
 
 import ru.otus.rehearsal_base.rehearsal_service.domain.rehearsal.Rehearsal;
 

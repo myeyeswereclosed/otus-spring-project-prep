@@ -1,7 +1,6 @@
 package ru.otus.project.authorization_server.config;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -52,16 +51,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         System.out.println("CLIENT ID " + oAuthProps.getClientId());
         System.out.println("CLIENT SECRET " + oAuthProps.getClientSecret());
 
-        clients
-                .jdbc(dataSource)
-                .withClient(oAuthProps.getClientId())
-                .secret(encoder.encode(oAuthProps.getClientSecret()))
-                .authorizedGrantTypes("password", "authorization_code", "refresh_token")
-                .scopes("read", "write")
-                .accessTokenValiditySeconds(ACCESS_TOKEN_VALIDITY_SECONDS)
-                .refreshTokenValiditySeconds(REFRESH_TOKEN_VALIDITY_SECONDS)
-                .redirectUris("http://localhost:8080/")
-        ;
+        clients.jdbc(dataSource);
     }
 
 }

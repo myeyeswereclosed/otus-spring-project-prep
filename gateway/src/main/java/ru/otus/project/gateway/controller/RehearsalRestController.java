@@ -3,19 +3,14 @@ package ru.otus.project.gateway.controller;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
-import ru.otus.project.gateway.dto.RehearsalDto;
+import ru.otus.project.gateway.dto.rehearsal.RehearsalDto;
+import ru.otus.project.gateway.dto.security.User;
+import ru.otus.project.gateway.service.UserService;
 
-import java.util.List;
-
-import static java.util.stream.Collectors.toList;
-import static org.springframework.http.HttpMethod.GET;
-import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.ResponseEntity.status;
 
 @RestController
@@ -23,23 +18,47 @@ import static org.springframework.http.ResponseEntity.status;
 public class RehearsalRestController {
     private static Logger logger = LoggerFactory.getLogger(RehearsalRestController.class);
 
+    private final UserService service;
+
     private final RestTemplate restClient = new RestTemplate();
-    private final String url = "http://localhost:8888/";
+    private final String url = "http://localhost:8888";
 
     @PostMapping("/rehearsal")
     public ResponseEntity<?> reserve(@RequestBody RehearsalDto rehearsal, Authentication authentication) {
 //        if (rehearsal.isValid())
 
-        logger.info("POST AUTHENTICATION " + authentication);
+        // TODO separate to strategies: user, admin ?
+
+        var response =
+            service
+                .authenticatedUser(authentication)
+                .map(user -> reserve(user, rehearsal))
+                .orElse(ResponseEntity.badRequest().build())
+        ;
+
+        logger.info("Response IS " + response);
+
+        return response;
+    }
+
+    private ResponseEntity<RehearsalDto> reserve(User user, RehearsalDto rehearsal) {
+        logger.info(
+            "Trying to reserve rehearsal: room: {}, {}({} hour(s)) for {}({})",
+            rehearsal.getRoom().getName(),
+            rehearsal.getStartsAt(),
+            rehearsal.getDuration(),
+            user.getName(),
+            user.getPhone()
+        );
 
         var response =
             restClient.postForEntity(
-                url + "/rehearsal",
+                url + "/artist/" + user.getPhone() + "/rehearsal",
                 rehearsal,
                 RehearsalDto.class
             );
 
-        logger.info("Response IS " + response);
+        logger.info("Response from rehearsal service: {}", response);
 
         return response;
     }

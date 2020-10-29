@@ -10,6 +10,6 @@ public class RoomDto {
     private final String name;
     private final String description;
     private final RoomStatusDto status;
-    private final ArtistTypeDto artistType;
+    private final RoomTypeDto roomType;
     private final int price;
 }

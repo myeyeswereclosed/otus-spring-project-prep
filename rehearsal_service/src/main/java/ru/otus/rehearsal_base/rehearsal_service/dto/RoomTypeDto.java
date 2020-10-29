@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class ArtistTypeDto {
+public class RoomTypeDto {
     private int id;
     private String name;
     private int rehearsalMinTime;
