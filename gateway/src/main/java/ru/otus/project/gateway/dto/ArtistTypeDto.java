@@ -1,12 +1,14 @@
 package ru.otus.project.gateway.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
-@RequiredArgsConstructor
 public class ArtistTypeDto {
-    private final int id;
-    private final String name;
-    private final int rehearsalMinTime;
+    private int id;
+    private String name;
+    private int rehearsalMinTime;
 }

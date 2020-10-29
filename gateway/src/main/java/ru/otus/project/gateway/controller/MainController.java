@@ -31,7 +31,6 @@ public class MainController {
 
     @GetMapping("/rehearsal")
     public String rehearsal(Model model) {
-        System.out.println("I AM HERE !!!");
         return "rehearsal";
     }
 

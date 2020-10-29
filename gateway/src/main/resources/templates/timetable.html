@@ -159,29 +159,40 @@
             console.log(calEvent);
             console.log(room);
 
-            let date = new Date(calEvent.start);
+            let token = localStorage.getItem("access_token");
 
-            let rehearsal = {
-              'startsAt': new Date(date.getTime() - date.getTimezoneOffset() * 60 * 1000),
-              'room': room,
-              // 'artist': artist
-            }
+            if (!token) {
+              location.href = "/login";
+            } else {
+              let date = new Date(calEvent.start);
 
-            console.log(JSON.stringify(rehearsal));
-
-            $.ajax({
-              url: "/rehearsal",
-              type: "post",
-              contentType: "application/json",
-              data: JSON.stringify(rehearsal),
-              success: function (rehearsal) {
-                console.log("Successfully reserved " + rehearsal);
-                // location.reload();
-              },
-              error: function (e) {
-                console.log(e);
+              let rehearsal = {
+                'startsAt': new Date(date.getTime() - date.getTimezoneOffset() * 60 * 1000),
+                'room': room,
+                // 'artist': artist
               }
-            })
+
+              console.log(JSON.stringify(rehearsal));
+              console.log(token);
+
+              $.ajax({
+                url: "/rehearsal",
+                type: "post",
+                beforeSend: function (xhr) {
+                  xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+                },
+                contentType: "application/json",
+                // authorization: 'Bearer ' + token,
+                data: JSON.stringify(rehearsal),
+                success: function (rehearsal) {
+                  console.log("Successfully reserved " + rehearsal);
+                  // location.reload();
+                },
+                error: function (e) {
+                  console.log(e);
+                }
+              });
+            }
           },
 
           eventDrop: function (calEvent, $event) {

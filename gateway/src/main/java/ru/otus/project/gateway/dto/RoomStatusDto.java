@@ -1,11 +1,14 @@
 package ru.otus.project.gateway.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Data
-@RequiredArgsConstructor
 public class RoomStatusDto {
-    private final String id;
-    private final String description;
+    private String id;
+    private String description;
 }

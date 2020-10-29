@@ -13,8 +13,8 @@ import java.util.Set;
 @ToString
 @Getter
 public class RehearsalBaseUser extends User {
+    private final long id;
     private final String phone;
-
     private final String email;
 
     public RehearsalBaseUser(
@@ -22,6 +22,7 @@ public class RehearsalBaseUser extends User {
     ) {
         super(user.getName(), user.getPassword(), Set.of(new SimpleGrantedAuthority(user.getRole())));
 
+        this.id = user.getId();
         this.phone = user.getPhone();
         this.email = user.getEmail();
     }

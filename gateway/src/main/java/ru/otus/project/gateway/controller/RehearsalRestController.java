@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import ru.otus.project.gateway.dto.RehearsalDto;
@@ -26,8 +27,10 @@ public class RehearsalRestController {
     private final String url = "http://localhost:8888/";
 
     @PostMapping("/rehearsal")
-    public ResponseEntity<?> reserve(@RequestBody RehearsalDto rehearsal) {
+    public ResponseEntity<?> reserve(@RequestBody RehearsalDto rehearsal, Authentication authentication) {
 //        if (rehearsal.isValid())
+
+        logger.info("POST AUTHENTICATION " + authentication);
 
         var response =
             restClient.postForEntity(

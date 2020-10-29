@@ -66,7 +66,7 @@ public class UserController {
 
         MultiValueMap<String, Object> formData = new LinkedMultiValueMap<>();
 
-        formData.add("username", user.getUsername());
+        formData.add("username", user.getPhone());
         formData.add("password", user.getPassword());
         formData.add("client_id", config.getClientId());
         formData.add("grant_type", "password");
@@ -84,7 +84,6 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    @ResponseBody
     public String register(ArtistDto user) {
         var response =
             restClient.postForEntity(
@@ -102,6 +101,6 @@ public class UserController {
 
         logger.info("Response is {}", response);
 
-        return "REGISTERED";
+        return "user/login";
     }
 }
