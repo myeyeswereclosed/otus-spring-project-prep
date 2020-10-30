@@ -12,7 +12,7 @@ public interface RehearsalService {
 
     Optional<Rehearsal> cancel(long rehearsalId) throws TooLateToCancel;
 
-    List<Rehearsal> getArtistRehearsals(long artistId);
+    List<Rehearsal> getArtistRehearsals(String phone);
 
     Optional<Rehearsal> get(long rehearsalId);
 }

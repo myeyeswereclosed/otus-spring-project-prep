@@ -17,7 +17,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         web
             .ignoring()
-            .antMatchers("/webjars/**", "/css/**", "/libs/**");
+            .antMatchers("/libs/**", "/webjars/**", "/css/**", "/js/**", "/js/jquery**");
     }
 
 //    @Override
@@ -31,7 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 ////            .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
 //            .antMatchers("/admin/**").hasRole("ADMIN")
 //            .antMatchers("/favicon.ico").anonymous()
-//            .antMatchers("/", "/login", "/clientLogin**", "/register", "/rehearsals").permitAll()
+//            .antMatchers("/", "/login", "/clientLogin**", "/register", "/rehearsals", "/error").permitAll()
 //            .anyRequest().authenticated()
 //            .and()
 //            .formLogin()

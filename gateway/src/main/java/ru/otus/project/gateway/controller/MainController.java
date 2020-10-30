@@ -30,8 +30,7 @@ public class MainController {
     }
 
     @GetMapping("/rehearsals")
-    public String rehearsals(Model model) {
-        System.out.println("OLOLO");
+    public String rehearsals() {
         return "rehearsals";
     }
 

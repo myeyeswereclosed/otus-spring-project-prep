@@ -49,13 +49,13 @@ public class RehearsalServiceImpl implements RehearsalService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Rehearsal> getArtistRehearsals(long artistId) {
+    public List<Rehearsal> getArtistRehearsals(String phone) {
         return
             artistRepository
-                .findById(artistId)
+                .findByPhone(phone)
                 .map(repository::findAllByArtist)
                 .orElseGet(() -> {
-                    logger.warn("Trying to find rehearsals, but artist with id {} not found", artistId);
+                    logger.warn("Trying to find rehearsals, but artist with phone {} not found", phone);
 
                     return emptyList();
                 });

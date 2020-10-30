@@ -5,62 +5,153 @@
   <title>RoomCalendar</title>
 
   <link rel='stylesheet' type='text/css' th:href="@{/libs/css/smoothness/jquery-ui-1.8.11.custom.css}" />
-  <link rel='stylesheet' type='text/css' th:href="@{/jquery.weekcalendar.css}" />
+  <link rel='stylesheet' type='text/css' th:href='@{/css/jquery.weekcalendar.css}' />
   <style type='text/css'>
-  body {
-    font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
-    margin: 0;
-  }
+    body {
+      font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
+      margin: 0;
+    }
 
-  h1 {
-    margin: 0 0 1em;
-    padding: 0.5em;
-  }
+    h1 {
+      margin: 0 0 1em;
+      padding: 0.5em;
+    }
 
-  p.description {
-    font-size: 0.8em;
-    padding: 1em;
-    position: absolute;
-    top: 3.2em;
-    margin-right: 400px;
-  }
+    p.description {
+      font-size: 0.8em;
+      padding: 1em;
+      position: absolute;
+      top: 3.2em;
+      margin-right: 400px;
+    }
 
-  #message {
-    font-size: 0.7em;
-    position: absolute;
-    top: 1em;
-    right: 1em;
-    width: 350px;
-    display: none;
-    padding: 1em;
-    background: #ffc;
-    border: 1px solid #dda;
-  }
+    #message {
+      font-size: 0.7em;
+      position: absolute;
+      top: 1em;
+      right: 1em;
+      width: 350px;
+      display: none;
+      padding: 1em;
+      background: #ffc;
+      border: 1px solid #dda;
+    }
   </style>
 
-  <script type='text/javascript' th:src="@{/libs/jquery-1.4.4.min.js}"></script>
-  <script type='text/javascript' th:src="@{/libs/jquery-ui-1.8.11.custom.min.js}"></script>
-
-  <script type="text/javascript" th:src="@{/libs/date.js}"></script>
-  <script type='text/javascript' th:src="@{/jquery.weekcalendar.js}"></script>
+  <script type='text/javascript' th:src='@{/libs/jquery-1.4.4.min.js}'></script>
+  <script type='text/javascript' th:src='@{/libs/jquery-ui-1.8.11.custom.min.js}'></script>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">
+  <script type='text/javascript' th:src="@{/js/jquery.weekcalendar.js}"></script>
+  <script type="text/javascript" th:src='@{/libs/date.js}'></script>
 </head>
 
-
 <body>
-<!-- TODO при подключении ломатеся календарь(
-  <div th:include="~{fragments/header :: header}"></div>
--->
+<!-- TODO при подключении ломатеся календарь( -->
+<!--  <div th:include="~{fragments/header :: header}"></div>-->
 
-  <div class="room-info">
+<div class="container">
+  <div class="row d-block">
+    <div class="navbar navbar-fixed-top navbar-inverse" >
+      <div class="navbar-inner">
+        <div class="container">
+          <a href="/" class="brand">Репетиционная база OLOLO</a>
+          <div class="nav-collapse collapse navbar-responsive-collapse" id="actions-div">
+            <ul class="nav">
+              <li><a href="#">Home</a></li>
+              <li><a href="#">Services</a></li>
+              <li class="dropdown">
+                <a href="#" data-toggle="dropdown" class="dropdown-toggle">Products <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li><a href="#">Gadgets</a></li>
+                  <li><a href="#">Accessories</a></li>
+                  <li class="divider"></li>
+                  <li><a href="#">More &raquo;</a></li>
+                </ul>
+              </li>
+            </ul>
 
+            <script type='text/javascript' th:inline="javascript">
+
+              let token = localStorage.getItem("access_token");
+
+              console.log("TOKEN " + token)
+
+              if (!token) {
+                renderForAnonymous();
+              } else {
+                renderForToken(token);
+              }
+
+              function renderForAnonymous() {
+                $('#actions-div')
+                    .append(
+                        `<ul class="nav pull-right">' +
+                            <li><a href="/login">Войти</a></li>
+                            <li class="divider-vertical"></li>
+                            <li><a href="/register">Зарегистрироваться</a></li>
+                        </ul>`
+                    );
+              }
+
+              function renderForToken(token) {
+                $.ajax({
+                  url: "/checkAccess",
+                  type: "get",
+                  beforeSend: function (xhr) {
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+                  },
+                  success: function(user) {
+                    console.log("Access allowed ");
+                    console.log(user);
+                    $('#actions-div')
+                        .append(
+                            `<ul class="nav pull-right">
+                                <li class="dropdown" id="profile">
+                                    <a
+                                        href="#" class="dropdown-toggle"
+                                        data-toggle="dropdown-menu"
+                                        role="button" aria-expanded="false"
+                                    >${user.name} (${user.phone}) <span class="caret"></span></a>
+                                    <ul class="dropdown-menu" role="menu">
+                                       <li><a href="/rehearsals">Репетиции</a></li>
+                                    </ul>
+                                </li>
+                                <li class="divider-vertical"></li>
+                                 <li><a href="/" onclick="localStorage.clear()">Выйти</a></li>
+                            </ul>`
+                        );
+
+                    let profile = $('#profile');
+
+                    profile.click(function(){
+                      if (profile.hasClass('open')) {
+                        profile.removeClass('open')
+                      } else {
+                        profile.addClass('open');
+                      }
+                    });
+                  },
+                  error: function(response) {
+                    // expired
+                    if(response.status === 401) {
+                      localStorage.clear();
+                      renderForAnonymous();
+                    }
+                  }
+                });
+              }
+
+            </script>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div>
-    <a href="/">На главную</a>
-  </div>
+  <div class="row d-block d-inline-block" style="margin-top: 60px;">
+    <div class="room-info">
 
-  <div>
-    <a href="/rehearsals">Мои репетиции</a>
+    </div>
   </div>
 
   <script type='text/javascript' th:inline="javascript">
@@ -70,21 +161,14 @@
       const timetableStart = /*[[${timetableStart}]]*/'timetableStart';
       const timetableEnd = /*[[${timetableEnd}]]*/'timetableEnd';
 
-      console.log("ROOM " + roomId);
-      console.log(timetableStart);
-      console.log(timetableEnd);
-
       $.ajax({
         url: "/room/" + roomId,
         type: "get",
         success: function(room) {
-          console.log("ROOM!!!!!");
-          console.log(room);
           renderRoomData(room);
           renderTimetable(room, timetableStart, timetableEnd);
         },
         error: function (e) {
-          console.log("ROOM ERROR")
           console.log(e);
         }
       });
@@ -105,9 +189,6 @@
           hourLine: false,
           use24Hour: true,
           data: function (start, end, render) {
-            console.log("HERE I AM");
-            console.log(room);
-
             let reserved = [];
 
             $.ajax({
@@ -117,6 +198,9 @@
               type: "get",
               success: function (rehearsals) {
                 rehearsals.forEach(function (rehearsal) {
+                  console.log("DTO");
+                  console.log(rehearsal);
+
                   let startYear = rehearsal.startsAt.slice(0, 4);
                   let startMonth = parseInt(rehearsal.startsAt.slice(5, 7)) - 1;
                   let startDay = rehearsal.startsAt.slice(8, 10);
@@ -124,11 +208,14 @@
 
                   let endHour = parseInt(startHour) + rehearsal.duration;
 
-                  rehearsal.start = new Date(startYear, startMonth, startDay, startHour)
-                  rehearsal.end = new Date(startYear, startMonth, startDay, endHour);
+                  let reservedRehearsal = {};
 
-                  console.log(rehearsal);
-                  reserved.push(rehearsal);
+                  reservedRehearsal.start = new Date(startYear, startMonth, startDay, startHour)
+                  reservedRehearsal.end = new Date(startYear, startMonth, startDay, endHour);
+
+                  console.log("AFTER");
+                  console.log(reservedRehearsal);
+                  reserved.push(reservedRehearsal);
                 })
 
                 render(reserved);
@@ -146,6 +233,9 @@
           /** TODO should be passed **/
           timeslotsPerDay: (timetableEnd - timetableStart) / room.roomType.rehearsalMinTime,
           newEventText: '',
+          timeSeparator: ' - ',
+          startParam: '',
+          endParam: '',
           preventDragOnEventCreation: true,
           allowCalEventOverlap: true,
           startOnFirstDayOfWeek: function (calendar) {
@@ -164,7 +254,7 @@
 
           eventNew: function (calEvent, $event) {
             if (calEvent.start.getTime() < new Date().getTime()) {
-              return;
+              return '';
             }
             // displayMessage('<strong>Added event</strong><br/>Start: ' + calEvent.startDatetime + '<br/>End: ' + calEvent.end);
 
@@ -194,11 +284,9 @@
                   xhr.setRequestHeader('Authorization', 'Bearer ' + token);
                 },
                 contentType: "application/json",
-                // authorization: 'Bearer ' + token,
                 data: JSON.stringify(rehearsal),
                 success: function (rehearsal) {
                   console.log("Successfully reserved " + rehearsal);
-                  // location.reload();
                 },
                 error: function (e) {
                   console.log(e);
@@ -255,6 +343,6 @@
   <div id='calendar'>
 
   </div>
-
+</div>
 </body>
 </html>

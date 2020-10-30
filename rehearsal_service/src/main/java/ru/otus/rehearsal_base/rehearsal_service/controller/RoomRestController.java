@@ -1,4 +1,4 @@
-package ru.otus.rehearsal_base.rehearsal_service.controller.rest;
+package ru.otus.rehearsal_base.rehearsal_service.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

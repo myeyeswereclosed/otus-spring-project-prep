@@ -7,7 +7,9 @@ import lombok.experimental.Accessors;
 import ru.otus.rehearsal_base.rehearsal_service.domain.rehearsal.PaymentStatus;
 import ru.otus.rehearsal_base.rehearsal_service.domain.rehearsal.RehearsalStatus;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Data
 @NoArgsConstructor
@@ -18,6 +20,9 @@ public class RehearsalDto {
     private ArtistDto artist;
     private RoomDto room;
     private LocalDateTime startsAt;
+    private LocalDate date;
+    private LocalTime start;
+    private LocalTime end;
     private int duration;
     private RehearsalStatus status;
     private PaymentStatus paymentStatus;

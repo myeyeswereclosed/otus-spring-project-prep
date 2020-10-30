@@ -5,77 +5,28 @@
     <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">
     <link rel="stylesheet"  th:href="@{/css/custom.css}">
     <script type="text/javascript" th:src="@{/libs/jquery-1.4.4.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/app.js}"></script>
 </head>
 <body>
-    <div th:include="~{fragments/header :: header}"></div>
+    <div class="container" id="main-container">
 
-    <div class="row table-responsive">
-        <table id = "book-info" class="table">
-            <thead>
-            <tr>
-                <th>Date</th>
-                <th>Room</th>
-                <th>Status</th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            </tbody>
+        <div th:include="~{fragments/header :: header}" hidden id="header"></div>
+        <div th:include="~{fragments/rehearsals :: rehearsals}" hidden id="rehearsals" ></div>
 
-                <script type='text/javascript' th:inline="javascript">
-                    const artist = /*[[${artist}]]*/'artist';
+        <script type='text/javascript' th:inline="javascript">
+            accessStrategy(
+                function(user) {
+                    console.log("HERE");
+                    console.log(user);
 
-                    $(function () {
-                        $.ajax({
-                            url: "/artist/" + artist.id + "/rehearsals/",
-                            method: "get",
-                            success: function (rehearsals) {
-                                rehearsals.forEach(function(rehearsal) {
-                                    let row =
-                                        $('<tr>')
-                                            .append($('<td>' + rehearsal.startsAt + '</td>'))
-                                            .append(
-                                                $('<td><a href="/room/' + rehearsal.room.id + '/timetable">'
-                                                    + rehearsal.room.name +
-                                                    '</a></td>'
-                                                )
-                                            )
-                                            .append($('<td>' + rehearsal.status + '</td>'));
-
-                                    if (rehearsal.cancelable) {
-                                        row.append(
-                                            $('<a class="btn btn-primary btn-info btn-sm cancel-rehearsal-btn" href="'
-                                                + 'rehearsal/' + rehearsal.id + '">Cancel</a>')
-                                        );
-                                    }
-
-                                    $('tbody').append(row);
-                                })
-
-                                $(".cancel-rehearsal-btn").click(
-                                    function (event) {
-                                        event.preventDefault();
-
-                                        console.log($(this).attr("href"));
-
-                                        $.ajax({
-                                            url: $(this).attr("href"),
-                                            type: "delete",
-                                            success: function() {
-                                                alert("Cancelled!");
-                                                location.reload();
-                                            },
-                                            error: function(jqXHR) {
-                                                handleError(jqXHR, this.url.split("/")[2]);
-                                            }
-                                        })
-                                    }
-                                );
-                            }
-                        });
-                    });
-                </script>
-        </table>
+                    $('#header').show();
+                    $('#rehearsals').show();
+                },
+                function() {
+                    location.href="/login";
+                }
+            )
+        </script>
     </div>
 </body>
 </html>

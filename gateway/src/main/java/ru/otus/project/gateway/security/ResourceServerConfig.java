@@ -1,6 +1,7 @@
 package ru.otus.project.gateway.security;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -51,10 +52,13 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
             .and()
             .authorizeRequests()
-//            .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+            .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
             .antMatchers("/admin/**").hasRole("ADMIN")
             .antMatchers("/favicon.ico").anonymous()
-            .antMatchers("/", "/login", "/clientLogin**", "/register", "/rehearsals", "/rooms/**").permitAll()
+            .antMatchers(
+                "/", "/login", "/clientLogin**", "/register", "/rehearsal/**",
+                "/rehearsals", "/rooms/**", "/user/rehearsals", "/room/**", "/error"
+            ).permitAll()
             .anyRequest().authenticated()
             .and()
             .formLogin()

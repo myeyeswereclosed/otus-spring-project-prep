@@ -1,4 +1,4 @@
-package ru.otus.rehearsal_base.rehearsal_service.controller.rest;
+package ru.otus.rehearsal_base.rehearsal_service.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -71,14 +71,17 @@ public class RehearsalRestController {
         }
     }
 
-    @GetMapping("/artist/{artistId}/rehearsals/")
-    public ResponseEntity<List<RehearsalDto>> getArtistRehearsals(@PathVariable long artistId) {
+    @GetMapping("/artist/{phone}/rehearsals")
+    public ResponseEntity<List<RehearsalDto>> getArtistRehearsals(@PathVariable String phone) {
         return
             ResponseEntity.ok(
                 service
-                    .getArtistRehearsals(artistId)
+                    .getArtistRehearsals(phone)
                     .stream()
-                    .map(rehearsal -> rehearsal.toDto(config.getCanBeCancelledBefore()))
+                    .map(rehearsal -> {
+                        logger.info("Rehearsal found: {}", rehearsal);
+                        return rehearsal.toDto(config.getCanBeCancelledBefore());
+                    })
                     .collect(toList())
             );
     }

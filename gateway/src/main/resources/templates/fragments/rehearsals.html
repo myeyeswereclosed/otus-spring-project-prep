@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Rehearsals</title>
+</head>
+<body>
+    <div th:fragment="rehearsals">
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet"  th:href="@{/css/custom.css}">
+    <script type="text/javascript" th:src="@{/libs/jquery-1.4.4.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/app.js}"></script>
+
+    <div class="container" id="table-container">
+        <h4 class="muted">Мои репетиции</h4>
+        <script type='text/javascript' th:inline="javascript">
+            $(function () {
+                $.ajax({
+                    url: "/user/rehearsals",
+                    type: "get",
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+                    },
+                    success: function (rehearsals) {
+                        if (rehearsals.length !== 0) {
+                            $('#table-container').append(
+                                `
+                                    <table id = "book-info" class="table">
+                                        <thead>
+                                        <tr class="table-light">
+                                            <th>Date</th>
+                                            <th>Time</th>
+                                            <th>Room</th>
+                                            <th>Status</th>
+                                            <th></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                `
+                            )
+
+                            rehearsals.forEach(function(rehearsal) {
+                                let row =
+                                    $('<tr class="table-success">')
+                                        .append($('<td>' + rehearsal.date + '</td>'))
+                                        .append($('<td>' + rehearsal.start + '-' + rehearsal.end + '</td>'))
+                                        .append(
+                                            $('<td><a href="/room/' + rehearsal.room.id + '/timetable">'
+                                                + rehearsal.room.name +
+                                                '</a></td>'
+                                            )
+                                        )
+                                        .append($('<td>' + rehearsal.status + '</td>'));
+
+                                if (rehearsal.cancelable) {
+                                    row.append(
+                                        $('<a class="btn btn-primary btn-info btn-sm cancel-rehearsal-btn" href="'
+                                            + 'rehearsal/' + rehearsal.id + '">Cancel</a>')
+                                    );
+                                }
+
+                                $('tbody').append(row);
+                            })
+                        }
+
+
+                        $(".cancel-rehearsal-btn").click(
+                            function (event) {
+                                event.preventDefault();
+
+                                console.log($(this).attr("href"));
+
+                                $.ajax({
+                                    url: $(this).attr("href"),
+                                    type: "delete",
+                                    success: function() {
+                                        alert("Cancelled!");
+                                        location.reload();
+                                    },
+                                    error: function(jqXHR) {
+                                        handleError(jqXHR, this.url.split("/")[2]);
+                                    }
+                                })
+                            }
+                        );
+                    }
+                });
+            });
+        </script>
+    </div>
+</body>
+</html>
