@@ -24,13 +24,13 @@ public class MainController {
         return "rooms";
     }
 
-    @GetMapping("/rehearsals")
-    public String rehearsals(Model model) {
-        // stub
-        var artist = artistRepository.findById(1L).get().toDto();
-
-        model.addAttribute("artist", artist);
-
-        return "rehearsals";
-    }
+//    @GetMapping("/rehearsals")
+//    public String rehearsals(Model model) {
+//        // stub
+//        var artist = artistRepository.findById(1L).get().toDto();
+//
+//        model.addAttribute("artist", artist);
+//
+//        return "rehearsals";
+//    }
 }

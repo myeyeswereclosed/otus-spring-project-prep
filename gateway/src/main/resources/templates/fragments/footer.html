@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Footer</title>
+    </head>
+    <body>
+        <div th:fragment="footer" >
+            <script type="text/javascript" th:src="@{/libs/jquery-1.4.4.min.js}"></script>
+            <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">
+
+            <div class="container">
+                <hr>
+                <div class="row">
+                    <div class="span12">
+                        <p class="pull-left">Улица Карла Маркса, д.8</p>
+                        <p class="pull-right">+8 (495) 123-123-1</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

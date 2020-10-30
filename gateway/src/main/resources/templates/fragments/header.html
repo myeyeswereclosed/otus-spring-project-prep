@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
-        <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">
-        <link rel="stylesheet"  th:href="@{/css/custom.css}">
+<!--        <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">-->
+<!--        <link rel="stylesheet"  th:href="@{/css/custom.css}">-->
         <title>Header</title>
     </head>
     <body>
         <div th:fragment="header" >
             <script type="text/javascript" th:src="@{/libs/jquery-1.4.4.min.js}"></script>
+            <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">
 
             <div class="navbar navbar-fixed-top navbar-inverse" >
                 <div class="navbar-inner">
@@ -35,10 +36,8 @@
                                 console.log("TOKEN " + token)
 
                                 if (!token) {
-                                    console.log("NO TOKEN");
                                     renderForAnonymous();
                                 } else {
-                                    console.log("CHECKING ACCESS");
                                     renderForToken(token);
                                 }
 
@@ -60,23 +59,43 @@
                                         beforeSend: function (xhr) {
                                             xhr.setRequestHeader('Authorization', 'Bearer ' + token);
                                         },
-                                        // contentType: "application/json",
-                                        // authorization: 'Bearer ' + token,
-                                        // data: JSON.stringify(rehearsal),
                                         success: function(user) {
                                             console.log("Access allowed ");
                                             console.log(user);
                                             $('#actions-div')
                                                 .append(
                                                     `<ul class="nav pull-right">
-                                                        <li><a href="/login">Профиль</a></li>
+                                                        <li class="dropdown" id="profile">
+                                                            <a
+                                                                href="#" class="dropdown-toggle"
+                                                                data-toggle="dropdown-menu"
+                                                                role="button" aria-expanded="false"
+                                                            >${user.name} (${user.phone}) <span class="caret"></span></a>
+                                                            <ul class="dropdown-menu" role="menu">
+                                                               <li><a href="/rehearsals">Репетиции</a></li>
+                                                            </ul>
+                                                        </li>
                                                         <li class="divider-vertical"></li>
                                                          <li><a href="/" onclick="localStorage.clear()">Выйти</a></li>
                                                     </ul>`
                                                 );
+
+                                            let profile = $('#profile');
+
+                                            profile.click(function(){
+                                                if (profile.hasClass('open')) {
+                                                    profile.removeClass('open')
+                                                } else {
+                                                    profile.addClass('open');
+                                                }
+                                            });
                                         },
-                                        error: function (e) {
-                                            console.log(e);
+                                        error: function(response) {
+                                            // expired
+                                            if(response.status === 401) {
+                                                localStorage.clear();
+                                                renderForAnonymous();
+                                            }
                                         }
                                     });
                                 }

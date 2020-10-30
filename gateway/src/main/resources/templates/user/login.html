@@ -25,6 +25,7 @@
                                     type="text"
                                     placeholder="Телефон..."
                                     th:field="*{phone}"
+                                    th:pattern="${'^[1-9][0-9]{9}$'}"
                                     required
                             >
                         </div>
@@ -117,7 +118,7 @@
         </div>
     </div>
 
-
+    <div th:include="~{fragments/footer :: footer}"></div>
 </body>
 
 </html>

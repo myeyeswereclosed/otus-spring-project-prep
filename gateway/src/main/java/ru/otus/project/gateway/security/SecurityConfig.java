@@ -20,27 +20,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/webjars/**", "/css/**", "/libs/**");
     }
 
-    @Override
-    public void configure(HttpSecurity http) throws Exception {
-        http
-            .csrf()
-            .disable()
-            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
-            .and()
-            .authorizeRequests()
-            .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-            .antMatchers("/admin/**").hasRole("ADMIN")
-            .antMatchers("/anonymous*", "/favicon.ico").anonymous()
-            .antMatchers("/", "/login**", "/clientLogin**", "/register").permitAll()
-            .anyRequest().authenticated()
-            .and()
-            .formLogin()
-            .loginPage("/login")
-        ;
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
-    }
+//    @Override
+//    public void configure(HttpSecurity http) throws Exception {
+//        http
+//            .csrf()
+//            .disable()
+//            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+//            .and()
+//            .authorizeRequests()
+////            .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+//            .antMatchers("/admin/**").hasRole("ADMIN")
+//            .antMatchers("/favicon.ico").anonymous()
+//            .antMatchers("/", "/login", "/clientLogin**", "/register", "/rehearsals").permitAll()
+//            .anyRequest().authenticated()
+//            .and()
+//            .formLogin()
+//            .loginPage("/login")
+//        ;
+//    }
 }

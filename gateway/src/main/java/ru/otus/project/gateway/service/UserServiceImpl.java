@@ -1,6 +1,7 @@
 package ru.otus.project.gateway.service;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
@@ -37,7 +38,7 @@ public class UserServiceImpl implements UserService {
 
             return Optional.of(accessToken.getAdditionalInformation());
         } catch (Exception e) {
-            logger.error("Exception {} occurred", e.getMessage());
+            logger.error("Exception {} occurred. Trace:\r\n{}", e.getMessage(), ExceptionUtils.getStackTrace(e));
         }
 
         return Optional.empty();
@@ -57,7 +58,7 @@ public class UserServiceImpl implements UserService {
                     )
                 );
         } catch (Exception e) {
-            logger.error("Exception {} occurred", e.getMessage());
+            logger.error("Exception {} occurred. Trace:\r\n{}", e.getMessage(), ExceptionUtils.getStackTrace(e));
         }
 
         return Optional.empty();

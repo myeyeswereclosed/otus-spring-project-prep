@@ -45,7 +45,8 @@
                                     name="phone"
                                     type="text"
                                     th:field="*{phone}"
-                                    placeholder="Телефон..."
+                                    placeholder="Телефон (10 цифр)..."
+                                    th:pattern="${'^[1-9][0-9]{9}$'}"
                                     required
                             >
                         </div>
@@ -84,14 +85,6 @@
             </div>
         </div>
     </div>
-    <!-- Footer section -->
-    <div class="container">
-        <hr>
-        <div class="row">
-            <div class="span12">
-                <p class="pull-left">Copyright &copy; 2013 Gadget Store, Inc. All Right Reserved</p>
-                <p class="pull-right"><a href="user-agreement.html">Privacy Policy</a> | <a href="user-agreement.html">Terms of Use</a></p>
-            </div>
-        </div>
-    </div>
+
+    <div th:include="~{fragments/footer :: footer}"></div>
 </body>

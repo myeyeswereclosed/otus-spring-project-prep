@@ -29,17 +29,10 @@ public class MainController {
         return "index";
     }
 
-    @GetMapping("/rehearsal")
-    public String rehearsal(Model model) {
-        return "rehearsal";
-    }
-
     @GetMapping("/rehearsals")
-    @ResponseStatus(HttpStatus.OK)
-    public void rehearsals(Authentication authentication) {
-        System.out.println("AUTHENTICATION " + authentication);
-
-//        return "rehearsal";
+    public String rehearsals(Model model) {
+        System.out.println("OLOLO");
+        return "rehearsals";
     }
 
     @GetMapping("/rooms/view")
