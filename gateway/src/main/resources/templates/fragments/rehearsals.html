@@ -28,10 +28,10 @@
                                     <table id = "book-info" class="table">
                                         <thead>
                                         <tr class="table-light">
-                                            <th>Date</th>
-                                            <th>Time</th>
-                                            <th>Room</th>
-                                            <th>Status</th>
+                                            <th>Дата</th>
+                                            <th>Время</th>
+                                            <th>Комната</th>
+                                            <th>Статус</th>
                                             <th></th>
                                         </tr>
                                         </thead>
@@ -57,7 +57,7 @@
                                 if (rehearsal.cancelable) {
                                     row.append(
                                         $('<a class="btn btn-primary btn-info btn-sm cancel-rehearsal-btn" href="'
-                                            + 'rehearsal/' + rehearsal.id + '">Cancel</a>')
+                                            + 'rehearsal/' + rehearsal.id + '">Отменить</a>')
                                     );
                                 }
 
@@ -76,7 +76,7 @@
                                     url: $(this).attr("href"),
                                     type: "delete",
                                     success: function() {
-                                        alert("Cancelled!");
+                                        alert("Репетиция отменена");
                                         location.reload();
                                     },
                                     error: function(jqXHR) {
