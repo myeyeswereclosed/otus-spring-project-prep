@@ -1,0 +1,21 @@
+server:
+  port: 8085
+  servlet:
+    context-path: /sms-service
+
+spring:
+  datasource:
+    platform: postgres
+    url: jdbc:postgresql://localhost:5432/sms_code_base
+    username: postgres
+    password: testpassword
+    driverClassName: org.postgresql.Driver
+    initialization-mode: always
+  jpa:
+    show-sql: true
+smsCode:
+  waitingInterval: 60 #seconds
+  countRequestsInterval: 300 #seconds
+  requestsNumber: 3
+
+

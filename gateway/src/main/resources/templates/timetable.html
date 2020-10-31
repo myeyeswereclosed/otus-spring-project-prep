@@ -271,13 +271,7 @@
               let rehearsal = {
                 'startsAt': new Date(date.getTime() - date.getTimezoneOffset() * 60 * 1000),
                 'room': room,
-                // 'artist': artist
               }
-
-              console.log(JSON.stringify(rehearsal));
-              console.log(token);
-
-              return;
 
               $.ajax({
                 url: "/rehearsal",
