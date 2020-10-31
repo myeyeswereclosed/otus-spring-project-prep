@@ -9,6 +9,8 @@
         <module>gateway</module>
         <module>rehearsal_service</module>
         <module>sms_service</module>
+        <module>service_discovery</module>
+        <module>config_server</module>
     </modules>
 
     <parent>

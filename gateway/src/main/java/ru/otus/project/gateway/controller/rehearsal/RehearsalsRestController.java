@@ -1,48 +1,39 @@
-package ru.otus.project.gateway.controller;
+package ru.otus.project.gateway.controller.rehearsal;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 import ru.otus.project.gateway.dto.rehearsal.RehearsalDto;
 import ru.otus.project.gateway.dto.security.User;
-import ru.otus.project.gateway.service.UserService;
+import ru.otus.project.gateway.service.user.UserAuthenticationService;
+import ru.otus.project.gateway.service.rehearsal.RehearsalService;
 
 import java.util.Collections;
 import java.util.List;
 
 import static org.apache.commons.lang3.exception.ExceptionUtils.getStackTrace;
-import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.ResponseEntity.ok;
 import static org.springframework.http.ResponseEntity.status;
 
 @RestController
 @RequiredArgsConstructor
-public class RehearsalRestController {
-    private static final Logger logger = LoggerFactory.getLogger(RehearsalRestController.class);
+public class RehearsalsRestController {
+    private static final Logger logger = LoggerFactory.getLogger(RehearsalsRestController.class);
 
-    private final UserService service;
-
-    private final RestTemplate restClient = new RestTemplate();
-    private final String url = "http://localhost:8888";
+    private final UserAuthenticationService userService;
+    private final RehearsalService rehearsalService;
 
     @PostMapping("/rehearsal")
     public ResponseEntity<?> reserve(@RequestBody RehearsalDto rehearsal, Authentication authentication) {
-//        if (rehearsal.isValid())
-
-        // TODO separate to strategies: user, admin ?
-
         var response =
-            service
+            userService
                 .authenticatedUser(authentication)
-                .map(user -> reserve(user, rehearsal))
-                .orElse(ResponseEntity.badRequest().build())
+                .map(user -> ResponseEntity.ok(reserve(user, rehearsal)))
+                .orElse(ResponseEntity.notFound().build())
         ;
 
         logger.info("Response IS " + response);
@@ -50,7 +41,7 @@ public class RehearsalRestController {
         return response;
     }
 
-    private ResponseEntity<RehearsalDto> reserve(User user, RehearsalDto rehearsal) {
+    private RehearsalDto reserve(User user, RehearsalDto rehearsal) {
         logger.info(
             "Trying to reserve rehearsal: room: {}, {}({} hour(s)) for {}({})",
             rehearsal.getRoom().getName(),
@@ -60,12 +51,7 @@ public class RehearsalRestController {
             user.getPhone()
         );
 
-        var response =
-            restClient.postForEntity(
-                url + "/artist/" + user.getPhone() + "/rehearsal",
-                rehearsal,
-                RehearsalDto.class
-            );
+        var response = rehearsalService.reserve(user.getPhone(), rehearsal);
 
         logger.info("Response from rehearsal service: {}", response);
 
@@ -75,7 +61,7 @@ public class RehearsalRestController {
     @DeleteMapping("rehearsal/{id}")
     public ResponseEntity<?> cancel(@PathVariable long id) {
         try {
-            restClient.delete(url + "/rehearsal/" + id);
+            rehearsalService.cancel(id);
 
             return ok().build();
         } catch (Exception e) {
@@ -85,27 +71,30 @@ public class RehearsalRestController {
         }
     }
 
-    @GetMapping("/user/rehearsals")
+    @GetMapping("artist/rehearsals")
     public ResponseEntity<List<RehearsalDto>> getArtistRehearsals(Authentication authentication) {
         return
             ok(
-                service
+                userService
                     .authenticatedUser(authentication)
                     .map(
                         user -> {
                             logger.info("Trying to obtain rehearsals for user {}", user);
 
-                            return
-                                restClient.exchange(
-                                    url + "/artist/" + user.getPhone() + "/rehearsals",
-                                    GET,
-                                    null,
-                                    new ParameterizedTypeReference<List<RehearsalDto>>() {}
-                                ).getBody();
+                            return rehearsalService.reservedByArtistWithPhone(user.getPhone());
                         })
                     .orElse(Collections.emptyList())
             )
         ;
+    }
+
+    @GetMapping("room/{roomId}/rehearsals/reserved/{fromDate}/{toDate}")
+    public List<RehearsalDto> reservedInPeriod(
+        @PathVariable int roomId,
+        @PathVariable String fromDate,
+        @PathVariable String toDate
+    ) {
+        return rehearsalService.reservedInPeriod(roomId, fromDate, toDate);
     }
 
 //    @GetMapping("/rehearsal/{id}")

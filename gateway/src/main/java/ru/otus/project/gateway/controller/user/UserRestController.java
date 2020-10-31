@@ -1,4 +1,4 @@
-package ru.otus.project.gateway.controller;
+package ru.otus.project.gateway.controller.user;
 
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -7,15 +7,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.otus.project.gateway.dto.security.User;
-import ru.otus.project.gateway.service.UserService;
+import ru.otus.project.gateway.service.user.UserAuthenticationService;
 
-@SuppressWarnings("deprecation")
 @RestController
 @RequiredArgsConstructor
-public class SecurityController {
-    private static final Logger logger = LoggerFactory.getLogger(SecurityController.class);
+public class UserRestController {
+    private static final Logger logger = LoggerFactory.getLogger(UserRestController.class);
 
-    private final UserService service;
+    private final UserAuthenticationService service;
 
     @GetMapping("/checkAccess")
     public User checkAccess(Authentication authentication) {

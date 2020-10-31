@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import ru.otus.project.gateway.dto.artist.ArtistDto;
-import ru.otus.project.gateway.dto.artist.ArtistUserDto;
 import ru.otus.project.gateway.dto.room.RoomDto;
 
 import java.time.LocalDate;

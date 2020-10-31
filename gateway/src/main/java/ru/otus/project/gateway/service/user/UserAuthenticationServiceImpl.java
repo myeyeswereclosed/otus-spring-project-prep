@@ -1,4 +1,4 @@
-package ru.otus.project.gateway.service;
+package ru.otus.project.gateway.service.user;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -15,14 +15,14 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService {
+public class UserAuthenticationServiceImpl implements UserAuthenticationService {
     public static final String ID_KEY = "id";
     public static final String NAME_KEY = "name";
     public static final String PHONE_KEY = "phone";
     public static final String EMAIL_KEY = "email";
     public static final String ROLE_KEY = "role";
 
-    private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserAuthenticationServiceImpl.class);
 
     private final TokenStore tokenStore;
 

@@ -16,7 +16,7 @@ import static java.util.stream.Collectors.toList;
 
 @RestController
 @RequiredArgsConstructor
-public class RoomRestController {
+public class RoomController {
     private final RoomRepository repository;
 
     @GetMapping("/rooms/active")

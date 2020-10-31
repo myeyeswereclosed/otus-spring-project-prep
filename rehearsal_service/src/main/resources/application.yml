@@ -1,7 +1,11 @@
 server:
   port: 8888
-#  servlet:
-#    context-path: /rehearsal-service
+  servlet:
+    context-path: /rehearsal-service
+
+eureka:
+  client:
+    fetch-registry: true
 
 spring:
   datasource:
@@ -15,5 +19,8 @@ spring:
     show-sql: true
 rehearsal:
   canBeCancelledBefore: 24 #hours
-
-
+logging:
+  level:
+    org:
+      springframework:
+        web: DEBUG

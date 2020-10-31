@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "timetable")
 @Data
 public class Timetable {
-    private int start;
-    private int end;
-    private int period;
+    private int startHour;
+    private int endHour;
+    private int periodInDays;
 }

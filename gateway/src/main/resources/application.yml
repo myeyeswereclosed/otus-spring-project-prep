@@ -1,16 +1,20 @@
 server:
   port: 8080
 
+eureka:
+  client:
+    fetch-registry: true
+
 app:
   oauth2:
-    token-uri: http://localhost:8090/oauth/token
+    token-uri: http://localhost:8090/auth-server/oauth/token
     client-id: "any_id"
     client-secret: "any_secret"
     signing-key: 987654321
 timetable:
-  start: 9 #hours
-  end: 24 #hours
-  period: 7 #days
+  startHour: 9 #hours
+  endHour: 24 #hours
+  periodInDays: 7 #days
 logging:
   level:
     org:

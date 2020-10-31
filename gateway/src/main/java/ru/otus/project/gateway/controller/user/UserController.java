@@ -1,4 +1,4 @@
-package ru.otus.project.gateway.controller;
+package ru.otus.project.gateway.controller.user;
 
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
@@ -16,14 +15,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import ru.otus.project.gateway.config.AuthorizationConfig;
-import ru.otus.project.gateway.dto.artist.ArtistAccountDto;
-import ru.otus.project.gateway.dto.artist.ArtistUserDto;
 import ru.otus.project.gateway.dto.artist.ArtistDto;
-import ru.otus.project.gateway.dto.security.User;
+import ru.otus.project.gateway.dto.artist.ArtistUserDto;
 import ru.otus.project.gateway.dto.security.TokenResponseDto;
+import ru.otus.project.gateway.dto.security.User;
 import ru.otus.project.gateway.dto.security.UserLoginDto;
-
-import java.util.Objects;
+import ru.otus.project.gateway.service.artist.ArtistService;
+import ru.otus.project.gateway.service.rehearsal.RehearsalService;
+import ru.otus.project.gateway.service.user.UserAuthenticationService;
+import ru.otus.project.gateway.service.user.UserService;
 
 @RequiredArgsConstructor
 @Controller
@@ -34,6 +34,10 @@ public class UserController {
     private final RestTemplate restClient = new RestTemplate();
     private final String authorizationServerUrl = "http://localhost:8090";
     private final String rehearsalServiceUrl = "http://localhost:8888";
+
+    private final UserAuthenticationService service;
+    private final UserService userService;
+    private final ArtistService artistService;
 
     @GetMapping("/register")
     public String register(Model model) {
@@ -55,19 +59,21 @@ public class UserController {
         logger.info("Trying to login {}", user);
 
         var authorizationResponse =
-            restClient.postForEntity(
-                config.getTokenUri(),
-                new HttpEntity<>(formDataForTokenRequest(user), headersForTokenRequest()),
-                TokenResponseDto.class
-            );
+            userService.accessToken(user.getPhone(), user.getPassword());
+//            restClient.postForEntity(
+//                config.getTokenUri(),
+//                new HttpEntity<>(formDataForTokenRequest(user), headersForTokenRequest()),
+//                TokenResponseDto.class
+//            );
 
         logger.info(
-            "Authorization server responded:{} - {}",
-            authorizationResponse.getStatusCode(),
-            authorizationResponse.getBody()
+            "Authorization server responded:{} - {}", authorizationResponse, authorizationResponse
+//            authorizationResponse.getStatusCode(),
+//            authorizationResponse.getBody()
         );
 
-        return authorizationResponse.getBody();
+//        return authorizationResponse.getBody();
+        return authorizationResponse;
 
 //        var rehearsalServiceResponse =
 //            restClient.getForEntity(
@@ -110,24 +116,36 @@ public class UserController {
     public String register(ArtistUserDto user, Model model) {
         // TODO completable future??
         var authorizationServerResponse =
-            restClient.postForEntity(
-                authorizationServerUrl + "/register",
+            userService.register(
                 new User(
                     user.getName(),
                     user.getPhone(),
                     user.getEmail(),
                     user.getPassword(),
                     user.getRole()
-                ),
-                User.class
+                )
             );
+//            restClient.postForEntity(
+//                authorizationServerUrl + "/register",
+//                new User(
+//                    user.getName(),
+//                    user.getPhone(),
+//                    user.getEmail(),
+//                    user.getPassword(),
+//                    user.getRole()
+//                ),
+//                User.class
+//            );
 
         var rehearsalServiceResponse =
-            restClient.postForEntity(
-                rehearsalServiceUrl + "/artist",
-                new ArtistDto(user.getName(), user.getGenre(), user.getPhone(), user.getEmail()),
-                ArtistDto.class
+            artistService.create(
+                new ArtistDto(user.getName(), user.getGenre(), user.getPhone(), user.getEmail())
             );
+//            restClient.postForEntity(
+//                rehearsalServiceUrl + "/artist",
+//                new ArtistDto(user.getName(), user.getGenre(), user.getPhone(), user.getEmail()),
+//                ArtistDto.class
+//            );
 
         model.addAttribute("user", new UserLoginDto());
 

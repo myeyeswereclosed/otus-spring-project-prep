@@ -1,4 +1,4 @@
-package ru.otus.project.gateway.controller;
+package ru.otus.project.gateway.controller.room;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -16,11 +16,16 @@ public class RoomController {
     public String roomTimetable(Model model, @PathVariable String id) {
         model
             .addAttribute("roomId", id)
-            .addAttribute("timetableStart", timetable.getStart())
-            .addAttribute("timetableEnd", timetable.getEnd())
-            .addAttribute("timetablePeriod", timetable.getPeriod())
+            .addAttribute("timetableStart", timetable.getStartHour())
+            .addAttribute("timetableEnd", timetable.getEndHour())
+            .addAttribute("timetablePeriod", timetable.getPeriodInDays())
         ;
 
         return "timetable";
+    }
+
+    @GetMapping("/rooms/view")
+    public String rooms() {
+        return "rooms";
     }
 }

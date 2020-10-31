@@ -17,10 +17,16 @@ public class RehearsalBaseUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String phone) throws UsernameNotFoundException {
+        System.out.println("HERE WITH " + phone);
+
         return
             repository
                 .findUserByPhone(phone)
-                .map(RehearsalBaseUser::new)
+                .map(user -> {
+                    System.out.println("USER FOUND " + user);
+
+                    return new RehearsalBaseUser(user);
+                })
                 .orElseThrow(
                     () -> new UsernameNotFoundException(String.format("User with phone %s not found", phone))
                 );
