@@ -25,7 +25,7 @@ import static org.springframework.http.ResponseEntity.status;
 @RestController
 @RequiredArgsConstructor
 public class RehearsalRestController {
-    private static Logger logger = LoggerFactory.getLogger(RehearsalRestController.class);
+    private static final Logger logger = LoggerFactory.getLogger(RehearsalRestController.class);
 
     private final UserService service;
 

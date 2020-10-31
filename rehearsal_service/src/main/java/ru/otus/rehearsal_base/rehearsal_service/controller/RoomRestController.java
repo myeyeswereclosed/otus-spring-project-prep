@@ -39,6 +39,4 @@ public class RoomRestController {
                     .map(Room::toDto)
             );
     }
-
-
 }

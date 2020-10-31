@@ -31,7 +31,7 @@ public class RehearsalRestController {
 
     @PostMapping("/artist/{phone}/rehearsal")
     public ResponseEntity<?> reserve(@PathVariable String phone, @RequestBody RehearsalDto rehearsal) {
-        logger.info("Trying to reserve {} fot {}", rehearsal, phone);
+        logger.info("Trying to reserve {} for {}", rehearsal, phone);
 
         return
             artistRepository

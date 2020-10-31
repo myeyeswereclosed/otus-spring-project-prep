@@ -58,27 +58,19 @@ public class UserController {
     public TokenResponseDto login(UserLoginDto user) {
         logger.info("Trying to login {}", user);
 
-        HttpHeaders headers = new HttpHeaders();
-
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        headers.setBasicAuth(config.getClientId(), config.getClientSecret());
-
-        MultiValueMap<String, Object> formData = new LinkedMultiValueMap<>();
-
-        formData.add("username", user.getPhone());
-        formData.add("password", user.getPassword());
-        formData.add("client_id", config.getClientId());
-        formData.add("grant_type", "password");
-
         // TODO completable future
         var authorizationResponse =
             restClient.postForEntity(
                 config.getTokenUri(),
-                new HttpEntity<>(formData, headers),
+                new HttpEntity<>(formDataForTokenRequest(user), headersForTokenRequest()),
                 TokenResponseDto.class
             );
 
-        logger.info("Authorization server responded {}", authorizationResponse);
+        logger.info(
+            "Authorization server responded:{} - {}",
+            authorizationResponse.getStatusCode(),
+            authorizationResponse.getBody()
+        );
 
         return authorizationResponse.getBody();
 
@@ -97,6 +89,26 @@ public class UserController {
 //                    Objects.requireNonNull(authorizationResponse.getBody()),
 //                    Objects.requireNonNull(rehearsalServiceResponse.getBody())
 //                );
+    }
+
+    private HttpHeaders headersForTokenRequest() {
+        HttpHeaders headers = new HttpHeaders();
+
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        headers.setBasicAuth(config.getClientId(), config.getClientSecret());
+
+        return headers;
+    }
+
+    private MultiValueMap<String, String> formDataForTokenRequest(UserLoginDto user) {
+        MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
+
+        formData.add("username", user.getPhone());
+        formData.add("password", user.getPassword());
+        formData.add("client_id", config.getClientId());
+        formData.add("grant_type", "password");
+
+        return formData;
     }
 
     @PostMapping("/register")

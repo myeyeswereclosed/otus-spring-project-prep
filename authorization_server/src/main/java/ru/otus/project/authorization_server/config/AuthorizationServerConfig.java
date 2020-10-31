@@ -21,16 +21,10 @@ import java.util.List;
 @EnableAuthorizationServer
 @RequiredArgsConstructor
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
-
-    private static final int ACCESS_TOKEN_VALIDITY_SECONDS = 60 * 60 * 3;
-    private static final int REFRESH_TOKEN_VALIDITY_SECONDS = -1;
-
-    private final OAuthProps oAuthProps;
     private final AuthenticationManager authManager;
     private final TokenStore tokenStore;
     private final JwtAccessTokenConverter jwtAccessTokenConverter;
     private final DataSource dataSource;
-    private final PasswordEncoder encoder;
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
@@ -48,10 +42,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        System.out.println("CLIENT ID " + oAuthProps.getClientId());
-        System.out.println("CLIENT SECRET " + oAuthProps.getClientSecret());
-
         clients.jdbc(dataSource);
     }
-
 }

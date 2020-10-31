@@ -26,14 +26,17 @@ public class Rehearsal {
 
     @OneToOne
     @Setter
-    private Artist artist;
+    private @NonNull Artist artist;
 
     @Column(name = "start_datetime")
     private LocalDateTime startDatetime;
 
     @OneToOne
     @JoinColumn(name = "room_id")
-    private Room room;
+    private @NonNull Room room;
+
+    @Column(name = "price")
+    private int price;
 
 //    private Set<Gear> rentedGears;
 
@@ -48,6 +51,7 @@ public class Rehearsal {
         this.artist = artist;
         this.startDatetime = startDatetime;
         this.room = room;
+        this.price = room.getPrice();
     }
 
     public Rehearsal changeStatus(RehearsalStatus status) {
@@ -80,23 +84,6 @@ public class Rehearsal {
         return ChronoUnit.HOURS.between(LocalDateTime.now(), startDatetime) > hours;
     }
 
-    public RehearsalDto toDto() {
-        return
-            new RehearsalDto(
-                id,
-                artist.toDto(),
-                room.toDto(),
-                startDatetime,
-                startDatetime.toLocalDate(),
-                startDatetime.toLocalTime(),
-                startDatetime.toLocalTime().plusHours(room.getArtistType().getRehearsalMinTime()),
-                room.getArtistType().getRehearsalMinTime(),
-                status,
-                paymentStatus,
-                true
-            );
-    }
-
     public RehearsalDto toDto(int hoursToCancel) {
         return
             new RehearsalDto(
@@ -108,6 +95,7 @@ public class Rehearsal {
                 startDatetime.toLocalTime(),
                 startDatetime.toLocalTime().plusHours(room.getArtistType().getRehearsalMinTime()),
                 room.getArtistType().getRehearsalMinTime(),
+                price,
                 status,
                 paymentStatus,
                 !status.isCancelled() && canBeCancelled(hoursToCancel)

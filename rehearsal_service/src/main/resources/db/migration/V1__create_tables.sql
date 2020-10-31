@@ -1,14 +1,5 @@
 begin;
 
--- reservation
-drop table if exists rehearsal_gear cascade;
-drop table if exists gear cascade;
-drop table if exists room cascade;
-drop table if exists artist cascade;
-drop table if exists rehearsal cascade;
-drop table if exists artist_type cascade;
-drop table if exists room_status cascade;
-
 -- одиночный музыкант(вокалист, ударник) или группа
 create table if not exists room_type(
     id serial primary key,
@@ -64,6 +55,7 @@ create table if not exists rehearsal(
     artist_id bigint not null,
     start_datetime timestamp not null,
     room_id int not null,
+    price int not null,
     -- reserved, cancelled, finished
     status varchar not null default 'reserved',
     -- paid, not paid
@@ -72,8 +64,6 @@ create table if not exists rehearsal(
     references artist(id) on update cascade on delete cascade,
         constraint fk__rehearsal__room_id foreign key(room_id)
     references room(id) on update cascade on delete restrict
---     constraint uq__rehearsal__room_id__start_datetime unique(room_id, start_datetime)
---         where (status = 'reserved')
 );
 
 create unique index uq__rehearsal__room_id__start_datetime
@@ -81,27 +71,13 @@ create unique index uq__rehearsal__room_id__start_datetime
     where status = 'RESERVED';
 
 create table if not exists rehearsal_gear(
-     id bigserial primary key,
-     rehearsal_id bigint not null,
-     gear_id int not null,
-     constraint fk__rehearsal_gear__rehearsal_id foreign key(rehearsal_id)
-         references rehearsal(id) on update cascade on delete cascade,
-     constraint fk__rehearsal_gear__gear_id foreign key(gear_id)
-         references gear(id) on update cascade on delete cascade
-);
-
--- sms
-
-drop table if exists sms_code;
-
-create table sms_code(
     id bigserial primary key,
-    phone varchar not null,
-    value varchar not null,
-    created_at timestamp not null default now(),
-    actual boolean default true
+    rehearsal_id bigint not null,
+    gear_id int not null,
+    constraint fk__rehearsal_gear__rehearsal_id foreign key(rehearsal_id)
+        references rehearsal(id) on update cascade on delete cascade,
+    constraint fk__rehearsal_gear__gear_id foreign key(gear_id)
+        references gear(id) on update cascade on delete cascade
 );
-
-create unique index uq__sms_code__phone__actual on sms_code(phone, actual) where actual;
 
 commit;

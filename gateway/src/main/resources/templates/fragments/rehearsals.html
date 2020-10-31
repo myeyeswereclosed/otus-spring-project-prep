@@ -32,6 +32,7 @@
                                             <th>Время</th>
                                             <th>Комната</th>
                                             <th>Статус</th>
+                                            <th>Цена</th>
                                             <th></th>
                                         </tr>
                                         </thead>
@@ -52,7 +53,9 @@
                                                 '</a></td>'
                                             )
                                         )
-                                        .append($('<td>' + rehearsal.status + '</td>'));
+                                        .append($('<td>' + rehearsal.status + '</td>'))
+                                        .append($('<td>' + rehearsal.price + '</td>'))
+                                ;
 
                                 if (rehearsal.cancelable) {
                                     row.append(
@@ -64,7 +67,6 @@
                                 $('tbody').append(row);
                             })
                         }
-
 
                         $(".cancel-rehearsal-btn").click(
                             function (event) {

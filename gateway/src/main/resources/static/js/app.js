@@ -1,8 +1,6 @@
 function accessStrategy(accessAllowedBehaviour, accessDeniedBehaviour) {
     let token = localStorage.getItem("access_token");
 
-    console.log("TOKEN " + token)
-
     if (!token) {
         accessDeniedBehaviour();
     } else {
@@ -19,8 +17,6 @@ function tokenStrategy(token, accessAllowedBehaviour, accessDeniedBehaviour) {
             xhr.setRequestHeader('Authorization', 'Bearer ' + token);
         },
         success: function(user) {
-            console.log("USER " + user);
-            console.log(user);
             accessAllowedBehaviour(user);
         },
         error: function(response) {

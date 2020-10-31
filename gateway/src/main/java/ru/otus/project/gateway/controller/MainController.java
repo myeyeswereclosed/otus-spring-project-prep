@@ -19,11 +19,6 @@ import ru.otus.project.gateway.config.AuthorizationConfig;
 @RequiredArgsConstructor
 @Controller
 public class MainController {
-    private static final Logger logger = LoggerFactory.getLogger(MainController.class);
-
-    private final AuthorizationConfig config;
-    private final RestTemplate restClient = new RestTemplate();
-
     @GetMapping("/")
     public String index(Model model) {
         return "index";
