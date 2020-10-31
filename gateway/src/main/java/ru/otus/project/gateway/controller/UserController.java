@@ -44,21 +44,16 @@ public class UserController {
 
     @GetMapping("/login")
     public String loginPage(Model model) {
-        System.out.println("HERE");
-
         model.addAttribute("user", new UserLoginDto());
-
-        System.out.println("LOGIN");
 
         return "user/login";
     }
 
-    @PostMapping("/clientLogin")
+    @PostMapping("/userLogin")
     @ResponseBody
     public TokenResponseDto login(UserLoginDto user) {
         logger.info("Trying to login {}", user);
 
-        // TODO completable future
         var authorizationResponse =
             restClient.postForEntity(
                 config.getTokenUri(),
@@ -113,6 +108,7 @@ public class UserController {
 
     @PostMapping("/register")
     public String register(ArtistUserDto user, Model model) {
+        // TODO completable future??
         var authorizationServerResponse =
             restClient.postForEntity(
                 authorizationServerUrl + "/register",

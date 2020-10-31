@@ -46,6 +46,32 @@
 </head>
 
 <body>
+<!-- Modal -->
+<div
+        class="modal fade" id="confirmReservation" tabindex="-1" role="dialog"
+        aria-labelledby="confirmReservationLabel" aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div>
+          <h5 class="modal-title" id="confirmReservationLabel">Подтверждение репетиции</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true" id="confirm-close">&times;</span>
+            </button>
+        </div>
+      </div>
+      <div class="modal-body" id="confirm-rehearsal-div">
+      </div>
+      <div class="modal-footer">
+        <button id="no-confirm" type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+        <button id="confirm-rehearsal" type="button" class="btn btn-primary">Подтвердить</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <!-- TODO при подключении ломатеся календарь( -->
 <!--  <div th:include="~{fragments/header :: header}"></div>-->
 
@@ -258,9 +284,6 @@
             }
             // displayMessage('<strong>Added event</strong><br/>Start: ' + calEvent.startDatetime + '<br/>End: ' + calEvent.end);
 
-            console.log(calEvent);
-            console.log(room);
-
             let token = localStorage.getItem("access_token");
 
             if (!token) {
@@ -268,26 +291,49 @@
             } else {
               let date = new Date(calEvent.start);
 
+              let startsAt = new Date(date.getTime() - date.getTimezoneOffset() * 60 * 1000);
+
               let rehearsal = {
-                'startsAt': new Date(date.getTime() - date.getTimezoneOffset() * 60 * 1000),
+                'startsAt': startsAt,
                 'room': room,
               }
 
-              $.ajax({
-                url: "/rehearsal",
-                type: "post",
-                beforeSend: function (xhr) {
-                  xhr.setRequestHeader('Authorization', 'Bearer ' + token);
-                },
-                contentType: "application/json",
-                data: JSON.stringify(rehearsal),
-                success: function (rehearsal) {
-                  console.log("Successfully reserved " + rehearsal);
-                },
-                error: function (e) {
-                  console.log(e);
-                }
+              let confirm = $('#confirmReservation');
+
+              confirm.hasClass('fade') && confirm.removeClass('fade');
+              $('#confirm-rehearsal-div').append(
+                `<div class="container">
+                    <p>${room.name}: ${startsAt}</p>
+                </div>`
+              );
+              $('#confirm-close').click(function () {
+                location.reload();
               });
+              $('#no-confirm').click(function () {
+                location.reload();
+              });
+
+              $('#confirm-rehearsal').click(
+                function () {
+                  $.ajax({
+                    url: "/rehearsal",
+                    type: "post",
+                    beforeSend: function (xhr) {
+                      xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+                    },
+                    contentType: "application/json",
+                    data: JSON.stringify(rehearsal),
+                    success: function (rehearsal) {
+                      // TODO successful popup
+                      console.log("Successfully reserved " + rehearsal);
+                      location.reload();
+                    },
+                    error: function (e) {
+                      console.log(e);
+                    }
+                  });
+                }
+              )
             }
           },
 

@@ -16,7 +16,7 @@
                 <h4 class="muted">Введите данные для входа</h4>
                 <hr>
                 <!--/*@thymesVar id="user" type="ru.otus.project.gateway.dto.security.UserLoginDto"*/-->
-                <form id ="login-form" class="form-horizontal" th:action="@{/}" th:object="${user}" th:method="post">
+                <form id ="login-form" class="form-horizontal" th:action="@{/userLogin}" th:object="${user}" th:method="post">
                     <div class="control-group">
                         <label class="control-label">Телефон (10 цифр)</label>
                         <div class="controls">
@@ -61,45 +61,19 @@
                         function (event) {
                             event.preventDefault();
 
-                            // const tokenUri = /*[[${tokenUri}]]*/'tokenUri';
-                            // const clientId = /*[[${clientId}]]*/'clientId';
-                            // const clientSecret = /*[[${clientSecret}]]*/'clientSecret';
-
-                            // let userData = $('#login-form').serialize();
-
-                            // console.log(userData);
-                            // console.log(tokenUri);
-                            // console.log(clientId);
-
                             let url = $('#login-form').attr('action');
 
-                            console.log("URL " + url);
-
                             $.ajax({
-                                url: "/clientLogin",
+                                url: url,
                                 type: "post",
-                                // contentType: "application/x-www-form-urlencoded",
-                                // mimeType: "application/x-www-form-urlencoded",
-                                // data: userData,
                                 data: $('#login-form').serialize(),
-                                // beforeSend: function (request) {
-                                //     request.setRequestHeader(
-                                //         "Authorization",
-                                //         "Basic " + btoa(clientId + ":" + clientSecret)
-                                //     )
-                                // },
                                 success: function (data) {
-                                    console.log("RESPONDED ");
-                                    console.log(data);
-
                                     // TODO убрать говнокод
                                     for (const [key, value] of Object.entries(data)) {
                                         if (key === "access_token") {
                                             localStorage.setItem(key, value);
                                         }
                                     }
-
-                                    console.log(localStorage.getItem("access_token"));
 
                                     $('#welcome-modal').attr('hidden', false);
 

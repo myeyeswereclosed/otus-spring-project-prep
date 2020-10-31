@@ -56,7 +56,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
             .antMatchers("/admin/**").hasRole("ADMIN")
             .antMatchers("/favicon.ico").anonymous()
             .antMatchers(
-                "/", "/login", "/clientLogin**", "/register", "/rehearsal/**",
+                "/", "/login", "/userLogin**", "/register", "/rehearsal/**",
                 "/rehearsals", "/rooms/**", "/user/rehearsals", "/room/**", "/error"
             ).permitAll()
             .anyRequest().authenticated()
@@ -65,17 +65,4 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
             .loginPage("/login")
         ;
     }
-
-//    @Override
-//    public void configure(HttpSecurity http) throws Exception {
-//        http
-//            .anonymous()
-//            .disable()
-//            .authorizeRequests()
-////            .antMatchers("/", "/login", "/clientLogin**", "/register", "/rehearsals").permitAll()
-//            .anyRequest().authenticated()
-//            .and()
-//            .exceptionHandling().accessDeniedHandler(new OAuth2AccessDeniedHandler());
-//    }
-
 }
