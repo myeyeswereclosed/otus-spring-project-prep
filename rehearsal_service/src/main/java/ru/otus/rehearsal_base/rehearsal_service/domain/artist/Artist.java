@@ -1,6 +1,7 @@
 package ru.otus.rehearsal_base.rehearsal_service.domain.artist;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import ru.otus.rehearsal_base.rehearsal_service.dto.ArtistDto;
@@ -12,6 +13,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@Data
 public class Artist {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

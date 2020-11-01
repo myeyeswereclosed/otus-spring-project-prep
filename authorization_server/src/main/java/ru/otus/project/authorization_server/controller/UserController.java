@@ -8,8 +8,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import ru.otus.project.authorization_server.dto.RehearsalBaseUserDto;
-import ru.otus.project.authorization_server.model.User;
+import ru.otus.project.authorization_server.dto.UserDto;
+import ru.otus.project.authorization_server.domain.User;
 import ru.otus.project.authorization_server.service.registration.RegistrationService;
 
 import static org.springframework.http.HttpStatus.CREATED;
@@ -25,7 +25,7 @@ public class UserController {
     private final PasswordEncoder encoder;
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RehearsalBaseUserDto dto) {
+    public ResponseEntity<?> register(@RequestBody UserDto dto) {
         logger.info("Trying to register {}", dto);
 
         try {

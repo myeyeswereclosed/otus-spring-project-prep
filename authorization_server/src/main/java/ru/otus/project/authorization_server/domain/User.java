@@ -1,4 +1,4 @@
-package ru.otus.project.authorization_server.model;
+package ru.otus.project.authorization_server.domain;
 
 import lombok.*;
 import lombok.experimental.Accessors;

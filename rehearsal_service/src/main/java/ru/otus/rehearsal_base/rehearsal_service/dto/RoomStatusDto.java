@@ -1,11 +1,13 @@
 package ru.otus.rehearsal_base.rehearsal_service.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @Data
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class RoomStatusDto {
-    private final String id;
-    private final String description;
+    private String id;
+    private String description;
 }

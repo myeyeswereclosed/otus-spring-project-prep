@@ -38,6 +38,7 @@ public class RehearsalServiceImpl implements RehearsalService {
         LocalDate end = LocalDate.parse(toDate);
 
         logger.info("Searching reserved rehearsals from {} to {}", start, end);
+
         return repository.findReserved(roomId, start.atStartOfDay(), end.plusDays(1).atStartOfDay());
     }
 

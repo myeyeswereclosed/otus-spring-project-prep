@@ -6,7 +6,7 @@ import lombok.*;
 @AllArgsConstructor
 @Data
 @ToString
-public class RehearsalBaseUserDto {
+public class UserDto {
     private long id;
     private @NonNull String name;
     private @NonNull String phone;

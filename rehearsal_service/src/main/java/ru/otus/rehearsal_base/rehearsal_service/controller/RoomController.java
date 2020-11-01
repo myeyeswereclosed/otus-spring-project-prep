@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.otus.rehearsal_base.rehearsal_service.domain.room.Room;
 import ru.otus.rehearsal_base.rehearsal_service.domain.room.RoomStatus;
 import ru.otus.rehearsal_base.rehearsal_service.dto.RoomDto;
+import ru.otus.rehearsal_base.rehearsal_service.mapper.DtoMapper;
 import ru.otus.rehearsal_base.rehearsal_service.repository.RoomRepository;
 
 import java.util.List;
@@ -18,6 +19,7 @@ import static java.util.stream.Collectors.toList;
 @RequiredArgsConstructor
 public class RoomController {
     private final RoomRepository repository;
+    private final DtoMapper<Room, RoomDto> mapper;
 
     @GetMapping("/rooms/active")
     public List<RoomDto> getActive() {
@@ -25,7 +27,7 @@ public class RoomController {
             repository
                 .findAllByStatus(RoomStatus.active())
                 .stream()
-                .map(Room::toDto)
+                .map(mapper::toDto)
                 .collect(toList())
             ;
     }
@@ -36,7 +38,7 @@ public class RoomController {
             ResponseEntity.of(
                 repository
                     .findById(id)
-                    .map(Room::toDto)
+                    .map(mapper::toDto)
             );
     }
 }

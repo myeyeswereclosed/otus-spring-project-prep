@@ -46,28 +46,18 @@ public class Rehearsal {
     @Enumerated(EnumType.STRING)
     private PaymentStatus paymentStatus = PaymentStatus.NOT_PAID;
 
-    public Rehearsal(long id, Artist artist, LocalDateTime startDatetime, Room room) {
+    public Rehearsal(long id, Artist artist, LocalDateTime startDatetime, Room room, int price) {
         this.id = id;
         this.artist = artist;
         this.startDatetime = startDatetime;
         this.room = room;
-        this.price = room.getPrice();
+        this.price = price;
     }
 
     public Rehearsal changeStatus(RehearsalStatus status) {
         this.status = status;
 
         return this;
-    }
-
-    public static Rehearsal fromDto(RehearsalDto dto) {
-        return
-            new Rehearsal(
-                dto.getId(),
-                Artist.fromDto(dto.getArtist()),
-                dto.getStartsAt(),
-                Room.fromDto(dto.getRoom())
-            );
     }
 
     public boolean isValid(LocalTime minTime, LocalTime maxTime) {
@@ -82,23 +72,5 @@ public class Rehearsal {
 
     public boolean canBeCancelled(int hours) {
         return ChronoUnit.HOURS.between(LocalDateTime.now(), startDatetime) > hours;
-    }
-
-    public RehearsalDto toDto(int hoursToCancel) {
-        return
-            new RehearsalDto(
-                id,
-                artist.toDto(),
-                room.toDto(),
-                startDatetime,
-                startDatetime.toLocalDate(),
-                startDatetime.toLocalTime(),
-                startDatetime.toLocalTime().plusHours(room.getArtistType().getRehearsalMinTime()),
-                room.getArtistType().getRehearsalMinTime(),
-                price,
-                status,
-                paymentStatus,
-                !status.isCancelled() && canBeCancelled(hoursToCancel)
-            );
     }
 }

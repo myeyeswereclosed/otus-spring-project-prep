@@ -5,9 +5,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.otus.rehearsal_base.rehearsal_service.config.RehearsalConfig;
+import ru.otus.rehearsal_base.rehearsal_service.domain.artist.Artist;
 import ru.otus.rehearsal_base.rehearsal_service.domain.rehearsal.Rehearsal;
+import ru.otus.rehearsal_base.rehearsal_service.dto.ArtistDto;
 import ru.otus.rehearsal_base.rehearsal_service.dto.RehearsalDto;
+import ru.otus.rehearsal_base.rehearsal_service.mapper.DtoMapper;
 import ru.otus.rehearsal_base.rehearsal_service.repository.ArtistRepository;
 import ru.otus.rehearsal_base.rehearsal_service.service.rehearsal.RehearsalService;
 import ru.otus.rehearsal_base.rehearsal_service.service.rehearsal.TooLateToCancel;
@@ -23,11 +25,13 @@ import static org.springframework.http.ResponseEntity.status;
 @RestController
 @RequiredArgsConstructor
 public class RehearsalController {
-    private static Logger logger = LoggerFactory.getLogger(RehearsalController.class);
+    private static final Logger logger = LoggerFactory.getLogger(RehearsalController.class);
 
     private final ArtistRepository artistRepository;
     private final RehearsalService service;
-    private final RehearsalConfig config;
+
+    private final DtoMapper<Rehearsal, RehearsalDto> mapper;
+    private final DtoMapper<Artist, ArtistDto> artistMapper;
 
     @PostMapping("/artist/{phone}/rehearsal")
     public ResponseEntity<?> reserve(@PathVariable String phone, @RequestBody RehearsalDto rehearsal) {
@@ -40,7 +44,7 @@ public class RehearsalController {
                     artist ->
                         status(CREATED)
                             .body(
-                                service.reserve(Rehearsal.fromDto(rehearsal.setArtist(artist.toDto())))
+                                service.reserve(mapper.toEntity(rehearsal.setArtist(artistMapper.toDto(artist))))
                             )
                 )
                 .orElse(notFound().build());
@@ -57,7 +61,7 @@ public class RehearsalController {
                 service
                     .getReserved(roomId, fromDate, toDate)
                     .stream()
-                    .map(rehearsal -> rehearsal.toDto(config.getCanBeCancelledBefore()))
+                    .map(mapper::toDto)
                     .collect(toList())
             );
     }
@@ -78,10 +82,7 @@ public class RehearsalController {
                 service
                     .getArtistRehearsals(phone)
                     .stream()
-                    .map(rehearsal -> {
-                        logger.info("Rehearsal found: {}", rehearsal);
-                        return rehearsal.toDto(config.getCanBeCancelledBefore());
-                    })
+                    .map(mapper::toDto)
                     .collect(toList())
             );
     }

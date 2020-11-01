@@ -33,7 +33,7 @@ public class Room {
 
     @OneToOne
     @JoinColumn(name = "type_id")
-    private RoomType artistType;
+    private RoomType roomType;
 
     @Column(name = "price")
     private int price;
@@ -51,11 +51,11 @@ public class Room {
     }
 
     public RoomDto toDto() {
-        return new RoomDto(id, name, description, status.toDto(), artistType.toDto(), price);
+        return new RoomDto(id, name, description, status.toDto(), roomType.toDto(), price);
     }
 
     public LocalTime latestRehearsalTime() {
-        return LocalTime.MIDNIGHT.minusHours(artistType.getRehearsalMinTime());
+        return LocalTime.MIDNIGHT.minusHours(roomType.getRehearsalMinTime());
     }
 
     public boolean canBeReservedAt(LocalTime time) {
@@ -66,7 +66,7 @@ public class Room {
                 &&
             time.getNano() == 0
                 &&
-            time.getHour() % artistType.getRehearsalMinTime() == 0
+            time.getHour() % roomType.getRehearsalMinTime() == 0
         ;
     }
 }

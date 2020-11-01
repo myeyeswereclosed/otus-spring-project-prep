@@ -3,7 +3,7 @@ package ru.otus.project.authorization_server.service.registration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.otus.project.authorization_server.model.User;
+import ru.otus.project.authorization_server.domain.User;
 import ru.otus.project.authorization_server.repository.UserRepository;
 
 @Service

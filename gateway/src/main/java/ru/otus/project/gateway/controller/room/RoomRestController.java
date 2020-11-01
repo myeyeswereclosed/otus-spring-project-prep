@@ -21,9 +21,6 @@ import static org.springframework.http.HttpMethod.GET;
 public class RoomRestController {
     private static final Logger logger = LoggerFactory.getLogger(RoomRestController.class);
 
-//    private final RestTemplate restClient = new RestTemplate();
-//    private final String url = "http://localhost:8888/";
-
     private final RoomService service;
 
     @GetMapping("/rooms")
@@ -31,12 +28,6 @@ public class RoomRestController {
         logger.info("Trying to obtain rooms info");
 
         return service.getAll();
-
-//        return
-//            restClient
-//                .exchange(url + "rooms/active", GET, null, new ParameterizedTypeReference<List<RoomDto>>() {})
-//                .getBody()
-//        ;
     }
 
     @GetMapping("/room/{id}")
@@ -44,7 +35,5 @@ public class RoomRestController {
         logger.info("Getting info about room with id={}", id);
 
         return service.roomInfo(id);
-
-//        return restClient.getForEntity(url + "room/" + id, RoomDto.class).getBody();
     }
 }

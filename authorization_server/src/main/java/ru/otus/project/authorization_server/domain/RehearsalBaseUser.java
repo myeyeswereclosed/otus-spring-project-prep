@@ -1,4 +1,4 @@
-package ru.otus.project.authorization_server.model;
+package ru.otus.project.authorization_server.domain;
 
 import lombok.Getter;
 import lombok.ToString;
@@ -15,7 +15,7 @@ public class RehearsalBaseUser extends User {
     private final String email;
 
     public RehearsalBaseUser(
-        ru.otus.project.authorization_server.model.User user
+        ru.otus.project.authorization_server.domain.User user
     ) {
         super(user.getName(), user.getPassword(), Set.of(new SimpleGrantedAuthority(user.getRole())));
 

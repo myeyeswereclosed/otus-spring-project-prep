@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import ru.otus.project.authorization_server.model.RehearsalBaseUser;
+import ru.otus.project.authorization_server.domain.RehearsalBaseUser;
 import ru.otus.project.authorization_server.repository.UserRepository;
 
 @Service
