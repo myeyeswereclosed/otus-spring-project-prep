@@ -3,7 +3,6 @@ package ru.otus.rehearsal_base.rehearsal_service.domain.room;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import ru.otus.rehearsal_base.rehearsal_service.dto.RoomStatusDto;
 
 import javax.persistence.*;
 
@@ -27,13 +26,5 @@ public class RoomStatus {
 
     public RoomStatus(String id) {
         this.id = id;
-    }
-
-    public static RoomStatus fromDto(RoomStatusDto dto) {
-        return new RoomStatus(dto.getId(), dto.getDescription());
-    }
-
-    public RoomStatusDto toDto() {
-        return new RoomStatusDto(id, description);
     }
 }

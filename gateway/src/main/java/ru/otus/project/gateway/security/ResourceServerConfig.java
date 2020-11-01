@@ -55,7 +55,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
             .antMatchers("/favicon.ico").anonymous()
             .antMatchers(
                 "/", "/login", "/userLogin**", "/register", "/rehearsal/**",
-                "/rehearsals", "/rooms/**", "/user/rehearsals", "/room/**", "/error"
+                "/rehearsals", "/rooms/**", "/user/rehearsals", "/room/**",
+                "/error", "/smsCode/generate"
             ).permitAll()
             .anyRequest().authenticated()
             .and()

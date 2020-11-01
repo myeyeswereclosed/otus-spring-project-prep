@@ -3,7 +3,7 @@ package ru.otus.project.gateway.service.room;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.otus.project.gateway.dto.room.RoomDto;
-import ru.otus.project.gateway.service.RehearsalServiceClient;
+import ru.otus.project.gateway.service.rest_client.RehearsalServiceClient;
 
 import java.util.List;
 

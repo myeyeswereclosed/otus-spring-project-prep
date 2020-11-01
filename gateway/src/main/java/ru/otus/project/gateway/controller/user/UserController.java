@@ -17,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 import ru.otus.project.gateway.config.AuthorizationConfig;
 import ru.otus.project.gateway.dto.artist.ArtistDto;
 import ru.otus.project.gateway.dto.artist.ArtistUserDto;
+import ru.otus.project.gateway.dto.phone.SmsCodeDto;
 import ru.otus.project.gateway.dto.security.TokenResponseDto;
 import ru.otus.project.gateway.dto.security.User;
 import ru.otus.project.gateway.dto.security.UserLoginDto;
@@ -41,7 +42,10 @@ public class UserController {
 
     @GetMapping("/register")
     public String register(Model model) {
-        model.addAttribute("artist", new ArtistUserDto());
+        model
+            .addAttribute("artist", new ArtistUserDto())
+            .addAttribute("smsCode", new SmsCodeDto())
+        ;
 
         return "user/register";
     }

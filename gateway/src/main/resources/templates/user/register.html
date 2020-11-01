@@ -4,10 +4,54 @@
     <title>Register user</title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">
     <link rel="stylesheet"  th:href="@{/css/custom.css}">
+<!--    <script th:src="@{/webjars/jquery/3.3.1/jquery.min.js}"></script>-->
 </head>
 <body>
 
     <div th:include="~{fragments/header :: header}"></div>
+
+    <!-- Modal -->
+    <div
+            class="modal fade" id="confirmRegistration" tabindex="-1" role="dialog"
+            aria-labelledby="confirmRegistrationLabel" aria-hidden="true"
+    >
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div>
+                        <h5 class="modal-title" id="confirmRegistrationLabel">Подтверждение регистрации</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true" id="confirm-close">&times;</span>
+                        </button>
+                    </div>
+                </div>
+                <!--/* @thymesVar id="smsCode" type="ru.otus.project.gateway.dto.phone.SmsCodeDto" */-->
+                <form id ="sms-code-form" class="form-horizontal"
+                      th:action="@{/smsCode}" th:object="${smsCode}" th:method="post"
+                >
+                    <div class="control-group">
+                        <label class="control-label">Смс-код</label>
+                        <div class="controls">
+                            <input
+                                    name="code"
+                                    type="password"
+                                    th:field="*{code}"
+                                    placeholder="Код..."
+                                    required>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Войти</button>
+                    </div>
+                </form>
+                <div class="modal-footer">
+                    <button id="no-confirm" type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                    <button id="confirm-rehearsal" type="button" class="btn btn-primary">Подтвердить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--- -->
 
     <div class="container">
         <div class="row">
@@ -15,7 +59,7 @@
                 <h4 class="muted">Зарегистрируйтесь</h4>
                 <hr>
                 <!--/*@thymesVar id="artist" type="ru.otus.project.gateway.dto.artist.ArtistUserDto"*/-->
-                <form class="form-horizontal" th:action="@{/register}" th:object="${artist}" th:method="post">
+                <form id="registration-form" class="form-horizontal" th:action="@{/register}" th:object="${artist}" th:method="post">
                     <div class="control-group">
                         <label class="control-label">Имя/название группы</label>
                         <div class="controls">
@@ -42,6 +86,7 @@
                         <label class="control-label">Телефон</label>
                         <div class="controls">
                             <input
+                                    id = "phone"
                                     name="phone"
                                     type="text"
                                     th:field="*{phone}"
@@ -82,6 +127,35 @@
                         <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
                     </div>
                 </form>
+
+                <script type="text/javascript" th:inline="javascript">
+                    $('#registration-form').submit(
+                        function (event) {
+                            console.log("I AM HERE");
+
+                            event.preventDefault();
+
+                            // TODO check exists!
+
+                            let confirm = $('#confirmRegistration');
+
+                            console.log("Before request");
+                            console.log($('#phone').val())
+
+                            $.ajax({
+                                url: "/smsCode/generate",
+                                type: "post",
+                                contentType: "application/json",
+                                data: JSON.stringify({number: $('#phone').val()}),
+                                success: function (data) {
+                                    confirm.removeClass('fade')
+                                },
+                                error: function (err) {
+                                    console.log(err);
+                                }
+                            });
+                        });
+                </script>
             </div>
         </div>
     </div>

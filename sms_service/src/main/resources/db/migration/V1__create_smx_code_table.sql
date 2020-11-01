@@ -5,6 +5,7 @@ create table if not exists sms_code(
     phone varchar not null,
     value varchar not null,
     created_at timestamp not null default now(),
+    expires_at timestamp not null,
     actual boolean default true
 );
 

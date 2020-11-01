@@ -3,7 +3,7 @@ package ru.otus.project.gateway.service.artist;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.otus.project.gateway.dto.artist.ArtistDto;
-import ru.otus.project.gateway.service.RehearsalServiceClient;
+import ru.otus.project.gateway.service.rest_client.RehearsalServiceClient;
 
 @Service
 @RequiredArgsConstructor

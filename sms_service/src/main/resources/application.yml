@@ -13,7 +13,8 @@ spring:
     initialization-mode: always
   jpa:
     show-sql: true
-smsCode:
+sms-code:
+  expirationTimeInSeconds: 90
   waitingInterval: 60 #seconds
   countRequestsInterval: 300 #seconds
   requestsNumber: 3

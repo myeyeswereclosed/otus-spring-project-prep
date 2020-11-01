@@ -23,12 +23,4 @@ public class RoomType {
 
     @Column(name = "rehearsal_min_time")
     private int rehearsalMinTime;
-
-    public static RoomType fromDto(RoomTypeDto dto) {
-        return new RoomType(dto.getId(), dto.getName(), dto.getRehearsalMinTime());
-    }
-
-    public RoomTypeDto toDto() {
-        return new RoomTypeDto(id, name, rehearsalMinTime);
-    }
 }

@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.otus.project.gateway.dto.rehearsal.RehearsalDto;
-import ru.otus.project.gateway.service.RehearsalServiceClient;
+import ru.otus.project.gateway.service.rest_client.RehearsalServiceClient;
 
 import java.util.List;
 

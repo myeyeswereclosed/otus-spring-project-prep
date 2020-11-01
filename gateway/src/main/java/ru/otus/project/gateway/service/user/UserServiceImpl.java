@@ -10,8 +10,8 @@ import org.springframework.util.MultiValueMap;
 import ru.otus.project.gateway.config.AuthorizationConfig;
 import ru.otus.project.gateway.dto.security.TokenResponseDto;
 import ru.otus.project.gateway.dto.security.User;
-import ru.otus.project.gateway.service.AuthorizationServerRegistrationClient;
-import ru.otus.project.gateway.service.AuthorizationServerTokenClient;
+import ru.otus.project.gateway.service.rest_client.AuthorizationServerRegistrationClient;
+import ru.otus.project.gateway.service.rest_client.AuthorizationServerTokenClient;
 
 @Service
 @RequiredArgsConstructor

@@ -31,19 +31,4 @@ public class Artist {
 
     @Column(name = "email")
     private String email;
-
-    public static Artist fromDto(ArtistDto dto) {
-        return
-            new Artist(
-                dto.getId(),
-                dto.getName(),
-                dto.getGenre(),
-                dto.getPhone(),
-                dto.getEmail()
-            );
-    }
-
-    public ArtistDto toDto() {
-        return new ArtistDto(id, name, genre, phone, email);
-    }
 }
