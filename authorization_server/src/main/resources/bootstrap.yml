@@ -1,7 +1,7 @@
 spring:
   application:
-    name: rehearsal-base-auth-server
-#  cloud:
-#    config:
-#      uri: http://localhost:4000
-#      fail-fast: true
+    name: authorization-server
+  cloud:
+    config:
+      uri: ${CONFIG_SERVER_HOST:http://localhost}:${CONFIG_SERVER_HOST:4000}
+      fail-fast: true

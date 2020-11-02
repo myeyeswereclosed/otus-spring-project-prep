@@ -1,0 +1,19 @@
+version: '3'
+services:
+#  config-server:
+#    build: ./tao-elszamolas-config
+#    container_name: tao-elszamolas-config
+#    ports:
+#      - "9001:9001"
+#    volumes:
+#      - "/tao-elszamolas/logs:/var/log/tao-elszamolas"
+#    networks:
+#      - taonetwork
+  rb-service-discovery:
+    image: rb-service-discovery
+    build:
+      context: .
+      dockerfile: Dockerfile
+    privileged: true
+    ports:
+      - "8761:8761"

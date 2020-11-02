@@ -5,8 +5,7 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/myeyeswereclosed/otus-spring-config/
-#          searchPaths: service-discovery, comment-service, book-service
+          uri: https://github.com/myeyeswereclosed/rehearsal-base-config
           searchPaths: '{application}'
 server:
   port: 4000

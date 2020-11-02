@@ -3,5 +3,6 @@ spring:
     name: service-discovery
   cloud:
     config:
-      uri: http://localhost:4000
+      uri: ${CONFIG_SERVER_HOST:http://localhost}:${CONFIG_SERVER_HOST:4000}
       fail-fast: true
+#      uri: http://rb-config-server:4000
