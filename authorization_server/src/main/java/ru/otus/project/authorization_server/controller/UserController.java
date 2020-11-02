@@ -8,8 +8,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import ru.otus.project.authorization_server.dto.UserDto;
 import ru.otus.project.authorization_server.domain.User;
+import ru.otus.project.authorization_server.dto.UserDto;
 import ru.otus.project.authorization_server.service.registration.RegistrationService;
 
 import static org.springframework.http.HttpStatus.CREATED;

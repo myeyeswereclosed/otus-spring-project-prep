@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
-<!--        <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">-->
-<!--        <link rel="stylesheet"  th:href="@{/css/custom.css}">-->
+        <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">
+        <link rel="stylesheet"  th:href="@{/css/custom.css}">
         <title>Header</title>
     </head>
     <body>
@@ -16,20 +16,45 @@
                         <a href="/" class="brand">Репетиционная база OLOLO</a>
                         <div class="nav-collapse collapse navbar-responsive-collapse" id="actions-div">
                             <ul class="nav">
-                                <li><a href="#">Home</a></li>
-                                <li><a href="#">Services</a></li>
-                                <li class="dropdown">
-                                    <a href="#" data-toggle="dropdown" class="dropdown-toggle">Products <b class="caret"></b></a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="#">Gadgets</a></li>
-                                        <li><a href="#">Accessories</a></li>
-                                        <li class="divider"></li>
-                                        <li><a href="#">More &raquo;</a></li>
+                                <li class="dropdown" id="rooms-dropdown">
+                                    <a href="#" data-toggle="dropdown" class="dropdown-toggle">Комнаты <b class="caret"></b></a>
+                                    <ul class="dropdown-menu" id="rooms-dropdown-list">
+<!--                                        <li><a href="#">Gadgets</a></li>-->
+<!--                                        <li><a href="#">Accessories</a></li>-->
+<!--                                        <li class="divider"></li>-->
+<!--                                        <li><a href="#">More &raquo;</a></li>-->
                                     </ul>
                                 </li>
                             </ul>
 
                             <script type='text/javascript' th:inline="javascript">
+
+                                $.ajax({
+                                    url: "/rooms",
+                                    type: "get",
+                                    success: function(rooms) {
+                                        rooms.forEach(
+                                            function(room) {
+                                                $('#rooms-dropdown-list').append(
+                                                    `<li><a href="/room/${room.id}/timetable">${room.name}</a></li>`
+                                                )
+                                            }
+                                        )
+                                    },
+                                    error: function(error) {
+                                        console.log(error);
+                                    }
+                                })
+
+                                let rooms = $('#rooms-dropdown');
+
+                                rooms.click(function() {
+                                    if (rooms.hasClass('open')) {
+                                        rooms.removeClass('open')
+                                    } else {
+                                        rooms.addClass('open');
+                                    }
+                                });
 
                                 let token = localStorage.getItem("access_token");
 

@@ -4,7 +4,6 @@ import lombok.*;
 import lombok.experimental.Accessors;
 import ru.otus.rehearsal_base.rehearsal_service.domain.artist.Artist;
 import ru.otus.rehearsal_base.rehearsal_service.domain.room.Room;
-import ru.otus.rehearsal_base.rehearsal_service.dto.RehearsalDto;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

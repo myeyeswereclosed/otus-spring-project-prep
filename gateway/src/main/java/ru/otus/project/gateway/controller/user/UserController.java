@@ -3,7 +3,6 @@ package ru.otus.project.gateway.controller.user;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -13,17 +12,11 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.client.RestTemplate;
 import ru.otus.project.gateway.config.AuthorizationConfig;
-import ru.otus.project.gateway.dto.artist.ArtistDto;
 import ru.otus.project.gateway.dto.artist.ArtistUserDto;
 import ru.otus.project.gateway.dto.phone.SmsCodeDto;
 import ru.otus.project.gateway.dto.security.TokenResponseDto;
-import ru.otus.project.gateway.dto.security.User;
 import ru.otus.project.gateway.dto.security.UserLoginDto;
-import ru.otus.project.gateway.service.artist.ArtistService;
-import ru.otus.project.gateway.service.rehearsal.RehearsalService;
-import ru.otus.project.gateway.service.user.UserAuthenticationService;
 import ru.otus.project.gateway.service.user.UserService;
 
 @RequiredArgsConstructor
@@ -32,13 +25,13 @@ public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     private final AuthorizationConfig config;
-    private final RestTemplate restClient = new RestTemplate();
-    private final String authorizationServerUrl = "http://localhost:8090";
-    private final String rehearsalServiceUrl = "http://localhost:8888";
+//    private final RestTemplate restClient = new RestTemplate();
+//    private final String authorizationServerUrl = "http://localhost:8090";
+//    private final String rehearsalServiceUrl = "http://localhost:8888";
 
-    private final UserAuthenticationService service;
+//    private final UserAuthenticationService service;
     private final UserService userService;
-    private final ArtistService artistService;
+//    private final ArtistService artistService;
 
     @GetMapping("/register")
     public String register(Model model) {
@@ -114,47 +107,5 @@ public class UserController {
         formData.add("grant_type", "password");
 
         return formData;
-    }
-
-    @PostMapping("/register")
-    public String register(ArtistUserDto user, Model model) {
-        // TODO completable future??
-        var authorizationServerResponse =
-            userService.register(
-                new User(
-                    user.getName(),
-                    user.getPhone(),
-                    user.getEmail(),
-                    user.getPassword(),
-                    user.getRole()
-                )
-            );
-//            restClient.postForEntity(
-//                authorizationServerUrl + "/register",
-//                new User(
-//                    user.getName(),
-//                    user.getPhone(),
-//                    user.getEmail(),
-//                    user.getPassword(),
-//                    user.getRole()
-//                ),
-//                User.class
-//            );
-
-        var rehearsalServiceResponse =
-            artistService.create(
-                new ArtistDto(user.getName(), user.getGenre(), user.getPhone(), user.getEmail())
-            );
-//            restClient.postForEntity(
-//                rehearsalServiceUrl + "/artist",
-//                new ArtistDto(user.getName(), user.getGenre(), user.getPhone(), user.getEmail()),
-//                ArtistDto.class
-//            );
-
-        model.addAttribute("user", new UserLoginDto());
-
-        logger.info("Response is {}", authorizationServerResponse);
-
-        return "user/login";
     }
 }

@@ -4,11 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.project.sms_service.domain.SmsCode;
-import ru.otus.project.sms_service.dto.SmsCodeDto;
 import ru.otus.project.sms_service.dto.SmsCodeStatus;
 import ru.otus.project.sms_service.repository.SmsCodeRepository;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

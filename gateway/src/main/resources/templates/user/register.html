@@ -4,7 +4,6 @@
     <title>Register user</title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">
     <link rel="stylesheet"  th:href="@{/css/custom.css}">
-<!--    <script th:src="@{/webjars/jquery/3.3.1/jquery.min.js}"></script>-->
 </head>
 <body>
 
@@ -27,12 +26,13 @@
                 </div>
                 <!--/* @thymesVar id="smsCode" type="ru.otus.project.gateway.dto.phone.SmsCodeDto" */-->
                 <form id ="sms-code-form" class="form-horizontal"
-                      th:action="@{/smsCode}" th:object="${smsCode}" th:method="post"
+                      th:action="@{/smsCode/check}" th:object="${smsCode}" th:method="post"
                 >
                     <div class="control-group">
                         <label class="control-label">Смс-код</label>
                         <div class="controls">
                             <input
+                                    id="sms-code"
                                     name="code"
                                     type="password"
                                     th:field="*{code}"
@@ -41,13 +41,10 @@
                         </div>
                     </div>
                     <div class="form-actions">
-                        <button type="submit" class="btn btn-primary">Войти</button>
+                        <button type="submit" class="btn btn-primary">Отправить</button>
+                        <button id="no-confirm" type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
                     </div>
                 </form>
-                <div class="modal-footer">
-                    <button id="no-confirm" type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-                    <button id="confirm-rehearsal" type="button" class="btn btn-primary">Подтвердить</button>
-                </div>
             </div>
         </div>
     </div>
@@ -129,7 +126,9 @@
                 </form>
 
                 <script type="text/javascript" th:inline="javascript">
-                    $('#registration-form').submit(
+                    let regForm = $('#registration-form');
+
+                    regForm.submit(
                         function (event) {
                             console.log("I AM HERE");
 
@@ -138,17 +137,73 @@
                             // TODO check exists!
 
                             let confirm = $('#confirmRegistration');
-
-                            console.log("Before request");
-                            console.log($('#phone').val())
+                            let phoneNumber = $('#phone').val();
 
                             $.ajax({
                                 url: "/smsCode/generate",
                                 type: "post",
                                 contentType: "application/json",
-                                data: JSON.stringify({number: $('#phone').val()}),
-                                success: function (data) {
+                                data: JSON.stringify({number: phoneNumber}),
+                                success: function(data) {
                                     confirm.removeClass('fade')
+
+                                    $('#confirm-close').click(function () {
+                                        confirm.addClass('fade')
+                                    });
+                                    $('#no-confirm').click(function () {
+                                        confirm.addClass('fade')
+                                    });
+
+                                    let codeForm = $('#sms-code-form');
+
+                                    codeForm.submit(
+                                        function(e) {
+                                            e.preventDefault();
+
+                                            $.ajax({
+                                                url: codeForm.attr('action'),
+                                                type: "post",
+                                                contentType: "application/json",
+                                                data: JSON.stringify(
+                                                    {phone: phoneNumber, code: $('#sms-code').val()}
+                                                ),
+                                                success: function() {
+                                                    let registrationForm = $('#registration-form');
+
+                                                    let user = {};
+
+                                                    regForm.serializeArray().forEach(
+                                                        function(input) {
+                                                            console.log(input);
+
+                                                            user[input.name] = input.value;
+                                                        }
+                                                    );
+
+                                                    console.log(user);
+
+                                                    $.ajax({
+                                                        url: registrationForm.attr('action'),
+                                                        // url: "/register",
+                                                        type: "post",
+                                                        contentType: "application/json",
+                                                        data: JSON.stringify(user),
+                                                        success: function () {
+                                                            alert("Вы успешно зарегистрированы");
+                                                            location.href = "/login";
+                                                        },
+                                                        error: function (registrationError) {
+                                                            console.log("NON_REGISTERED");
+                                                        }
+                                                    })
+                                                },
+                                                error: function(smsCodeError) {
+                                                    console.log(smsCodeError)
+                                                }
+                                            });
+                                        }
+                                    )
+
                                 },
                                 error: function (err) {
                                     console.log(err);

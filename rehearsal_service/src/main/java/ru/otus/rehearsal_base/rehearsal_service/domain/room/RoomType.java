@@ -3,7 +3,6 @@ package ru.otus.rehearsal_base.rehearsal_service.domain.room;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.otus.rehearsal_base.rehearsal_service.dto.RoomTypeDto;
 
 import javax.persistence.*;
 

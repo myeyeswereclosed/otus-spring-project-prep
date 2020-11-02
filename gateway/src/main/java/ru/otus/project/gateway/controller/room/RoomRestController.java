@@ -3,18 +3,15 @@ package ru.otus.project.gateway.controller.room;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
-import ru.otus.project.gateway.dto.rehearsal.RehearsalDto;
 import ru.otus.project.gateway.dto.room.RoomDto;
 import ru.otus.project.gateway.service.room.RoomService;
 
 import java.util.List;
 
-import static org.springframework.http.HttpMethod.GET;
+import static java.util.stream.Collectors.toList;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,7 +24,7 @@ public class RoomRestController {
     public List<RoomDto> getAllForArtist() {
         logger.info("Trying to obtain rooms info");
 
-        return service.getAll();
+        return service.getAll().stream().sorted().collect(toList());
     }
 
     @GetMapping("/room/{id}")

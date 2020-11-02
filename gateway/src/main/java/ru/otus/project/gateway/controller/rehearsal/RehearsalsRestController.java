@@ -9,8 +9,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.otus.project.gateway.dto.rehearsal.RehearsalDto;
 import ru.otus.project.gateway.dto.security.User;
-import ru.otus.project.gateway.service.user.UserAuthenticationService;
 import ru.otus.project.gateway.service.rehearsal.RehearsalService;
+import ru.otus.project.gateway.service.user.UserAuthenticationService;
 
 import java.util.Collections;
 import java.util.List;

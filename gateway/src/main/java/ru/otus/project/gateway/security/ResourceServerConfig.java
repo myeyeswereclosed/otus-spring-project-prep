@@ -56,7 +56,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
             .antMatchers(
                 "/", "/login", "/userLogin**", "/register", "/rehearsal/**",
                 "/rehearsals", "/rooms/**", "/user/rehearsals", "/room/**",
-                "/error", "/smsCode/generate"
+                "/error", "/smsCode/**"
             ).permitAll()
             .anyRequest().authenticated()
             .and()

@@ -1,12 +1,10 @@
 package ru.otus.project.gateway.service.rest_client;
 
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.http.HttpHeaders;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import ru.otus.project.gateway.config.FeignClientConfig;
 import ru.otus.project.gateway.dto.security.TokenResponseDto;
-
-import java.util.Map;
 
 @FeignClient(
     name = "rehearsal-base-auth-server",
