@@ -18,23 +18,29 @@ services:
       dockerfile: Dockerfile
     container_name: rb-service-discovery
     environment:
-      CONFIG_SERVER_HOST: rb-config-server
+      CONFIG_SERVER_HOST: config-server
       CONFIG_SERVER_PORT: 4000
+      SERVICE_DISCOVERY_HOST: service-discovery
+      SERVICE_DISCOVERY_PORT: 8761
+      WAIT_HOSTS: config-server:4000
     depends_on:
       - config-server
     restart: unless-stopped
     ports:
       - "8761:8761"
-#      volumes:
-#        - "/tao-elszamolas/logs:/var/log/tao-elszamolas"
     networks:
       - rbnetwork
 
   authorization-server-database:
     image: postgres
+    container_name: authorization-server-database
     restart: always
+    ports:
+      - "54320:5432"
     env_file:
       - database.env # configure postgres
+    networks:
+      - rbnetwork
 
   authorization-server:
     build:
@@ -42,14 +48,24 @@ services:
       dockerfile: Dockerfile
     container_name: rb-authorization-server
     environment:
-      CONFIG_SERVER_HOST: rb-config-server
+      CONFIG_SERVER_HOST: config-server
       CONFIG_SERVER_PORT: 4000
+      DB_HOST: authorization-server-database
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      SERVICE_DISCOVERY_HOST: service-discovery
+      SERVICE_DISCOVERY_PORT: 8761
+      WAIT_HOSTS: authorization-server-database:5432, service-discovery:8761
     depends_on:
       - config-server
       - service-discovery
+      - authorization-server-database
     restart: unless-stopped
     ports:
       - "8090:8090"
+    networks:
+      - rbnetwork
 
 networks:
   rbnetwork:
