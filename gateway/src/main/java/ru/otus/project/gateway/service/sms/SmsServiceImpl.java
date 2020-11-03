@@ -13,10 +13,6 @@ public class SmsServiceImpl implements SmsService {
 
     @Override
     public boolean generateCode(String phone) {
-        var dto = new PhoneDto(phone);
-
-        System.out.println("DTO " + dto);
-
         return client.generate(new PhoneDto(phone)).getStatusCode().is2xxSuccessful();
     }
 

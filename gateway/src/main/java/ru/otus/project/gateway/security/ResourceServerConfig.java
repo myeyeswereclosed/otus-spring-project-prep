@@ -51,12 +51,12 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
             .and()
             .authorizeRequests()
             .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-            .antMatchers("/admin/**").hasRole("ADMIN")
+//            .antMatchers("/admin/**").hasRole("ADMIN")
             .antMatchers("/favicon.ico").anonymous()
             .antMatchers(
                 "/", "/login", "/userLogin**", "/register", "/rehearsal/**",
                 "/rehearsals", "/rooms/**", "/user/rehearsals", "/room/**",
-                "/error", "/smsCode/**"
+                "/error", "/smsCode/**", "/api/**"
             ).permitAll()
             .anyRequest().authenticated()
             .and()

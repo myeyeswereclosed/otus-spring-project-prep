@@ -18,6 +18,8 @@ import ru.otus.project.sms_service.service.code_generation.availability.PhoneCod
 import ru.otus.project.sms_service.service.code_generation.service.PhoneCodeService;
 import ru.otus.project.sms_service.service.mobile_provider.MobileProvider;
 
+import static org.springframework.integration.scheduling.PollerMetadata.DEFAULT_POLLER;
+
 @Configuration
 @RequiredArgsConstructor
 public class Config {
@@ -31,7 +33,7 @@ public class Config {
     private final PhoneCodeService service;
     private final MobileProvider mobileProvider;
 
-    @Bean (name = PollerMetadata.DEFAULT_POLLER )
+    @Bean (name = DEFAULT_POLLER )
     public PollerMetadata poller () {
         return
             Pollers

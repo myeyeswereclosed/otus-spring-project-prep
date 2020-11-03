@@ -6,8 +6,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ru.otus.project.gateway.config.FeignClientConfig;
 import ru.otus.project.gateway.dto.security.TokenResponseDto;
 
+// TODO сделать аккуратнее
 @FeignClient(
-    name = "rehearsal-base-auth-server",
+    name = "authorization-server",
     path = "/auth-server",
     contextId = "token",
     configuration = FeignClientConfig.class
@@ -15,9 +16,9 @@ import ru.otus.project.gateway.dto.security.TokenResponseDto;
 public interface AuthorizationServerTokenClient {
     @PostMapping("oauth/token")
     TokenResponseDto accessToken(
-        @RequestParam("grant_type") String grantType, @RequestParam("username") String username,
-        @RequestParam("password") String password, @RequestParam("client_id") String clientId
-//        @RequestHeader HttpHeaders headers,
-//        @RequestBody Map<String, ?> formData
+        @RequestParam("grant_type") String grantType,
+        @RequestParam("username") String username,
+        @RequestParam("password") String password,
+        @RequestParam("client_id") String clientId
     );
 }

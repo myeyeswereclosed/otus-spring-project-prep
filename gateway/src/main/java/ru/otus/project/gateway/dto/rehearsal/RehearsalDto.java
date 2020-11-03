@@ -19,7 +19,6 @@ public class RehearsalDto {
     private long id;
     private ArtistDto artist;
     private RoomDto room;
-    /** TODO datetime **/
     private LocalDateTime startsAt;
     private LocalDate date;
     private LocalTime start;

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import ru.otus.project.gateway.dto.security.User;
 
 @FeignClient(
-    name = "rehearsal-base-auth-server",
+    name = "authorization-server",
     path = "/auth-server",
     contextId = "register"
 )

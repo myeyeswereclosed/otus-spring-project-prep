@@ -11,86 +11,96 @@
     <script type="text/javascript" th:src="@{/libs/jquery-1.4.4.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/app.js}"></script>
 
-    <div class="container" id="table-container">
-        <h4 class="muted">Мои репетиции</h4>
-        <script type='text/javascript' th:inline="javascript">
-            $(function () {
-                $.ajax({
-                    url: "/artist/rehearsals",
-                    type: "get",
-                    beforeSend: function (xhr) {
-                        xhr.setRequestHeader('Authorization', 'Bearer ' + token);
-                    },
-                    success: function (rehearsals) {
+        <div class="container" id="table-container">
+            <h4 class="muted">Мои репетиции</h4>
+            <script type='text/javascript' th:inline="javascript">
+                accessStrategy(
+                    `${path}/artist/rehearsals`,
+                    function (rehearsals) {
                         if (rehearsals.length !== 0) {
-                            $('#table-container').append(
-                                `
-                                    <table id = "book-info" class="table">
-                                        <thead>
-                                        <tr class="table-light">
-                                            <th>Дата</th>
-                                            <th>Время</th>
-                                            <th>Комната</th>
-                                            <th>Статус</th>
-                                            <th>Цена</th>
-                                            <th></th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        </tbody>
-                                    </table>
-                                `
-                            )
-
-                            rehearsals.forEach(function(rehearsal) {
-                                let row =
-                                    $('<tr class="table-success">')
-                                        .append($('<td>' + rehearsal.date + '</td>'))
-                                        .append($('<td>' + rehearsal.start + '-' + rehearsal.end + '</td>'))
-                                        .append(
-                                            $('<td><a href="/room/' + rehearsal.room.id + '/timetable">'
-                                                + rehearsal.room.name +
-                                                '</a></td>'
-                                            )
-                                        )
-                                        .append($('<td>' + rehearsal.status + '</td>'))
-                                        .append($('<td>' + rehearsal.price + '</td>'))
-                                ;
-
-                                if (rehearsal.cancelable) {
-                                    row.append(
-                                        $('<a class="btn btn-primary btn-info btn-sm cancel-rehearsal-btn" href="'
-                                            + 'rehearsal/' + rehearsal.id + '">Отменить</a>')
-                                    );
-                                }
-
-                                $('tbody').append(row);
-                            })
+                            renderRehearsalsTable(rehearsals);
                         }
 
-                        $(".cancel-rehearsal-btn").click(
-                            function (event) {
-                                event.preventDefault();
-
-                                console.log($(this).attr("href"));
-
-                                $.ajax({
-                                    url: $(this).attr("href"),
-                                    type: "delete",
-                                    success: function() {
-                                        alert("Репетиция отменена");
-                                        location.reload();
-                                    },
-                                    error: function(jqXHR) {
-                                        handleError(jqXHR, this.url.split("/")[2]);
-                                    }
-                                })
-                            }
-                        );
+                        handleCancellation();
+                    },
+                    function() {
+                        console.log('Request error occurred');
                     }
-                });
-            });
-        </script>
+                );
+
+                function renderRehearsalsTable(rehearsals) {
+                    $('#table-container').append(
+                        `
+                            <table id = "book-info" class="table">
+                                <thead>
+                                <tr class="table-light">
+                                    <th>Дата</th>
+                                    <th>Время</th>
+                                    <th>Комната</th>
+                                    <th>Статус</th>
+                                    <th>Цена</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        `
+                    );
+
+                    renderRehearsals(rehearsals);
+                }
+
+                function renderRehearsals(rehearsals) {
+                    rehearsals.forEach(function(rehearsal) {
+                        let row =
+                            $(
+                                `<tr class="table-success">
+                                    <td>${rehearsal.date}</td>
+                                    <td>${rehearsal.start}</td>
+                                    <td>
+                                        <a href=${path}/room/${rehearsal.room.id}/timetable>
+                                            ${rehearsal.room.name}
+                                        </a>
+                                    </td>
+                                    <td>${rehearsal.status}</td>
+                                    <td>${rehearsal.price}</td>`
+                            );
+
+                        if (rehearsal.cancelable) {
+                            row.append(`
+                                <a
+                                class="btn btn-primary btn-info btn-sm cancel-rehearsal-btn"
+                                href="${path}/rehearsal/${rehearsal.id}">Отменить</a>`
+                            );
+                        }
+
+                        $('tbody').append(row);
+                    })
+                }
+
+                function handleCancellation() {
+                    $(".cancel-rehearsal-btn").click(
+                        function (event) {
+                            event.preventDefault();
+
+                            $.ajax({
+                                url: $(this).attr("href"),
+                                type: "delete",
+                                success: function() {
+                                    alert("Репетиция отменена");
+                                    location.reload();
+                                },
+                                error: function(jqXHR) {
+                                    // TODO сделать адекватнее
+                                    location.reload();
+                                }
+                            })
+                        }
+                    );
+                }
+            </script>
+        </div>
     </div>
 </body>
 </html>

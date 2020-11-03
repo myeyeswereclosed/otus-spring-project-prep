@@ -1,6 +1,5 @@
 package ru.otus.rehearsal_base.rehearsal_service.mapper;
 
-
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -27,7 +26,7 @@ public class RehearsalMapper implements DtoMapper<Rehearsal, RehearsalDto> {
                 artistMapper.toEntity(dto.getArtist()),
                 dto.getStartsAt(),
                 roomMapper.toEntity(dto.getRoom()),
-                dto.getPrice()
+                dto.getRoom().getPrice()
             );
     }
 

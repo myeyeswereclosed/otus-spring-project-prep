@@ -26,7 +26,7 @@
                 </div>
                 <!--/* @thymesVar id="smsCode" type="ru.otus.project.gateway.dto.phone.SmsCodeDto" */-->
                 <form id ="sms-code-form" class="form-horizontal"
-                      th:action="@{/smsCode/check}" th:object="${smsCode}" th:method="post"
+                      th:action="@{/api/sms/code/check}" th:object="${smsCode}" th:method="post"
                 >
                     <div class="control-group">
                         <label class="control-label">Смс-код</label>
@@ -98,7 +98,7 @@
                         <div class="controls">
                             <input
                                     name="email"
-                                    type="text"
+                                    type="email"
                                     th:field="*{email}"
                                     placeholder="Email">
                         </div>
@@ -130,8 +130,6 @@
 
                     regForm.submit(
                         function (event) {
-                            console.log("I AM HERE");
-
                             event.preventDefault();
 
                             // TODO check exists!
@@ -139,12 +137,14 @@
                             let confirm = $('#confirmRegistration');
                             let phoneNumber = $('#phone').val();
 
+                            console.log("HERE !!!!");
+
                             $.ajax({
-                                url: "/smsCode/generate",
+                                url: `${path}/api/sms/code/generate`,
                                 type: "post",
                                 contentType: "application/json",
                                 data: JSON.stringify({number: phoneNumber}),
-                                success: function(data) {
+                                success: function() {
                                     confirm.removeClass('fade')
 
                                     $('#confirm-close').click(function () {
@@ -174,8 +174,6 @@
 
                                                     regForm.serializeArray().forEach(
                                                         function(input) {
-                                                            console.log(input);
-
                                                             user[input.name] = input.value;
                                                         }
                                                     );
@@ -184,16 +182,16 @@
 
                                                     $.ajax({
                                                         url: registrationForm.attr('action'),
-                                                        // url: "/register",
                                                         type: "post",
                                                         contentType: "application/json",
                                                         data: JSON.stringify(user),
                                                         success: function () {
                                                             alert("Вы успешно зарегистрированы");
-                                                            location.href = "/login";
+                                                            location.href = `${path}/login`;
                                                         },
                                                         error: function (registrationError) {
-                                                            console.log("NON_REGISTERED");
+                                                            // TODO to error page!
+                                                            console.log(registrationError);
                                                         }
                                                     })
                                                 },

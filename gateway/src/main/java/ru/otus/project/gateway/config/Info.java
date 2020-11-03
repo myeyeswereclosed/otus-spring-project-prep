@@ -5,10 +5,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ConfigurationProperties(prefix = "app.oauth2")
+@ConfigurationProperties(prefix = "app.rehearsal-base.info")
 @Data
-public class AuthorizationConfig {
-    private String clientId;
-    private String clientSecret;
-    private String signingKey;
+public class Info {
+    private String name;
+    private String address;
+    private String phone;
 }

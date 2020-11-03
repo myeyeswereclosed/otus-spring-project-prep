@@ -3,6 +3,7 @@ package ru.otus.project.gateway.controller.user;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,17 +27,16 @@ public class UserRestController {
     private final UserService userService;
     private final ArtistService artistService;
 
-    @GetMapping("/checkAccess")
-    public User checkAccess(Authentication authentication) {
-        // TODO говнокод
-        return service.authenticatedUser(authentication).orElse(null);
+    @GetMapping("/currentUser")
+    public ResponseEntity<User> currentUser(Authentication authentication) {
+        return ResponseEntity.of(service.authenticatedUser(authentication));
     }
 
     @PostMapping("/register")
     public String register(@RequestBody ArtistUserDto user, Model model) {
-        System.out.println("OLOLOLOLO" + user);
+        logger.info("Registering user {}", user);
 
-        // TODO completable future??
+        // TODO completable future. JTA?
         var authorizationServerResponse =
             userService.register(
                 new User(
@@ -47,27 +47,9 @@ public class UserRestController {
                     user.getRole()
                 )
             );
-//            restClient.postForEntity(
-//                authorizationServerUrl + "/register",
-//                new User(
-//                    user.getName(),
-//                    user.getPhone(),
-//                    user.getEmail(),
-//                    user.getPassword(),
-//                    user.getRole()
-//                ),
-//                User.class
-//            );
 
         var rehearsalServiceResponse =
-            artistService.create(
-                new ArtistDto(user.getName(), user.getGenre(), user.getPhone(), user.getEmail())
-            );
-//            restClient.postForEntity(
-//                rehearsalServiceUrl + "/artist",
-//                new ArtistDto(user.getName(), user.getGenre(), user.getPhone(), user.getEmail()),
-//                ArtistDto.class
-//            );
+            artistService.create(new ArtistDto(user.getName(), user.getGenre(), user.getPhone(), user.getEmail()));
 
         model.addAttribute("user", new UserLoginDto());
 

@@ -57,18 +57,17 @@
                 </div>
 
                 <script type='text/javascript' th:inline="javascript">
-                    $('#login-form').submit(
+                    const loginForm = $('#login-form');
+
+                    loginForm.submit(
                         function (event) {
                             event.preventDefault();
 
-                            let url = $('#login-form').attr('action');
-
                             $.ajax({
-                                url: url,
+                                url: loginForm.attr('action'),
                                 type: "post",
-                                data: $('#login-form').serialize(),
+                                data: loginForm.serialize(),
                                 success: function (data) {
-                                    // TODO убрать говнокод
                                     for (const [key, value] of Object.entries(data)) {
                                         if (key === "access_token") {
                                             localStorage.setItem(key, value);
@@ -79,7 +78,7 @@
 
                                     setTimeout(function(){ $('#welcome-modal').attr('hidden', true); }, 2500);
 
-                                    location.href = "/";
+                                    location.href = `${path}`;
                                 },
                                 error: function (err) {
                                     console.log(err);

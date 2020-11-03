@@ -5,10 +5,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ConfigurationProperties(prefix = "app.oauth2")
+@ConfigurationProperties(prefix = "server.servlet")
 @Data
-public class AuthorizationConfig {
-    private String clientId;
-    private String clientSecret;
-    private String signingKey;
+public class PathConfig {
+    private String contextPath;
 }
+

@@ -15,12 +15,13 @@
 
         <script type='text/javascript' th:inline="javascript">
             accessStrategy(
-                function(user) {
+                `${path}/currentUser`,
+                function() {
                     $('#header').show();
                     $('#rehearsals').show();
                 },
                 function() {
-                    location.href="/login";
+                    location.href=`${path}/login`;
                 }
             )
         </script>

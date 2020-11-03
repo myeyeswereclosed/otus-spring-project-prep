@@ -15,6 +15,7 @@ import ru.otus.project.gateway.service.user.UserAuthenticationService;
 import java.util.Collections;
 import java.util.List;
 
+import static java.util.Collections.emptyList;
 import static org.apache.commons.lang3.exception.ExceptionUtils.getStackTrace;
 import static org.springframework.http.ResponseEntity.ok;
 import static org.springframework.http.ResponseEntity.status;
@@ -28,7 +29,7 @@ public class RehearsalsRestController {
     private final RehearsalService rehearsalService;
 
     @PostMapping("/rehearsal")
-    public ResponseEntity<?> reserve(@RequestBody RehearsalDto rehearsal, Authentication authentication) {
+    public ResponseEntity<RehearsalDto> reserve(@RequestBody RehearsalDto rehearsal, Authentication authentication) {
         var response =
             userService
                 .authenticatedUser(authentication)
@@ -36,7 +37,7 @@ public class RehearsalsRestController {
                 .orElse(ResponseEntity.notFound().build())
         ;
 
-        logger.info("Response IS " + response);
+        logger.info("Response: {} {}", response.getStatusCode(), response.getBody());
 
         return response;
     }
@@ -51,19 +52,15 @@ public class RehearsalsRestController {
             user.getPhone()
         );
 
-        var response = rehearsalService.reserve(user.getPhone(), rehearsal);
-
-        logger.info("Response from rehearsal service: {}", response);
-
-        return response;
+        return rehearsalService.reserve(user.getPhone(), rehearsal);
     }
 
     @DeleteMapping("rehearsal/{id}")
-    public ResponseEntity<?> cancel(@PathVariable long id) {
+    public ResponseEntity<Long> cancel(@PathVariable long id) {
         try {
             rehearsalService.cancel(id);
 
-            return ok().build();
+            return ok(id);
         } catch (Exception e) {
             logger.info("Exception: {}, trace:\r\n{}", e.getMessage(), getStackTrace(e));
 
@@ -71,10 +68,10 @@ public class RehearsalsRestController {
         }
     }
 
-    @GetMapping("artist/rehearsals")
+    @GetMapping("/artist/rehearsals")
     public ResponseEntity<List<RehearsalDto>> getArtistRehearsals(Authentication authentication) {
         return
-            ok(
+            ResponseEntity.of(
                 userService
                     .authenticatedUser(authentication)
                     .map(
@@ -83,12 +80,10 @@ public class RehearsalsRestController {
 
                             return rehearsalService.reservedByArtistWithPhone(user.getPhone());
                         })
-                    .orElse(Collections.emptyList())
-            )
-        ;
+            );
     }
 
-    @GetMapping("room/{roomId}/rehearsals/reserved/{fromDate}/{toDate}")
+    @GetMapping("/room/{roomId}/rehearsals/reserved/{fromDate}/{toDate}")
     public List<RehearsalDto> reservedInPeriod(
         @PathVariable int roomId,
         @PathVariable String fromDate,

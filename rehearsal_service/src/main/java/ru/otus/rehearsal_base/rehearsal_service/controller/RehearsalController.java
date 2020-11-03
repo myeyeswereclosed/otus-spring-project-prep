@@ -17,8 +17,7 @@ import ru.otus.rehearsal_base.rehearsal_service.service.rehearsal.TooLateToCance
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
-import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.*;
 import static org.springframework.http.ResponseEntity.notFound;
 import static org.springframework.http.ResponseEntity.status;
 
@@ -34,7 +33,7 @@ public class RehearsalController {
     private final DtoMapper<Artist, ArtistDto> artistMapper;
 
     @PostMapping("/artist/{phone}/rehearsal")
-    public ResponseEntity<?> reserve(@PathVariable String phone, @RequestBody RehearsalDto rehearsal) {
+    public ResponseEntity<RehearsalDto> reserve(@PathVariable String phone, @RequestBody RehearsalDto rehearsal) {
         logger.info("Trying to reserve {} for {}", rehearsal, phone);
 
         return
@@ -44,7 +43,11 @@ public class RehearsalController {
                     artist ->
                         status(CREATED)
                             .body(
-                                service.reserve(mapper.toEntity(rehearsal.setArtist(artistMapper.toDto(artist))))
+                                mapper.toDto(
+                                    service.reserve(
+                                        mapper.toEntity(rehearsal.setArtist(artistMapper.toDto(artist)))
+                                    )
+                                )
                             )
                 )
                 .orElse(notFound().build());
@@ -71,7 +74,7 @@ public class RehearsalController {
         try {
             return ResponseEntity.of(service.cancel(id));
         } catch (TooLateToCancel e) {
-            return status(INTERNAL_SERVER_ERROR).body(e.getMessage());
+            return status(BAD_REQUEST).body(e.getMessage());
         }
     }
 

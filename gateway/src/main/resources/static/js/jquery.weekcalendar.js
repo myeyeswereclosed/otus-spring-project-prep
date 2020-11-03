@@ -261,7 +261,9 @@
          * @param {number} option daysToShow.
          * @return {String} the title attribute for the calendar.
          */
-        title: '%start% - %end%',
+        // title: '%start% - %end%',
+        // TODO это хак
+        title: '',
         /**
          * default options to pass to callback
          * you can pass a function returning an object or a litteral object

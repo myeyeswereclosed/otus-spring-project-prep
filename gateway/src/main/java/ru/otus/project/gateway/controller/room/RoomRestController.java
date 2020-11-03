@@ -20,12 +20,13 @@ public class RoomRestController {
 
     private final RoomService service;
 
-    @GetMapping("/rooms")
-    public List<RoomDto> getAllForArtist() {
-        logger.info("Trying to obtain rooms info");
-
-        return service.getAll().stream().sorted().collect(toList());
-    }
+    // TODO где сортировать
+//    @GetMapping("/rooms")
+//    public List<RoomDto> getAllForArtist() {
+//        logger.info("Trying to obtain rooms info");
+//
+//        return service.getAll().stream().sorted().collect(toList());
+//    }
 
     @GetMapping("/room/{id}")
     public RoomDto get(@PathVariable int id) {

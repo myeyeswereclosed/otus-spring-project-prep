@@ -1,17 +1,16 @@
-function accessStrategy(accessAllowedBehaviour, accessDeniedBehaviour) {
+function accessStrategy(url, accessAllowedBehaviour, accessDeniedBehaviour) {
     let token = localStorage.getItem("access_token");
 
     if (!token) {
         accessDeniedBehaviour();
     } else {
-        tokenStrategy(token, accessAllowedBehaviour, accessDeniedBehaviour);
+        tokenStrategy(url, token, accessAllowedBehaviour, accessDeniedBehaviour);
     }
 }
 
-// ololo
-function tokenStrategy(token, accessAllowedBehaviour, accessDeniedBehaviour) {
+function tokenStrategy(url, token, accessAllowedBehaviour, accessDeniedBehaviour) {
     $.ajax({
-        url: "/checkAccess",
+        url: url,
         type: "get",
         beforeSend: function (xhr) {
             xhr.setRequestHeader('Authorization', 'Bearer ' + token);
@@ -21,11 +20,23 @@ function tokenStrategy(token, accessAllowedBehaviour, accessDeniedBehaviour) {
         },
         error: function(response) {
             // expired
-            if(response.status === 401) {
+            if(response.status === 401 && response.status === 404) {
                 localStorage.clear();
                 accessDeniedBehaviour();
             }
             // TODO redirect to error page?
+        }
+    });
+}
+
+function toggle(selector) {
+    let element = $(selector);
+
+    element.click(function(){
+        if (element.hasClass('open')) {
+            element.removeClass('open')
+        } else {
+            element.addClass('open');
         }
     });
 }

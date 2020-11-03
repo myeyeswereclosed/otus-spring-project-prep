@@ -22,14 +22,15 @@ public class RoomController {
     private final DtoMapper<Room, RoomDto> mapper;
 
     @GetMapping("/rooms/active")
-    public List<RoomDto> getActive() {
+    public ResponseEntity<List<RoomDto>> getActive() {
         return
-            repository
-                .findAllByStatus(RoomStatus.active())
-                .stream()
-                .map(mapper::toDto)
-                .collect(toList())
-            ;
+            ResponseEntity.ok(
+                repository
+                    .findAllByStatus(RoomStatus.active())
+                    .stream()
+                    .map(mapper::toDto)
+                    .collect(toList())
+            );
     }
 
     @GetMapping("/room/{id}")

@@ -1,6 +1,7 @@
 package ru.otus.rehearsal_base.rehearsal_service.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,7 +17,7 @@ public class ArtistController {
     private final DtoMapper<Artist, ArtistDto> mapper;
 
     @PostMapping("/artist")
-    public ArtistDto add(@RequestBody ArtistDto artist) {
-        return mapper.toDto(service.add(mapper.toEntity(artist)));
+    public ResponseEntity<ArtistDto> add(@RequestBody ArtistDto artist) {
+        return ResponseEntity.ok(mapper.toDto(service.add(mapper.toEntity(artist))));
     }
 }

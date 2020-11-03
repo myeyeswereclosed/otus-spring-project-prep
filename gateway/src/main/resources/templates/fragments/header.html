@@ -1,42 +1,39 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
-        <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">
-        <link rel="stylesheet"  th:href="@{/css/custom.css}">
         <title>Header</title>
     </head>
     <body>
         <div th:fragment="header">
             <script type="text/javascript" th:src="@{/libs/jquery-1.4.4.min.js}"></script>
             <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">
+            <script type="text/javascript" th:src="@{/js/app.js}"></script>
 
             <div class="navbar navbar-fixed-top navbar-inverse" >
                 <div class="navbar-inner">
                     <div class="container">
-                        <a href="/" class="brand">Репетиционная база OLOLO</a>
+                        <a th:href="${path}" class="brand" th:text="${'Репетиционная база ' + baseName}">Репетиционная база </a>
                         <div class="nav-collapse collapse navbar-responsive-collapse" id="actions-div">
                             <ul class="nav">
                                 <li class="dropdown" id="rooms-dropdown">
                                     <a href="#" data-toggle="dropdown" class="dropdown-toggle">Комнаты <b class="caret"></b></a>
-                                    <ul class="dropdown-menu" id="rooms-dropdown-list">
-<!--                                        <li><a href="#">Gadgets</a></li>-->
-<!--                                        <li><a href="#">Accessories</a></li>-->
-<!--                                        <li class="divider"></li>-->
-<!--                                        <li><a href="#">More &raquo;</a></li>-->
-                                    </ul>
+                                    <ul class="dropdown-menu" id="rooms-dropdown-list"></ul>
                                 </li>
                             </ul>
 
                             <script type='text/javascript' th:inline="javascript">
+                                const path = /*[[${path}]]*/'path';
+
+                                console.log(path);
 
                                 $.ajax({
-                                    url: "/rooms",
+                                    url: `${path}/api/rooms/active`,
                                     type: "get",
                                     success: function(rooms) {
                                         rooms.forEach(
                                             function(room) {
                                                 $('#rooms-dropdown-list').append(
-                                                    `<li><a href="/room/${room.id}/timetable">${room.name}</a></li>`
+                                                    `<li><a href="${path}/room/${room.id}/timetable">${room.name}</a></li>`
                                                 )
                                             }
                                         )
@@ -46,85 +43,50 @@
                                     }
                                 })
 
-                                let rooms = $('#rooms-dropdown');
+                                toggle('#rooms-dropdown');
 
-                                rooms.click(function() {
-                                    if (rooms.hasClass('open')) {
-                                        rooms.removeClass('open')
-                                    } else {
-                                        rooms.addClass('open');
+                                accessStrategy(
+                                    `${path}/currentUser`,
+                                    function(user) {
+                                        console.log("Access allowed " + user);
+                                        renderUserHeader(user);
+                                        toggle('#profile');
+                                    },
+                                    function() {
+                                        renderForAnonymous();
                                     }
-                                });
+                                )
 
-                                let token = localStorage.getItem("access_token");
-
-                                console.log("TOKEN " + token)
-
-                                if (!token) {
-                                    renderForAnonymous();
-                                } else {
-                                    renderForToken(token);
+                                function renderUserHeader(user) {
+                                    $('#actions-div')
+                                        .append(
+                                            `<ul class="nav pull-right">
+                                                <li class="dropdown" id="profile">
+                                                    <a
+                                                        href="#" class="dropdown-toggle"
+                                                        data-toggle="dropdown-menu"
+                                                        role="button" aria-expanded="false"
+                                                    >${user.name} (${user.phone}) <span class="caret"></span></a>
+                                                    <ul class="dropdown-menu" role="menu">
+                                                       <li><a href="${path}/rehearsals">Репетиции</a></li>
+                                                    </ul>
+                                                </li>
+                                                <li class="divider-vertical"></li>
+                                                 <li><a href="${path}" onclick="localStorage.clear()">Выйти</a></li>
+                                            </ul>`
+                                        );
                                 }
 
                                 function renderForAnonymous() {
                                     $('#actions-div')
                                         .append(
                                             `<ul class="nav pull-right">' +
-                                                <li><a href="/login">Войти</a></li>
+                                                <li><a href="${path}/login">Войти</a></li>
                                                 <li class="divider-vertical"></li>
-                                                <li><a href="/register">Зарегистрироваться</a></li>
+                                                <li><a href="${path}/register">Зарегистрироваться</a></li>
                                             </ul>`
                                         );
                                 }
-
-                                function renderForToken(token) {
-                                    $.ajax({
-                                        url: "/checkAccess",
-                                        type: "get",
-                                        beforeSend: function (xhr) {
-                                            xhr.setRequestHeader('Authorization', 'Bearer ' + token);
-                                        },
-                                        success: function(user) {
-                                            console.log("Access allowed ");
-                                            console.log(user);
-                                            $('#actions-div')
-                                                .append(
-                                                    `<ul class="nav pull-right">
-                                                        <li class="dropdown" id="profile">
-                                                            <a
-                                                                href="#" class="dropdown-toggle"
-                                                                data-toggle="dropdown-menu"
-                                                                role="button" aria-expanded="false"
-                                                            >${user.name} (${user.phone}) <span class="caret"></span></a>
-                                                            <ul class="dropdown-menu" role="menu">
-                                                               <li><a href="/rehearsals">Репетиции</a></li>
-                                                            </ul>
-                                                        </li>
-                                                        <li class="divider-vertical"></li>
-                                                         <li><a href="/" onclick="localStorage.clear()">Выйти</a></li>
-                                                    </ul>`
-                                                );
-
-                                            let profile = $('#profile');
-
-                                            profile.click(function(){
-                                                if (profile.hasClass('open')) {
-                                                    profile.removeClass('open')
-                                                } else {
-                                                    profile.addClass('open');
-                                                }
-                                            });
-                                        },
-                                        error: function(response) {
-                                            // expired
-                                            if(response.status === 401) {
-                                                localStorage.clear();
-                                                renderForAnonymous();
-                                            }
-                                        }
-                                    });
-                                }
-
                             </script>
                         </div>
                     </div>
