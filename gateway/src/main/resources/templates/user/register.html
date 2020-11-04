@@ -24,7 +24,7 @@
                         </button>
                     </div>
                 </div>
-                <!--/* @thymesVar id="smsCode" type="ru.otus.project.gateway.dto.phone.SmsCodeDto" */-->
+                <!--/* @thymesVar id="smsCode" type="ru.otus.project.gateway.model.phone.SmsCode" */-->
                 <form id ="sms-code-form" class="form-horizontal"
                       th:action="@{/api/sms/code/check}" th:object="${smsCode}" th:method="post"
                 >
@@ -55,7 +55,7 @@
             <div class="span12">
                 <h4 class="muted">Зарегистрируйтесь</h4>
                 <hr>
-                <!--/*@thymesVar id="artist" type="ru.otus.project.gateway.dto.artist.ArtistUserDto"*/-->
+                <!--/*@thymesVar id="artist" type="ru.otus.project.gateway.model.artist.ArtistUser"*/-->
                 <form id="registration-form" class="form-horizontal" th:action="@{/register}" th:object="${artist}" th:method="post">
                     <div class="control-group">
                         <label class="control-label">Имя/название группы</label>

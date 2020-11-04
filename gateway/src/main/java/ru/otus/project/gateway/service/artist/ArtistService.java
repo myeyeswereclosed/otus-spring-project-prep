@@ -1,7 +1,9 @@
 package ru.otus.project.gateway.service.artist;
 
-import ru.otus.project.gateway.dto.artist.ArtistDto;
+import ru.otus.project.gateway.model.artist.Artist;
+
+import java.util.Optional;
 
 public interface ArtistService {
-    ArtistDto create(ArtistDto artist);
+    Optional<Artist> create(Artist artist);
 }

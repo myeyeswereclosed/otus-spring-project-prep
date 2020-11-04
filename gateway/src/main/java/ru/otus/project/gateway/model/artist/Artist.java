@@ -1,21 +1,20 @@
-package ru.otus.project.gateway.dto.artist;
+package ru.otus.project.gateway.model.artist;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-public class ArtistUserDto {
+public class Artist {
     private long id;
     private String name;
     private String genre;
     private String phone;
     private String email;
-    @ToString.Exclude
-    private String password;
-    private String role = "user";
+
+    public Artist(String name, String genre, String phone, String email) {
+        this(0, name, genre, phone, email);
+    }
 }

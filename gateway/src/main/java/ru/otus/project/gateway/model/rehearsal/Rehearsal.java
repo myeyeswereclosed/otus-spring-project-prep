@@ -1,11 +1,11 @@
-package ru.otus.project.gateway.dto.rehearsal;
+package ru.otus.project.gateway.model.rehearsal;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-import ru.otus.project.gateway.dto.artist.ArtistDto;
-import ru.otus.project.gateway.dto.room.RoomDto;
+import ru.otus.project.gateway.model.artist.Artist;
+import ru.otus.project.gateway.model.room.Room;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -15,10 +15,10 @@ import java.time.LocalTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class RehearsalDto {
+public class Rehearsal {
     private long id;
-    private ArtistDto artist;
-    private RoomDto room;
+    private Artist artist;
+    private Room room;
     private LocalDateTime startsAt;
     private LocalDate date;
     private LocalTime start;

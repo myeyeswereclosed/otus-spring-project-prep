@@ -1,22 +1,16 @@
 package ru.otus.project.gateway.controller.room;
 
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-import ru.otus.project.gateway.dto.room.RoomDto;
-import ru.otus.project.gateway.service.room.RoomService;
 
 @RestController
 @RequiredArgsConstructor
 public class RoomRestController {
-    private static final Logger logger = LoggerFactory.getLogger(RoomRestController.class);
+//    private static final Logger logger = LoggerFactory.getLogger(RoomRestController.class);
 
-    private final RoomService service;
+//    private final RoomService service;
 
-    // TODO где сортировать
+//    TODO сортировка!
 //    @GetMapping("/rooms")
 //    public List<RoomDto> getAllForArtist() {
 //        logger.info("Trying to obtain rooms info");

@@ -1,4 +1,4 @@
-package ru.otus.project.gateway.dto.security;
+package ru.otus.project.gateway.model.security;
 
 import lombok.*;
 
@@ -11,6 +11,7 @@ public class User {
     private @NonNull String name;
     private @NonNull String phone;
     private String email;
+    @ToString.Exclude
     private @NonNull String password;
     private @NonNull String role;
 

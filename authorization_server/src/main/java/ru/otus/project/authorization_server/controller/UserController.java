@@ -25,7 +25,7 @@ public class UserController {
     private final PasswordEncoder encoder;
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody UserDto dto) {
+    public ResponseEntity<UserDto> register(@RequestBody UserDto dto) {
         logger.info("Trying to register {}", dto);
 
         try {

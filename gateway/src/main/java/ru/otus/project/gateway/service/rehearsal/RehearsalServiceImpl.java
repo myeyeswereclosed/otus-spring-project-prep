@@ -1,21 +1,34 @@
 package ru.otus.project.gateway.service.rehearsal;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import ru.otus.project.gateway.dto.rehearsal.RehearsalDto;
-import ru.otus.project.gateway.service.rest_client.RehearsalServiceClient;
+import ru.otus.project.gateway.model.rehearsal.Rehearsal;
+import ru.otus.project.gateway.service.rest_client.rehearsal.ReadRehearsalsClient;
+import ru.otus.project.gateway.service.rest_client.rehearsal.RehearsalServiceClient;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class RehearsalServiceImpl implements RehearsalService {
+    private static final Logger logger = LoggerFactory.getLogger(RehearsalServiceImpl.class);
+
     private final RehearsalServiceClient client;
+    private final ReadRehearsalsClient artistRehearsalsClient;
 
     @Override
-    public RehearsalDto reserve(String artistPhone, RehearsalDto rehearsal) {
-        return client.reserve(artistPhone, rehearsal);
+    public Optional<Rehearsal> reserve(String artistPhone, Rehearsal rehearsal) {
+        try {
+            return Optional.ofNullable(client.reserve(artistPhone, rehearsal));
+        } catch (Exception e) {
+            logger.error("Exception {} occurred. Trace:\r\n{}", e.getMessage(), ExceptionUtils.getStackTrace(e));
+        }
+
+        return Optional.empty();
     }
 
 //    @Override
@@ -24,12 +37,18 @@ public class RehearsalServiceImpl implements RehearsalService {
 //    }
 
     @Override
-    public List<RehearsalDto> reservedByArtistWithPhone(String artistPhone) {
-        return client.reservedBy(artistPhone);
+    public List<Rehearsal> reservedBy(String artistPhone) {
+        return artistRehearsalsClient.reservedBy(artistPhone);
     }
 
     @Override
-    public ResponseEntity<?> cancel(long rehearsalId) {
-        return client.cancel(rehearsalId);
+    public Optional<Rehearsal> cancel(long rehearsalId) {
+        try {
+            return Optional.ofNullable(client.cancel(rehearsalId));
+        } catch (Exception e) {
+            logger.error("Exception {} occurred. Trace:\r\n{}", e.getMessage(), ExceptionUtils.getStackTrace(e));
+        }
+
+        return Optional.empty();
     }
 }

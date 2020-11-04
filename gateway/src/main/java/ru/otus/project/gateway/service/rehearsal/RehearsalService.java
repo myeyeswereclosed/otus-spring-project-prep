@@ -1,16 +1,16 @@
 package ru.otus.project.gateway.service.rehearsal;
 
-import org.springframework.http.ResponseEntity;
-import ru.otus.project.gateway.dto.rehearsal.RehearsalDto;
+import ru.otus.project.gateway.model.rehearsal.Rehearsal;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface RehearsalService {
-    RehearsalDto reserve(String artistPhone, RehearsalDto rehearsal);
+    Optional<Rehearsal> reserve(String artistPhone, Rehearsal rehearsal);
 
 //    List<RehearsalDto> reservedInPeriod(int roomId, String fromDate, String toDate);
 
-    List<RehearsalDto> reservedByArtistWithPhone(String artistPhone);
+    List<Rehearsal> reservedBy(String artistPhone);
 
-    ResponseEntity<?> cancel(long rehearsalId);
+    Optional<Rehearsal> cancel(long rehearsalId);
 }

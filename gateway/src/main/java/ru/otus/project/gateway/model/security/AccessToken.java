@@ -1,9 +1,9 @@
-package ru.otus.project.gateway.dto.security;
+package ru.otus.project.gateway.model.security;
 
 import lombok.Data;
 
 @Data
-public class TokenResponseDto {
+public class AccessToken {
     private String access_token;
     private String token_type;
     private String refresh_token;

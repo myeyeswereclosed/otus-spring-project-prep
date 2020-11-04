@@ -19,8 +19,7 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.ResponseEntity.notFound;
-import static org.springframework.http.ResponseEntity.status;
+import static org.springframework.http.ResponseEntity.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -71,11 +70,12 @@ public class RehearsalController {
     }
 
     @DeleteMapping("rehearsal/{id}")
-    public ResponseEntity<?> cancel(@PathVariable long id) {
+    public ResponseEntity<RehearsalDto> cancel(@PathVariable long id) {
         try {
-            return ResponseEntity.of(service.cancel(id));
+            return
+                ResponseEntity.of(service.cancel(id).map(mapper::toDto));
         } catch (TooLateToCancel e) {
-            return status(BAD_REQUEST).body(e.getMessage());
+            return badRequest().build();
         }
     }
 

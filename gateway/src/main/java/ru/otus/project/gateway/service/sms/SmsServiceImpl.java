@@ -2,8 +2,8 @@ package ru.otus.project.gateway.service.sms;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.otus.project.gateway.dto.phone.PhoneDto;
-import ru.otus.project.gateway.dto.phone.SmsCodeDto;
+import ru.otus.project.gateway.model.phone.Phone;
+import ru.otus.project.gateway.model.phone.SmsCode;
 import ru.otus.project.gateway.service.rest_client.SmsServiceClient;
 
 @Service
@@ -13,11 +13,11 @@ public class SmsServiceImpl implements SmsService {
 
     @Override
     public boolean generateCode(String phone) {
-        return client.generate(new PhoneDto(phone)).getStatusCode().is2xxSuccessful();
+        return client.generate(new Phone(phone)).getStatusCode().is2xxSuccessful();
     }
 
     @Override
-    public boolean checkCode(SmsCodeDto smsCode) {
+    public boolean checkCode(SmsCode smsCode) {
         return client.check(smsCode).getStatusCode().is2xxSuccessful();
     }
 }

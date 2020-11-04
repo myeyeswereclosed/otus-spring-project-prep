@@ -10,12 +10,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import ru.otus.project.gateway.dto.artist.ArtistDto;
-import ru.otus.project.gateway.dto.artist.ArtistUserDto;
-import ru.otus.project.gateway.dto.security.User;
-import ru.otus.project.gateway.dto.security.UserLoginDto;
+import ru.otus.project.gateway.model.artist.Artist;
+import ru.otus.project.gateway.model.artist.ArtistUser;
+import ru.otus.project.gateway.model.security.User;
 import ru.otus.project.gateway.service.artist.ArtistService;
-import ru.otus.project.gateway.service.user.UserAuthenticationService;
 import ru.otus.project.gateway.service.user.UserService;
 
 @RestController
@@ -23,38 +21,45 @@ import ru.otus.project.gateway.service.user.UserService;
 public class UserRestController {
     private static final Logger logger = LoggerFactory.getLogger(UserRestController.class);
 
-    private final UserAuthenticationService service;
     private final UserService userService;
     private final ArtistService artistService;
 
     @GetMapping("/currentUser")
     public ResponseEntity<User> currentUser(Authentication authentication) {
-        return ResponseEntity.of(service.authenticatedUser(authentication));
+        return ResponseEntity.of(userService.authorizedUser(authentication));
     }
 
     @PostMapping("/register")
-    public String register(@RequestBody ArtistUserDto user, Model model) {
-        logger.info("Registering user {}", user);
+    public ResponseEntity<Artist> register(@RequestBody ArtistUser artist, Model model) {
+        logger.info("Registering new artist {}", artist);
 
-        // TODO completable future. JTA?
-        var authorizationServerResponse =
-            userService.register(
-                new User(
-                    user.getName(),
-                    user.getPhone(),
-                    user.getEmail(),
-                    user.getPassword(),
-                    user.getRole()
-                )
+        // TODO JTA???
+        var result =
+            userService
+                .register(user(artist))
+                .flatMap(authServerUser -> {
+                    logger.info(
+                        "{} successfully registered in auth server. Registering as rehearsal service artist",
+                        artist
+                    );
+
+                    return
+                        artistService.create(
+                            new Artist(artist.getName(), artist.getGenre(),artist.getPhone(), artist.getEmail())
+                    );
+                });
+
+        return ResponseEntity.of(result);
+    }
+
+    private User user(ArtistUser artistUser) {
+        return
+            new User(
+                artistUser.getName(),
+                artistUser.getPhone(),
+                artistUser.getEmail(),
+                artistUser.getPassword(),
+                artistUser.getRole()
             );
-
-        var rehearsalServiceResponse =
-            artistService.create(new ArtistDto(user.getName(), user.getGenre(), user.getPhone(), user.getEmail()));
-
-        model.addAttribute("user", new UserLoginDto());
-
-        logger.info("Response is {}", authorizationServerResponse);
-
-        return "user/login";
     }
 }

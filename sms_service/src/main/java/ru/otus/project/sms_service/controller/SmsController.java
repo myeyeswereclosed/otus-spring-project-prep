@@ -12,6 +12,9 @@ import ru.otus.project.sms_service.dto.SmsCodeStatus;
 import ru.otus.project.sms_service.service.SmcCodeProvider;
 import ru.otus.project.sms_service.service.code_generation.service.SmsCodeService;
 
+import static org.springframework.http.ResponseEntity.badRequest;
+import static org.springframework.http.ResponseEntity.ok;
+
 @RestController
 @RequiredArgsConstructor
 public class SmsController {
@@ -24,13 +27,13 @@ public class SmsController {
 
         return
             codeGenerationAvailability.isAvailable()
-                ? ResponseEntity.ok().build()
-                : ResponseEntity.badRequest().body(codeGenerationAvailability.getMessage())
+                ? ok().build()
+                : badRequest().build()
             ;
     }
 
     @PostMapping("code/check")
     public ResponseEntity<SmsCodeStatus> checkCode(@RequestBody SmsCodeDto smsCode) {
-        return ResponseEntity.ok(service.checkCode(new SmsCode(smsCode.getPhone(), smsCode.getCode())));
+        return ok(service.checkCode(new SmsCode(smsCode.getPhone(), smsCode.getCode())));
     }
 }

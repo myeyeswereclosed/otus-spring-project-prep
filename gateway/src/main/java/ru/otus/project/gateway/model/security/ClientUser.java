@@ -1,4 +1,4 @@
-package ru.otus.project.gateway.dto.security;
+package ru.otus.project.gateway.model.security;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

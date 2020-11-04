@@ -4,7 +4,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.otus.project.gateway.config.FeignClientConfig;
-import ru.otus.project.gateway.dto.security.TokenResponseDto;
+import ru.otus.project.gateway.model.security.AccessToken;
 
 // TODO сделать аккуратнее
 @FeignClient(
@@ -15,7 +15,7 @@ import ru.otus.project.gateway.dto.security.TokenResponseDto;
 )
 public interface AuthorizationServerTokenClient {
     @PostMapping("oauth/token")
-    TokenResponseDto accessToken(
+    AccessToken accessToken(
         @RequestParam("grant_type") String grantType,
         @RequestParam("username") String username,
         @RequestParam("password") String password,

@@ -4,7 +4,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import ru.otus.project.gateway.dto.security.User;
+import ru.otus.project.gateway.model.security.User;
 
 @FeignClient(
     name = "authorization-server",
@@ -12,6 +12,6 @@ import ru.otus.project.gateway.dto.security.User;
     contextId = "register"
 )
 public interface AuthorizationServerRegistrationClient {
-    @PostMapping("register")
-    ResponseEntity<?> register(@RequestBody User user);
+    @PostMapping("/register")
+    ResponseEntity<User> register(@RequestBody User user);
 }

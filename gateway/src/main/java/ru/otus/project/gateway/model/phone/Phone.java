@@ -1,4 +1,4 @@
-package ru.otus.project.gateway.dto.phone;
+package ru.otus.project.gateway.model.phone;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,6 +9,6 @@ import lombok.ToString;
 @NoArgsConstructor
 @Data
 @ToString
-public class PhoneDto {
+public class Phone {
     private String number;
 }

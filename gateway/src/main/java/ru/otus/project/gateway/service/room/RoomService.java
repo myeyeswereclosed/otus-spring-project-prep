@@ -1,12 +1,12 @@
 package ru.otus.project.gateway.service.room;
 
-import ru.otus.project.gateway.dto.room.RoomDto;
+import ru.otus.project.gateway.model.room.Room;
 
 import java.util.List;
 
 public interface RoomService {
-    List<RoomDto> getAll();
+    List<Room> getAll();
 
     // TODO optional
-    RoomDto roomInfo(int id);
+    Room roomInfo(int id);
 }
