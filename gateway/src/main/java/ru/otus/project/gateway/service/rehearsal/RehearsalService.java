@@ -8,7 +8,7 @@ import java.util.List;
 public interface RehearsalService {
     RehearsalDto reserve(String artistPhone, RehearsalDto rehearsal);
 
-    List<RehearsalDto> reservedInPeriod(int roomId, String fromDate, String toDate);
+//    List<RehearsalDto> reservedInPeriod(int roomId, String fromDate, String toDate);
 
     List<RehearsalDto> reservedByArtistWithPhone(String artistPhone);
 

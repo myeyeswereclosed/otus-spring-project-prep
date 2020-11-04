@@ -28,6 +28,7 @@ public class User {
     private String email;
 
     @Column(name = "password")
+    @ToString.Exclude
     private @NonNull String password;
 
     @Column(name = "role")

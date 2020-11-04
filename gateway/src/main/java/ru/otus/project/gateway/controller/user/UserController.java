@@ -8,8 +8,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import ru.otus.project.gateway.config.Info;
-import ru.otus.project.gateway.config.PathConfig;
 import ru.otus.project.gateway.controller.ModelBuilder;
 import ru.otus.project.gateway.dto.artist.ArtistUserDto;
 import ru.otus.project.gateway.dto.phone.SmsCodeDto;

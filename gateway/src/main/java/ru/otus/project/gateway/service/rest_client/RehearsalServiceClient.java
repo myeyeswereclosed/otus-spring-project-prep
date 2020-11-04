@@ -24,12 +24,12 @@ public interface RehearsalServiceClient {
     @GetMapping("/artist/{phone}/rehearsals")
     List<RehearsalDto> reservedBy(@PathVariable String phone);
 
-    @GetMapping("/room/{roomId}/rehearsals/reserved/{fromDate}/{toDate}")
-    List<RehearsalDto> reservedInPeriod(
-        @PathVariable int roomId,
-        @PathVariable String fromDate,
-        @PathVariable String toDate
-    );
+//    @GetMapping("/room/{roomId}/rehearsals/reserved/{fromDate}/{toDate}")
+//    List<RehearsalDto> reservedInPeriod(
+//        @PathVariable int roomId,
+//        @PathVariable String fromDate,
+//        @PathVariable String toDate
+//    );
 
     @DeleteMapping("/rehearsal/{id}")
     ResponseEntity<?> cancel(@PathVariable long id);

@@ -87,13 +87,18 @@
                             $.ajax({
                                 url: $(this).attr("href"),
                                 type: "delete",
+                                beforeSend: function (xhr) {
+                                    xhr.setRequestHeader(
+                                        'Authorization', 'Bearer ' + localStorage.getItem("access_token")
+                                    );
+                                },
                                 success: function() {
                                     alert("Репетиция отменена");
                                     location.reload();
                                 },
-                                error: function(jqXHR) {
-                                    // TODO сделать адекватнее
-                                    location.reload();
+                                error: function(error) {
+                                    console.log(error)
+                                    // location.reload();
                                 }
                             })
                         }

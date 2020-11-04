@@ -5,8 +5,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import ru.otus.project.gateway.config.Info;
-import ru.otus.project.gateway.config.PathConfig;
 import ru.otus.project.gateway.config.Timetable;
 import ru.otus.project.gateway.controller.ModelBuilder;
 

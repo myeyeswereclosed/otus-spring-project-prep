@@ -8,7 +8,6 @@ FROM openjdk:11-jdk-slim
 COPY --from=build /home/service_discovery/target/ServiceDiscovery.jar /service_discovery/ServiceDiscovery.jar
 EXPOSE 8761
 
-## Add the wait script to the image
 ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.7.3/wait /wait
 RUN chmod +x /wait
 

@@ -17,7 +17,8 @@ import ru.otus.rehearsal_base.rehearsal_service.service.rehearsal.TooLateToCance
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
-import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.ResponseEntity.notFound;
 import static org.springframework.http.ResponseEntity.status;
 

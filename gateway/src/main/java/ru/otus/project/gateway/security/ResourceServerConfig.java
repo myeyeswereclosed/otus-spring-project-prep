@@ -54,9 +54,9 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 //            .antMatchers("/admin/**").hasRole("ADMIN")
             .antMatchers("/favicon.ico").anonymous()
             .antMatchers(
-                "/", "/login", "/userLogin**", "/register", "/rehearsal/**",
-                "/rehearsals", "/rooms/**", "/user/rehearsals", "/room/**",
-                "/error", "/smsCode/**", "/api/**"
+                "/", "/login", "/userLogin**", "/register", "/currentUser",
+                "/rehearsals", "/rooms/**", "/room/**",
+                "/error", "/smsCode/**", "/api/**", "/actuator"
             ).permitAll()
             .anyRequest().authenticated()
             .and()

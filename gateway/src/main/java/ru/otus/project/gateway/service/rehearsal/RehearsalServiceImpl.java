@@ -18,10 +18,10 @@ public class RehearsalServiceImpl implements RehearsalService {
         return client.reserve(artistPhone, rehearsal);
     }
 
-    @Override
-    public List<RehearsalDto> reservedInPeriod(int roomId, String fromDate, String toDate) {
-        return client.reservedInPeriod(roomId, fromDate, toDate);
-    }
+//    @Override
+//    public List<RehearsalDto> reservedInPeriod(int roomId, String fromDate, String toDate) {
+//        return client.reservedInPeriod(roomId, fromDate, toDate);
+//    }
 
     @Override
     public List<RehearsalDto> reservedByArtistWithPhone(String artistPhone) {

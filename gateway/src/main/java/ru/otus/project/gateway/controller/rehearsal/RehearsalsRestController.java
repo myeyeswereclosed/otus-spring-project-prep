@@ -12,12 +12,10 @@ import ru.otus.project.gateway.dto.security.User;
 import ru.otus.project.gateway.service.rehearsal.RehearsalService;
 import ru.otus.project.gateway.service.user.UserAuthenticationService;
 
-import java.util.Collections;
 import java.util.List;
 
-import static java.util.Collections.emptyList;
 import static org.apache.commons.lang3.exception.ExceptionUtils.getStackTrace;
-import static org.springframework.http.ResponseEntity.ok;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static org.springframework.http.ResponseEntity.status;
 
 @RestController
@@ -34,7 +32,7 @@ public class RehearsalsRestController {
             userService
                 .authenticatedUser(authentication)
                 .map(user -> ResponseEntity.ok(reserve(user, rehearsal)))
-                .orElse(ResponseEntity.notFound().build())
+                .orElse(ResponseEntity.status(UNAUTHORIZED).build())
         ;
 
         logger.info("Response: {} {}", response.getStatusCode(), response.getBody());
@@ -56,11 +54,22 @@ public class RehearsalsRestController {
     }
 
     @DeleteMapping("rehearsal/{id}")
-    public ResponseEntity<Long> cancel(@PathVariable long id) {
-        try {
-            rehearsalService.cancel(id);
+    public ResponseEntity<Long> cancel(@PathVariable long id, Authentication authentication) {
+        logger.info("Trying to cancel rehearsal {}", id);
 
-            return ok(id);
+        try {
+            return
+                userService
+                    .authenticatedUser(authentication)
+                    .map(
+                        user -> {
+                            rehearsalService.cancel(id);
+
+                            return ResponseEntity.ok(id);
+                        }
+                    )
+                    .orElse(ResponseEntity.status(UNAUTHORIZED).build())
+            ;
         } catch (Exception e) {
             logger.info("Exception: {}, trace:\r\n{}", e.getMessage(), getStackTrace(e));
 
@@ -83,14 +92,14 @@ public class RehearsalsRestController {
             );
     }
 
-    @GetMapping("/room/{roomId}/rehearsals/reserved/{fromDate}/{toDate}")
-    public List<RehearsalDto> reservedInPeriod(
-        @PathVariable int roomId,
-        @PathVariable String fromDate,
-        @PathVariable String toDate
-    ) {
-        return rehearsalService.reservedInPeriod(roomId, fromDate, toDate);
-    }
+//    @GetMapping("/room/{roomId}/rehearsals/reserved/{fromDate}/{toDate}")
+//    public List<RehearsalDto> reservedInPeriod(
+//        @PathVariable int roomId,
+//        @PathVariable String fromDate,
+//        @PathVariable String toDate
+//    ) {
+//        return rehearsalService.reservedInPeriod(roomId, fromDate, toDate);
+//    }
 
 //    @GetMapping("/rehearsal/{id}")
 //    public ResponseEntity<Rehearsal> getRehearsal(@PathVariable long id) {

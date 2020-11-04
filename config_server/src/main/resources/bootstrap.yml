@@ -9,3 +9,11 @@ spring:
           searchPaths: '{application}'
 server:
   port: 4000
+management:
+  endpoints:
+    web:
+      exposure:
+        include: metrics, health
+  endpoint:
+    health:
+      show-details: always

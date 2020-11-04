@@ -9,10 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.otus.project.gateway.dto.room.RoomDto;
 import ru.otus.project.gateway.service.room.RoomService;
 
-import java.util.List;
-
-import static java.util.stream.Collectors.toList;
-
 @RestController
 @RequiredArgsConstructor
 public class RoomRestController {
@@ -28,10 +24,10 @@ public class RoomRestController {
 //        return service.getAll().stream().sorted().collect(toList());
 //    }
 
-    @GetMapping("/room/{id}")
-    public RoomDto get(@PathVariable int id) {
-        logger.info("Getting info about room with id={}", id);
-
-        return service.roomInfo(id);
-    }
+//    @GetMapping("/room/{id}")
+//    public RoomDto get(@PathVariable int id) {
+//        logger.info("Getting info about room with id={}", id);
+//
+//        return service.roomInfo(id);
+//    }
 }

@@ -1,4 +1,10 @@
 version: '3'
+
+volumes:
+  authorization-base-data: {}
+  sms-code-base-data: {}
+  rehearsal-base-data: {}
+
 services:
   config-server:
     build:
@@ -7,8 +13,6 @@ services:
     container_name: rb-config-server
     ports:
       - "4000:4000"
-#      volumes:
-#        - "/tao-elszamolas/logs:/var/log/tao-elszamolas"
     networks:
       - rbnetwork
 
@@ -38,7 +42,9 @@ services:
     ports:
       - "54320:5432"
     env_file:
-      - database.env # configure postgres
+      - ./authorization_server/auth_server_db.env # configure postgres
+    volumes:
+      - authorization-base-data:/var/lib/postgresql/authorization_base_data
     networks:
       - rbnetwork
 
@@ -68,22 +74,108 @@ services:
     networks:
       - rbnetwork
 
+  sms-service-database:
+    image: postgres
+    container_name: sms-service-database
+    restart: always
+    ports:
+      - "5431:5432"
+    env_file:
+      - ./sms_service/sms_service_db.env # configure postgres
+    volumes:
+      - sms-code-base-data:/var/lib/postgresql/sms_code_base_data
+    networks:
+      - rbnetwork
+
+  sms-service:
+    build:
+      context: ./sms_service
+      dockerfile: Dockerfile
+    container_name: rb-sms-service
+    env_file:
+      - ./sms_service/sms_service_app.env
+    environment:
+      PORT: 8085
+      CONFIG_SERVER_HOST: config-server
+      CONFIG_SERVER_PORT: 4000
+      DB_HOST: sms-service-database
+      DB_PORT: 5432
+      SERVICE_DISCOVERY_HOST: service-discovery
+      SERVICE_DISCOVERY_PORT: 8761
+      WAIT_HOSTS: sms-service-database:5432, service-discovery:8761
+    depends_on:
+      - config-server
+      - service-discovery
+      - sms-service-database
+    restart: unless-stopped
+    ports:
+      - "8085:8085"
+    networks:
+      - rbnetwork
+
+  rehearsal-database:
+    image: postgres
+    container_name: rehearsal-database
+    restart: always
+    ports:
+      - "5433:5432"
+    env_file:
+      - ./rehearsal_service/rehearsal_service_db.env # configure postgres
+    volumes:
+      - rehearsal-base-data:/var/lib/postgresql/rehearsal_base_data
+    networks:
+      - rbnetwork
+
+  rehearsal-service:
+    build:
+      context: ./rehearsal_service
+      dockerfile: Dockerfile
+    container_name: rb-rehearsal-service
+    env_file:
+      - ./rehearsal_service/rehearsal_service_app.env
+    environment:
+      PORT: 8888
+      CONFIG_SERVER_HOST: config-server
+      CONFIG_SERVER_PORT: 4000
+      DB_HOST: rehearsal-database
+      DB_PORT: 5432
+      SERVICE_DISCOVERY_HOST: service-discovery
+      SERVICE_DISCOVERY_PORT: 8761
+      WAIT_HOSTS: rehearsal-database:5432, service-discovery:8761
+    depends_on:
+      - config-server
+      - service-discovery
+      - rehearsal-database
+    restart: unless-stopped
+    ports:
+      - "8888:8888"
+    networks:
+      - rbnetwork
+
   gateway:
     build:
       context: ./gateway
       dockerfile: Dockerfile
     container_name: rb-gateway
+    env_file:
+      - ./gateway/gateway_app.env
     environment:
       PORT: 8080
       CONFIG_SERVER_HOST: config-server
       CONFIG_SERVER_PORT: 4000
       SERVICE_DISCOVERY_HOST: service-discovery
       SERVICE_DISCOVERY_PORT: 8761
-      WAIT_HOSTS: config-server:4000, service-discovery:8761, authorization-server:8090
+      REHEARSAL_SERVICE_HOST: rehearsal-service
+      REHEARSAL_SERVICE_PORT: 8888
+      SMS_SERVICE_HOST: sms-service
+      SMS_SERVICE_PORT: 8085
+      WAIT_HOSTS: config-server:4000, service-discovery:8761, authorization-server:8090, rehearsal-service:8888, sms-service:8085
     depends_on:
       - config-server
       - service-discovery
       - authorization-server
+      - rehearsal-service
+      - sms-service
     restart: unless-stopped
     ports:
       - "8080:8080"

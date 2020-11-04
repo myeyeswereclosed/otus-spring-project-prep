@@ -1,12 +1,7 @@
 package ru.otus.project.gateway.controller.sms;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import ru.otus.project.gateway.dto.phone.PhoneDto;
-import ru.otus.project.gateway.dto.phone.SmsCodeDto;
 import ru.otus.project.gateway.service.sms.SmsService;
 
 @RestController

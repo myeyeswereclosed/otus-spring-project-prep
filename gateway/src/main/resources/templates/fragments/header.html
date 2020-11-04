@@ -16,51 +16,45 @@
                         <div class="nav-collapse collapse navbar-responsive-collapse" id="actions-div">
                             <ul class="nav">
                                 <li class="dropdown" id="rooms-dropdown">
-                                    <a href="#" data-toggle="dropdown" class="dropdown-toggle">Комнаты <b class="caret"></b></a>
-                                    <ul class="dropdown-menu" id="rooms-dropdown-list"></ul>
-                                </li>
-                            </ul>
+                                    <script type='text/javascript' th:inline="javascript">
+                                        const path = /*[[${path}]]*/'path';
 
-                            <script type='text/javascript' th:inline="javascript">
-                                const path = /*[[${path}]]*/'path';
-
-                                console.log(path);
-
-                                $.ajax({
-                                    url: `${path}/api/rooms/active`,
-                                    type: "get",
-                                    success: function(rooms) {
-                                        rooms.forEach(
-                                            function(room) {
-                                                $('#rooms-dropdown-list').append(
-                                                    `<li><a href="${path}/room/${room.id}/timetable">${room.name}</a></li>`
+                                        $.ajax({
+                                            url: `${path}/api/rooms/active`,
+                                            type: "get",
+                                            success: function(rooms) {
+                                                rooms.forEach(
+                                                    function(room) {
+                                                        $('#rooms-dropdown-list').append(
+                                                            `<li><a href="${path}/room/${room.id}/timetable">${room.name}</a></li>`
+                                                        )
+                                                    }
                                                 )
+                                            },
+                                            error: function(error) {
+                                                console.log(error);
+                                            }
+                                        })
+
+                                        toggle('#rooms-dropdown');
+
+                                        accessStrategy(
+                                            `${path}/currentUser`,
+                                            function(user) {
+                                                console.log("Access allowed");
+                                                // $('#actions-div').remove($('#anonymous-actions'));
+                                                renderUserHeader(user);
+                                                toggle('#profile');
+                                            },
+                                            function() {
+                                                renderForAnonymous();
                                             }
                                         )
-                                    },
-                                    error: function(error) {
-                                        console.log(error);
-                                    }
-                                })
 
-                                toggle('#rooms-dropdown');
-
-                                accessStrategy(
-                                    `${path}/currentUser`,
-                                    function(user) {
-                                        console.log("Access allowed " + user);
-                                        renderUserHeader(user);
-                                        toggle('#profile');
-                                    },
-                                    function() {
-                                        renderForAnonymous();
-                                    }
-                                )
-
-                                function renderUserHeader(user) {
-                                    $('#actions-div')
-                                        .append(
-                                            `<ul class="nav pull-right">
+                                        function renderUserHeader(user) {
+                                            $('#actions-div')
+                                                .append(
+                                                    `<ul class="nav pull-right">
                                                 <li class="dropdown" id="profile">
                                                     <a
                                                         href="#" class="dropdown-toggle"
@@ -74,20 +68,25 @@
                                                 <li class="divider-vertical"></li>
                                                  <li><a href="${path}" onclick="localStorage.clear()">Выйти</a></li>
                                             </ul>`
-                                        );
-                                }
+                                                );
+                                        }
 
-                                function renderForAnonymous() {
-                                    $('#actions-div')
-                                        .append(
-                                            `<ul class="nav pull-right">' +
+                                        function renderForAnonymous() {
+                                            $('#actions-div')
+                                                .append(
+                                                    `<ul class="nav pull-right" id="anonymous-actions">' +
                                                 <li><a href="${path}/login">Войти</a></li>
                                                 <li class="divider-vertical"></li>
                                                 <li><a href="${path}/register">Зарегистрироваться</a></li>
                                             </ul>`
-                                        );
-                                }
-                            </script>
+                                                );
+                                        }
+                                    </script>
+                                    <a href="#" data-toggle="dropdown" class="dropdown-toggle">Комнаты <b class="caret"></b></a>
+                                    <ul class="dropdown-menu" id="rooms-dropdown-list"></ul>
+                                </li>
+                            </ul>
+
                         </div>
                     </div>
                 </div>

@@ -1,6 +1,8 @@
 package ru.otus.project.authorization_server.service.user_details;
 
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -13,17 +15,19 @@ import ru.otus.project.authorization_server.repository.UserRepository;
 @Primary
 @RequiredArgsConstructor
 public class RehearsalBaseUserDetailsService implements UserDetailsService {
+    private static final Logger logger = LoggerFactory.getLogger(RehearsalBaseUserDetailsService.class);
+
     private final UserRepository repository;
 
     @Override
     public UserDetails loadUserByUsername(String phone) throws UsernameNotFoundException {
-        System.out.println("HERE WITH " + phone);
+        logger.info("Trying to find user by phone {}", phone);
 
         return
             repository
                 .findUserByPhone(phone)
                 .map(user -> {
-                    System.out.println("USER FOUND " + user);
+                    logger.info("Found user: {}", user);
 
                     return new RehearsalBaseUser(user);
                 })
