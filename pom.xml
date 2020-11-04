@@ -20,7 +20,7 @@
     </parent>
 
     <groupId>ru.otus</groupId>
-    <artifactId>otus-spring-project-prep</artifactId>
+    <artifactId>otus-spring-rehearsal-base</artifactId>
     <version>0.0.1</version>
 
     <properties>
