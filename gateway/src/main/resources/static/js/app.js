@@ -19,8 +19,7 @@ function tokenStrategy(url, token, accessAllowedBehaviour, accessDeniedBehaviour
             accessAllowedBehaviour(user);
         },
         error: function(response) {
-            // expired
-            if(response.status === 401 && response.status === 404) {
+            if(response.status === 401 || response.status === 404) {
                 localStorage.clear();
                 accessDeniedBehaviour();
             }

@@ -79,20 +79,34 @@ public class UserAuthorizationService implements UserService {
     }
 
     private Optional<Map<String, Object>> authorizationInfo(Authentication authentication) {
-        try {
-            var details = (OAuth2AuthenticationDetails) authentication.getDetails();
-            var accessToken = tokenStore.readAccessToken(details.getTokenValue());
+        return
+            Optional
+                .ofNullable(authentication)
+                .flatMap(
+                    authenticationPresent -> {
+                        try {
+                            var details = (OAuth2AuthenticationDetails) authentication.getDetails();
+                            var accessToken = tokenStore.readAccessToken(details.getTokenValue());
 
-            logger.info("{} access token is valid", authentication.getPrincipal());
+                            logger.info("{} access token is valid", authentication.getPrincipal());
 
-            return Optional.of(accessToken.getAdditionalInformation());
-        } catch (Exception e) {
-            logger.error("Exception {} occurred. Trace:\r\n {}", e.getMessage(), getStackTrace(e));
-        }
+                            return Optional.of(accessToken.getAdditionalInformation());
+                        } catch (Exception e) {
+                            logger.error("Exception {} occurred. Trace:\r\n {}", e.getMessage(), getStackTrace(e));
+                        }
 
-        logger.warn("Token information is invalid");
+                        logger.warn("Token information is invalid");
 
-        return Optional.empty();
+                        return Optional.empty();
+                    }
+                )
+                .or(
+                    () -> {
+                        logger.warn("Authentication not found");
+
+                        return Optional.empty();
+                    }
+                );
     }
 
     private Optional<User> makeUserFromInfo(Map<String, Object> info) {
