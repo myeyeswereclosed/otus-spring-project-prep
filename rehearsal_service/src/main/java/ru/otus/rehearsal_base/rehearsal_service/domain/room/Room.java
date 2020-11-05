@@ -26,11 +26,11 @@ public class Room {
     @Column(name = "description")
     private String description;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "status_id")
     private RoomStatus status;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "type_id")
     private RoomType roomType;
 

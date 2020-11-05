@@ -11,13 +11,29 @@ import java.util.List;
 
 public interface RehearsalRepository extends JpaRepository<Rehearsal, Long> {
     @Query(
-        "select r from Rehearsal r " +
-        "where r.room.id = :roomId and r.status = 'RESERVED' and r.startDatetime > :from and r.startDatetime < :to")
+        "select r from Rehearsal r" +
+            " join fetch r.artist " +
+            " join fetch r.room room" +
+            " join fetch room.roomType " +
+            " join fetch room.status " +
+        " where r.room.id = :roomId " +
+            "and r.status = 'RESERVED' " +
+            "and r.startDatetime > :from " +
+            "and r.startDatetime < :to"
+    )
     List<Rehearsal> findReserved(
         @Param("roomId") int roomId,
         @Param("from") LocalDateTime from,
         @Param("to") LocalDateTime to
     );
 
-    List<Rehearsal> findAllByArtist(Artist artist);
+    @Query(
+        "select r from Rehearsal r " +
+            " join fetch r.artist artist" +
+            " join fetch r.room room" +
+            " join fetch room.roomType " +
+            " join fetch room.status " +
+        "where artist.phone = :phone"
+    )
+    List<Rehearsal> findAllByArtistPhone(@Param("phone") String phone);
 }

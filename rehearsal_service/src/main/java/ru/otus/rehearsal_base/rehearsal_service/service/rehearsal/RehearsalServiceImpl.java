@@ -14,7 +14,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import static java.util.Collections.emptyList;
 import static ru.otus.rehearsal_base.rehearsal_service.domain.rehearsal.RehearsalStatus.CANCELLED;
 
 @Service
@@ -51,15 +50,7 @@ public class RehearsalServiceImpl implements RehearsalService {
     @Override
     @Transactional(readOnly = true)
     public List<Rehearsal> getArtistRehearsals(String phone) {
-        return
-            artistRepository
-                .findByPhone(phone)
-                .map(repository::findAllByArtist)
-                .orElseGet(() -> {
-                    logger.warn("Trying to find rehearsals, but artist with phone {} not found", phone);
-
-                    return emptyList();
-                });
+        return repository.findAllByArtistPhone(phone);
     }
 
     @Override

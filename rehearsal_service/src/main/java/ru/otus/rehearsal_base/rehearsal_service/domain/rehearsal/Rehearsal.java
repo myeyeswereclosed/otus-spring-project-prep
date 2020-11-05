@@ -23,14 +23,15 @@ public class Rehearsal {
     @Column(name = "id")
     private long id;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "artist_id")
     @Setter
     private @NonNull Artist artist;
 
     @Column(name = "start_datetime")
     private LocalDateTime startDatetime;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id")
     private @NonNull Room room;
 
