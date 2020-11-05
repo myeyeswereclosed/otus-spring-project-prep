@@ -33,7 +33,7 @@ public interface RehearsalRepository extends JpaRepository<Rehearsal, Long> {
             " join fetch r.room room" +
             " join fetch room.roomType " +
             " join fetch room.status " +
-        "where artist.phone = :phone"
+        "where artist.phone = :phone order by r.startDatetime desc"
     )
     List<Rehearsal> findAllByArtistPhone(@Param("phone") String phone);
 }

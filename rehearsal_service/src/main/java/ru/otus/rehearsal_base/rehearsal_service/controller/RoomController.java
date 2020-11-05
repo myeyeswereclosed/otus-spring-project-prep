@@ -29,6 +29,7 @@ public class RoomController {
                     .findAllByStatus(RoomStatus.active())
                     .stream()
                     .map(mapper::toDto)
+                    .sorted()
                     .collect(toList())
             );
     }
