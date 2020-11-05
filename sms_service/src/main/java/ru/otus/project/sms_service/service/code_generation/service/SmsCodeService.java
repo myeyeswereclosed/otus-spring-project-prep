@@ -22,9 +22,15 @@ public class SmsCodeService implements PhoneCodeService {
 
     @Transactional
     public SmsCodeStatus checkCode(SmsCode code) {
+        var maybeCode = repository.findByPhoneAndValueAndActual(code.getPhone(), code.getValue(), true);
+
+        // TODO как сочетается c Transactional
+        if (maybeCode.isPresent()) {
+            repository.invalidate(maybeCode.get().getId());
+        }
+
         return
-            repository
-                .findByPhoneAndValueAndActual(code.getPhone(), code.getValue(), true)
+            maybeCode
                 .map(codeFound -> codeFound.isExpired() ? SmsCodeStatus.EXPIRED : SmsCodeStatus.SUCCESS)
                 .orElse(SmsCodeStatus.FAIL)
         ;

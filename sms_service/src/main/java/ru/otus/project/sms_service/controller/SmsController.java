@@ -34,6 +34,8 @@ public class SmsController {
 
     @PostMapping("code/check")
     public ResponseEntity<SmsCodeStatus> checkCode(@RequestBody SmsCodeDto smsCode) {
-        return ok(service.checkCode(new SmsCode(smsCode.getPhone(), smsCode.getCode())));
+        var result =  service.checkCode(new SmsCode(smsCode.getPhone(), smsCode.getCode()));
+
+        return result.isOk() ? ok(result) : badRequest().build();
     }
 }

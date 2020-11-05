@@ -13,6 +13,10 @@ public interface SmsCodeRepository extends JpaRepository<SmsCode, Long> {
     @Query("update SmsCode code set code.actual = false where code.phone = :number and code.actual = true")
     void invalidateActualFor(@Param("number") String number);
 
+    @Modifying
+    @Query("update SmsCode code set code.actual = false where code.id = :id")
+    void invalidate(@Param("id") long id);
+
     Optional<SmsCode> findByPhoneAndValueAndActual(
         @Param("phone") String phone,
         @Param("value") String value,

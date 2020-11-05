@@ -208,13 +208,17 @@
                                                         alert("Вы успешно зарегистрированы");
                                                         location.href = `${path}/login`;
                                                     },
-                                                    error: function (registrationError) {
+                                                    error: function(registrationError) {
                                                         // TODO to error page!
-                                                        console.log(registrationError);
+                                                        alert("Произошла ошибка. Попробуйте еще раз или свяжитесь с нами");
+
+                                                        location.reload();
                                                     }
                                                 })
                                             },
                                             error: function(smsCodeError) {
+                                                alert(smsCodeError);
+
                                                 console.log(smsCodeError)
                                             }
                                         });
