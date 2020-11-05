@@ -31,7 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
             .csrf().disable()
             .authorizeRequests()
-            .antMatchers("/register", "/oauth/token").anonymous()
+            .antMatchers("/user", "/register", "/oauth/token").anonymous()
             .anyRequest().authenticated()
         ;
     }

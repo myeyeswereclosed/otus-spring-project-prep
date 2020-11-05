@@ -132,82 +132,102 @@
                         function (event) {
                             event.preventDefault();
 
-                            // TODO check exists!
-
-                            let confirm = $('#confirmRegistration');
-                            let phoneNumber = $('#phone').val();
-
-                            console.log("HERE !!!!");
+                            let phoneField = $('#phone');
+                            let phoneNumber = phoneField.val();
 
                             $.ajax({
-                                url: `${path}/api/sms/code/generate`,
-                                type: "post",
-                                contentType: "application/json",
-                                data: JSON.stringify({number: phoneNumber}),
-                                success: function() {
-                                    confirm.removeClass('fade')
+                                url: `${path}/api/user?phone=${phoneNumber}`,
+                                type: "get",
+                                success: function(data) {
+                                    alert("Пользователь с таким номером уже зарегистрирован");
 
-                                    $('#confirm-close').click(function () {
-                                        confirm.addClass('fade')
-                                    });
-                                    $('#no-confirm').click(function () {
-                                        confirm.addClass('fade')
-                                    });
-
-                                    let codeForm = $('#sms-code-form');
-
-                                    codeForm.submit(
-                                        function(e) {
-                                            e.preventDefault();
-
-                                            $.ajax({
-                                                url: codeForm.attr('action'),
-                                                type: "post",
-                                                contentType: "application/json",
-                                                data: JSON.stringify(
-                                                    {phone: phoneNumber, code: $('#sms-code').val()}
-                                                ),
-                                                success: function() {
-                                                    let registrationForm = $('#registration-form');
-
-                                                    let user = {};
-
-                                                    regForm.serializeArray().forEach(
-                                                        function(input) {
-                                                            user[input.name] = input.value;
-                                                        }
-                                                    );
-
-                                                    console.log(user);
-
-                                                    $.ajax({
-                                                        url: registrationForm.attr('action'),
-                                                        type: "post",
-                                                        contentType: "application/json",
-                                                        data: JSON.stringify(user),
-                                                        success: function () {
-                                                            alert("Вы успешно зарегистрированы");
-                                                            location.href = `${path}/login`;
-                                                        },
-                                                        error: function (registrationError) {
-                                                            // TODO to error page!
-                                                            console.log(registrationError);
-                                                        }
-                                                    })
-                                                },
-                                                error: function(smsCodeError) {
-                                                    console.log(smsCodeError)
-                                                }
-                                            });
-                                        }
-                                    )
-
+                                    phoneField.attr('value', '');
                                 },
-                                error: function (err) {
-                                    console.log(err);
+                                error: function(response) {
+                                    if (response.status === 404) {
+                                        registrationFlow(phoneNumber);
+                                    } else {
+                                        alert("Произошла ошибка. Попробуйте еще раз");
+
+                                        location.reload();
+                                    }
                                 }
                             });
                         });
+
+                    function registrationFlow(phoneNumber) {
+                        let confirm = $('#confirmRegistration');
+
+                        $.ajax({
+                            url: `${path}/api/sms/code/generate`,
+                            type: "post",
+                            contentType: "application/json",
+                            data: JSON.stringify({number: phoneNumber}),
+                            success: function() {
+                                confirm.removeClass('fade')
+
+                                $('#confirm-close').click(function () {
+                                    confirm.addClass('fade')
+                                });
+                                $('#no-confirm').click(function () {
+                                    confirm.addClass('fade')
+                                });
+
+                                let codeForm = $('#sms-code-form');
+
+                                codeForm.submit(
+                                    function(e) {
+                                        e.preventDefault();
+
+                                        $.ajax({
+                                            url: codeForm.attr('action'),
+                                            type: "post",
+                                            contentType: "application/json",
+                                            data: JSON.stringify(
+                                                {phone: phoneNumber, code: $('#sms-code').val()}
+                                            ),
+                                            success: function() {
+                                                let registrationForm = $('#registration-form');
+
+                                                let user = {};
+
+                                                regForm.serializeArray().forEach(
+                                                    function(input) {
+                                                        user[input.name] = input.value;
+                                                    }
+                                                );
+
+                                                console.log(user);
+
+                                                $.ajax({
+                                                    url: registrationForm.attr('action'),
+                                                    type: "post",
+                                                    contentType: "application/json",
+                                                    data: JSON.stringify(user),
+                                                    success: function () {
+                                                        alert("Вы успешно зарегистрированы");
+                                                        location.href = `${path}/login`;
+                                                    },
+                                                    error: function (registrationError) {
+                                                        // TODO to error page!
+                                                        console.log(registrationError);
+                                                    }
+                                                })
+                                            },
+                                            error: function(smsCodeError) {
+                                                console.log(smsCodeError)
+                                            }
+                                        });
+                                    }
+                                )
+
+                            },
+                            error: function (err) {
+                                console.log(err);
+                            }
+                        });
+                    }
+
                 </script>
             </div>
         </div>

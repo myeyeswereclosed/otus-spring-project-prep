@@ -11,6 +11,7 @@ public class UserDto {
     private @NonNull String name;
     private @NonNull String phone;
     private String email;
+    @ToString.Exclude
     private @NonNull String password;
     private @NonNull String role;
 }
