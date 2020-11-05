@@ -39,7 +39,7 @@
                                     <th>Комната</th>
                                     <th>Статус</th>
                                     <th>Цена</th>
-                                    <th></th>
+                                    <th>Действия</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -55,9 +55,16 @@
                     rehearsals.forEach(function(rehearsal) {
                         let row =
                             $(
-                                `<tr class="table-success">
-                                    <td>${rehearsal.date}</td>
-                                    <td>${rehearsal.start}</td>
+                                `<tr>
+                                    <td>${new Date(Date.parse(rehearsal.date))
+                                        .toLocaleString('ru-RU',
+                                            {
+                                                year: 'numeric',
+                                                month: '2-digit',
+                                                day: '2-digit',
+                                            }
+                                        )}</td>
+                                    <td>${rehearsal.start} - ${rehearsal.end}</td>
                                     <td>
                                         <a href=${path}/room/${rehearsal.room.id}/timetable>
                                             ${rehearsal.room.name}
@@ -69,9 +76,9 @@
 
                         if (rehearsal.cancelable) {
                             row.append(`
-                                <a
+                                <td><a
                                 class="btn btn-primary btn-info btn-sm cancel-rehearsal-btn"
-                                href="${path}/rehearsal/${rehearsal.id}">Отменить</a>`
+                                href="${path}/rehearsal/${rehearsal.id}">Отменить</a></td>`
                             );
                         }
 

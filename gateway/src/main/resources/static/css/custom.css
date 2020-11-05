@@ -18,3 +18,9 @@ body{
 .nav-tabs{
     margin-top: 40px;
 }
+
+#confirm-close {
+    position: absolute;
+    top: 20px;
+    left: 500px;
+}

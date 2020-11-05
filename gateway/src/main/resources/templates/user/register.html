@@ -19,7 +19,7 @@
                 <div class="modal-header">
                     <div>
                         <h5 class="modal-title" id="confirmRegistrationLabel">Подтверждение регистрации</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button type="button" class="close position-absolute" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true" id="confirm-close">&times;</span>
                         </button>
                     </div>
@@ -28,6 +28,7 @@
                 <form id ="sms-code-form" class="form-horizontal"
                       th:action="@{/api/sms/code/check}" th:object="${smsCode}" th:method="post"
                 >
+                    <div class="control-group"></div>
                     <div class="control-group">
                         <label class="control-label">Смс-код</label>
                         <div class="controls">

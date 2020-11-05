@@ -6,6 +6,7 @@
 
   <link rel='stylesheet' type='text/css' th:href="@{/libs/css/smoothness/jquery-ui-1.8.11.custom.css}" />
   <link rel='stylesheet' type='text/css' th:href='@{/css/jquery.weekcalendar.css}' />
+  <link rel="stylesheet"  th:href="@{/css/custom.css}">
   <style type='text/css'>
     body {
       font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
@@ -23,18 +24,6 @@
       position: absolute;
       top: 3.2em;
       margin-right: 400px;
-    }
-
-    #message {
-      font-size: 0.7em;
-      position: absolute;
-      top: 1em;
-      right: 1em;
-      width: 350px;
-      display: none;
-      padding: 1em;
-      background: #ffc;
-      border: 1px solid #dda;
     }
   </style>
 
@@ -159,7 +148,17 @@
 
         function renderRoomData(room) {
           $('.room-info')
-            .append($('<div><h3>' + room.name + '</h3></div><br/>'))
+            .append(`
+              <div>
+                <h3>${room.name}</h3>
+                <div>
+                    ${room.description}
+                </div>
+                <div>
+                    Стоимость: ${room.price} р.
+                </div>
+              </div><br/>`
+            );
         }
 
         function renderTimetable(room, timetableStart, timetableEnd) {
@@ -247,6 +246,23 @@
                 let date = new Date(calEvent.start);
 
                 let startsAt = new Date(date.getTime() - date.getTimezoneOffset() * 60 * 1000);
+                let startsAtForUser =
+                  new Date(date.getTime())
+                    .toLocaleString('ru-RU',
+                      {
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit',
+                        hour: '2-digit',
+                        minute:'2-digit'
+                      }
+                    );
+
+                console.log(room);
+
+                let endsAtForUser =
+                  new Date(date.getTime() + room.roomType.rehearsalMinTime * 60 * 60 * 1000)
+                    .toLocaleString('ru-RU', {hour: '2-digit', minute:'2-digit'});
 
                 let rehearsal = {
                   'startsAt': startsAt,
@@ -258,8 +274,8 @@
                 confirm.hasClass('fade') && confirm.removeClass('fade');
 
                 $('#confirm-rehearsal-div').append(
-                  `<div class="container">
-                      <p>${room.name}: ${startsAt}</p>
+                  `<div>
+                      <span>${room.name}: ${startsAtForUser} - ${endsAtForUser}. Цена: ${room.price} р.</span>
                   </div>`
                 );
                 $('#confirm-close').click(function () {
@@ -285,7 +301,9 @@
                         location.reload();
                       },
                       error: function (e) {
-                        console.log(e);
+                        alert("Произошла ошибка. Попробуйте еще раз");
+
+                        location.reload();
                       }
                     });
                   }
