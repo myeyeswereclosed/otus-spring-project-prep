@@ -179,12 +179,14 @@
                                     function(e) {
                                         e.preventDefault();
 
+                                        let smsCodeInput = $('#sms-code');
+
                                         $.ajax({
                                             url: codeForm.attr('action'),
                                             type: "post",
                                             contentType: "application/json",
                                             data: JSON.stringify(
-                                                {phone: phoneNumber, code: $('#sms-code').val()}
+                                                {phone: phoneNumber, code: smsCodeInput.val()}
                                             ),
                                             success: function() {
                                                 let registrationForm = $('#registration-form');
@@ -216,22 +218,24 @@
                                                     }
                                                 })
                                             },
-                                            error: function(smsCodeError) {
-                                                alert(smsCodeError);
+                                            error: function() {
+                                                alert("Ошибка проверки кода. Попробуем еще раз");
 
-                                                console.log(smsCodeError)
+                                                // TODO сохранять данные формы регистрации
+
+                                                location.reload();
                                             }
                                         });
                                     }
-                                )
-
+                                );
                             },
-                            error: function (err) {
-                                console.log(err);
+                            error: function() {
+                                alert("Произошла ошибка. Попробуйте еще раз или свяжитесь с нами");
+
+                                location.reload();
                             }
                         });
                     }
-
                 </script>
             </div>
         </div>
