@@ -48,6 +48,15 @@ services:
     networks:
       - rbnetwork
 
+  zipkin:
+    image: openzipkin/zipkin
+    container_name: zipkin
+    restart: always
+    ports:
+      - "9411:9411"
+    networks:
+      - rbnetwork
+
   authorization-server:
     build:
       context: ./authorization_server
@@ -63,11 +72,14 @@ services:
       DB_PASSWORD: postgres
       SERVICE_DISCOVERY_HOST: service-discovery
       SERVICE_DISCOVERY_PORT: 8761
-      WAIT_HOSTS: authorization-server-database:5432, service-discovery:8761
+      ZIPKIN_HOST: zipkin
+      ZIPKIN_PORT: 9411
+      WAIT_HOSTS: authorization-server-database:5432, service-discovery:8761, zipkin:9411
     depends_on:
       - config-server
       - service-discovery
       - authorization-server-database
+      - zipkin
     restart: unless-stopped
     ports:
       - "8090:8090"
@@ -102,11 +114,14 @@ services:
       DB_PORT: 5432
       SERVICE_DISCOVERY_HOST: service-discovery
       SERVICE_DISCOVERY_PORT: 8761
-      WAIT_HOSTS: sms-service-database:5432, service-discovery:8761
+      ZIPKIN_HOST: zipkin
+      ZIPKIN_PORT: 9411
+      WAIT_HOSTS: sms-service-database:5432, service-discovery:8761, zipkin:9411
     depends_on:
       - config-server
       - service-discovery
       - sms-service-database
+      - zipkin
     restart: unless-stopped
     ports:
       - "8085:8085"
@@ -141,11 +156,14 @@ services:
       DB_PORT: 5432
       SERVICE_DISCOVERY_HOST: service-discovery
       SERVICE_DISCOVERY_PORT: 8761
-      WAIT_HOSTS: rehearsal-database:5432, service-discovery:8761
+      ZIPKIN_HOST: zipkin
+      ZIPKIN_PORT: 9411
+      WAIT_HOSTS: rehearsal-database:5432, service-discovery:8761, zipkin:9411
     depends_on:
       - config-server
       - service-discovery
       - rehearsal-database
+      - zipkin
     restart: unless-stopped
     ports:
       - "8888:8888"
@@ -171,13 +189,16 @@ services:
       REHEARSAL_SERVICE_PORT: 8888
       SMS_SERVICE_HOST: sms-service
       SMS_SERVICE_PORT: 8085
-      WAIT_HOSTS: config-server:4000, service-discovery:8761, authorization-server:8090, rehearsal-service:8888, sms-service:8085
+      ZIPKIN_HOST: zipkin
+      ZIPKIN_PORT: 9411
+      WAIT_HOSTS: config-server:4000, service-discovery:8761, authorization-server:8090, rehearsal-service:8888, sms-service:8085, zipkin:9411
     depends_on:
       - config-server
       - service-discovery
       - authorization-server
       - rehearsal-service
       - sms-service
+      - zipkin
     restart: unless-stopped
     ports:
       - "8080:8080"
