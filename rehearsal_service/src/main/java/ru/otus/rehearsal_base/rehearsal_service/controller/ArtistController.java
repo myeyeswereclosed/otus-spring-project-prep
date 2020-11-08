@@ -1,6 +1,7 @@
 package ru.otus.rehearsal_base.rehearsal_service.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -10,6 +11,8 @@ import ru.otus.rehearsal_base.rehearsal_service.dto.ArtistDto;
 import ru.otus.rehearsal_base.rehearsal_service.mapper.DtoMapper;
 import ru.otus.rehearsal_base.rehearsal_service.service.artist.ArtistService;
 
+import static org.springframework.http.ResponseEntity.status;
+
 @RestController
 @RequiredArgsConstructor
 public class ArtistController {
@@ -18,6 +21,8 @@ public class ArtistController {
 
     @PostMapping("/artist")
     public ResponseEntity<ArtistDto> add(@RequestBody ArtistDto artist) {
-        return ResponseEntity.ok(mapper.toDto(service.add(mapper.toEntity(artist))));
+        return
+            status(HttpStatus.CREATED)
+                .body(mapper.toDto(service.add(mapper.toEntity(artist))));
     }
 }

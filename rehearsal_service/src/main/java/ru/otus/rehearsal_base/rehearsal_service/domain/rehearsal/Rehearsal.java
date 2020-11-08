@@ -38,8 +38,6 @@ public class Rehearsal {
     @Column(name = "price")
     private int price;
 
-//    private Set<Gear> rentedGears;
-
     @Enumerated(EnumType.STRING)
     private RehearsalStatus status = RehearsalStatus.RESERVED;
 

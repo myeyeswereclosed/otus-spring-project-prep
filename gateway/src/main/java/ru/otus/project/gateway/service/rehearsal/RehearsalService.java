@@ -8,8 +8,6 @@ import java.util.Optional;
 public interface RehearsalService {
     Optional<Rehearsal> reserve(String artistPhone, Rehearsal rehearsal);
 
-//    List<RehearsalDto> reservedInPeriod(int roomId, String fromDate, String toDate);
-
     List<Rehearsal> reservedBy(String artistPhone);
 
     Optional<Rehearsal> cancel(long rehearsalId);

@@ -52,6 +52,8 @@
                                         )
 
                                         function renderUserHeader(user) {
+                                            let phoneSecured = user.phone.slice(0, 3) + '***' + user.phone.slice(8);
+
                                             $('#actions-div')
                                                 .append(
                                                     `<ul class="nav pull-right">
@@ -60,7 +62,7 @@
                                                         href="#" class="dropdown-toggle"
                                                         data-toggle="dropdown-menu"
                                                         role="button" aria-expanded="false"
-                                                    >${user.name} (${user.phone}) <span class="caret"></span></a>
+                                                    >${user.name} (${phoneSecured}) <span class="caret"></span></a>
                                                     <ul class="dropdown-menu" role="menu">
                                                        <li><a href="${path}/rehearsals">Репетиции</a></li>
                                                     </ul>

@@ -84,7 +84,6 @@ public class Config {
     public RecipientListRouter router() {
         RecipientListRouter router = new RecipientListRouter();
         router.setIgnoreSendFailures(false);
-//        router.setApplySequence(true);
         router.addRecipient(RESPONSE_CHANNEL);
         router.addRecipient(GENERATE_CODE_CHANNEL);
 

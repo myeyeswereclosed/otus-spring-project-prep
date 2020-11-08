@@ -12,6 +12,6 @@ import ru.otus.project.gateway.model.security.User;
     contextId = "register"
 )
 public interface AuthorizationServerRegistrationClient {
-    @PostMapping("/register")
+    @PostMapping("/user")
     ResponseEntity<User> register(@RequestBody User user);
 }

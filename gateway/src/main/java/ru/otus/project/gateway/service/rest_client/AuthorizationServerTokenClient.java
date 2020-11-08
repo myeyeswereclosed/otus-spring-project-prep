@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ru.otus.project.gateway.config.FeignClientConfig;
 import ru.otus.project.gateway.model.security.AccessToken;
 
-// TODO сделать аккуратнее
 @FeignClient(
     name = "authorization-server",
     path = "/auth-server",

@@ -1,9 +1,6 @@
 package ru.otus.rehearsal_base.rehearsal_service.domain.artist;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -20,13 +17,13 @@ public class Artist {
     private long id;
 
     @Column(name = "name")
-    private String name;
+    private @NonNull String name;
 
     @Column(name = "genre")
     private String genre;
 
     @Column(name = "phone")
-    private String phone;
+    private @NonNull String phone;
 
     @Column(name = "email")
     private String email;

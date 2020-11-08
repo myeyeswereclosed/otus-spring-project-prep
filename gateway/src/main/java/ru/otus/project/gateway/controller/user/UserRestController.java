@@ -30,10 +30,9 @@ public class UserRestController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<Artist> register(@RequestBody ArtistUser artist, Model model) {
+    public ResponseEntity<Artist> register(@RequestBody ArtistUser artist) {
         logger.info("Registering new artist {}", artist);
 
-        // TODO JTA???
         var result =
             userService
                 .register(user(artist))

@@ -24,10 +24,7 @@ public class SmsCodeService implements PhoneCodeService {
     public SmsCodeStatus checkCode(SmsCode code) {
         var maybeCode = repository.findByPhoneAndValueAndActual(code.getPhone(), code.getValue(), true);
 
-        // TODO как сочетается c Transactional
-        if (maybeCode.isPresent()) {
-            repository.invalidate(maybeCode.get().getId());
-        }
+        maybeCode.ifPresent(smsCode -> repository.invalidate(smsCode.getId()));
 
         return
             maybeCode
